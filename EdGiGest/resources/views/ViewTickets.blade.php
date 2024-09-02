@@ -7,6 +7,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th></th>
                     <th>Cliente</th>
                     <th>Nome Ticket</th>
                     <th>Stato</th>
@@ -15,6 +16,7 @@
             <tbody>
                 @foreach($tickets as $ticket)
                 <tr>
+                    <td><input type="radio" name="id" value="{{$ticket['id']}}" ></td>
                     <td>{{ $ticket['clientName'] }}</td>
                     <td>{{ $ticket['name'] }}</td>
                     <td>@if($ticket['color']=='#8bc34a')
@@ -28,5 +30,10 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
+    <div>
+        <form action="{{route('get.tasks', ['id' => $ticket['id'] ])}}" method="GET">
+        @csrf
+        <button type="submit">Vedi dettagli</button>
     </div>
 </body>

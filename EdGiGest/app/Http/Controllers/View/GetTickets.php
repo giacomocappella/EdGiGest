@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class GetTicket extends Controller
+class GetTickets extends Controller
 {
     public function __invoke(Request $request){
           // La chiave API
@@ -15,7 +15,7 @@ class GetTicket extends Controller
           // URL dell'API
           $response = Http::withHeaders([
               'x-api-key' => $apiKey,
-        ])->withoutVerifying()->get('https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/projects');
+        ])->withoutVerifying()->get('https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/projects?sort-column=CLIENT_NAME');
         //RICORDARSI DI VERIFICARE IL CERTIFICATO (PER ORA BYPASSATO)
 
 
