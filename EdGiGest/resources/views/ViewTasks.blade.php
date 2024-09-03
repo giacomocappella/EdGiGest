@@ -24,6 +24,7 @@
         <div class="bottoni">
             <button>Chiudi Ticket</button>
             <button>Riapri Ticket</button>
+            <a href='/tickets'>Torna a elenco tickets</a>
         </div>
     </div>
 </div>
@@ -47,5 +48,7 @@
         @endforeach
     </tbody>
 </table>
+    <a href="/newtask">Crea nuova attività</button>
+</form>
 </body>
 

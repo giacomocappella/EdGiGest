@@ -14,6 +14,8 @@
                 </tr>
             </thead>
             <tbody>
+                <form action="{{route('get.tasks')}}" method="GET">
+                    @csrf
                 @foreach($tickets as $ticket)
                 <tr>
                     <td><input type="radio" name="id" value="{{$ticket['id']}}" ></td>
@@ -32,8 +34,7 @@
         </table>
     </div>
     <div>
-        <form action="{{route('get.tasks', ['id' => $ticket['id'] ])}}" method="GET">
-        @csrf
         <button type="submit">Vedi dettagli</button>
     </div>
+</form>
 </body>
