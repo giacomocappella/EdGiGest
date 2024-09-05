@@ -6,7 +6,7 @@ use App\Http\Controllers\View;
 Route::get('/', 'App\Http\Controllers\View\Dashboard')->name('dashboard');
 Route::get('/newclient', 'App\Http\Controllers\View\CreateClient')->name('create.client');
 Route::get('/tickets', 'App\Http\Controllers\View\GetTickets')->name('get.tickets');
-Route::get('/tickets/tasks','App\Http\Controllers\View\GetTasks')->name('get.tasks');
+Route::get('/ticket/tasks','App\Http\Controllers\View\GetTasks')->name('get.tasks');
 Route::get('/newticket','App\Http\Controllers\View\CreateTicket')->name('create.ticket');
 
 Route::post('/newclient/store', 'App\Http\Controllers\Post\StoreClient')->name('store.client');

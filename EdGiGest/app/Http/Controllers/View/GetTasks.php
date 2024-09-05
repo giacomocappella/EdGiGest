@@ -74,7 +74,7 @@ class GetTasks extends Controller
             $task['timeInterval']['end']=$this->convertDateFormat($task['timeInterval']['end']);
             $task['timeInterval']['duration']=$this->convertDurationFormat($task['timeInterval']['duration']);
         }
-        
+
         return view('ViewTasks', ['tasks'=>$datatask], ['tickets'=>$dataticket]);
 
       } else {
