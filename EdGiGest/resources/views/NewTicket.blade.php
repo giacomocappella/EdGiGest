@@ -57,7 +57,12 @@
             margin-top: 5px;
         }
 
-        .submit-btn {
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .submit-btn, .cancel-btn {
             background-color: #4CAF50;
             color: white;
             padding: 10px 15px;
@@ -65,12 +70,20 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            width: 100%;
             text-transform: uppercase;
+            text-align: center;
         }
 
-        .submit-btn:hover {
+        .submit-btn:hover, .cancel-btn:hover {
             background-color: #45a049;
+        }
+
+        .cancel-btn {
+            background-color: #f44336;
+        }
+
+        .cancel-btn:hover {
+            background-color: #e53935;
         }
     </style>
 </head>
@@ -98,7 +111,10 @@
             @enderror
         </div>
 
-        <button type="submit" class="submit-btn">Crea ticket e apri nuova attività</button>
+        <div class="button-container">
+            <button type="submit" class="submit-btn">Crea ticket e apri nuova attività</button>
+            <a href="{{ route('dashboard') }}" class="cancel-btn">Torna alla Dashboard</a>
+        </div>
     </form>
 </div>
 
