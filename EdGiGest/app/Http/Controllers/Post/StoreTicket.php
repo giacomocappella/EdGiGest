@@ -28,7 +28,7 @@ class StoreTicket extends Controller
         ])->withoutVerifying()->post('https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/projects', [
         'clientId' => $client,
         'name' => $request->Ticket_name,
-        'color'=> '#8bc34a',  //ad ogni ticket creato (e aperto) assegno il colore verde (= ticket aperto)
+        'color'=> '#689F38',  //ad ogni ticket creato (e aperto) assegno il colore verde (= ticket aperto)
         ]);
         //RICORDARSI DI VERIFICARE IL CERTIFICATO (PER ORA BYPASSATO)
 

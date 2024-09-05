@@ -5,9 +5,41 @@ namespace App\Http\Controllers\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
 
 class GetTasks extends Controller
 {
+    public function convertDateFormat($dataora)
+    {
+    
+    // Crea un'istanza Carbon dalla stringa della data
+    $data = Carbon::parse($dataora);
+
+    // Format the date
+    $formattedDate = $data->format('d-m-Y H:i');
+
+    return $formattedDate; 
+    }
+
+    public function convertDurationFormat($duration)
+    {
+        if ($duration === null || $duration === "PT0S") {
+            $duration = "0 min";
+        } else {
+            
+            preg_match('/PT(?:(\d+)H)?(?:(\d+)M)?/', $duration, $matches);
+    
+            $ore = isset($matches[1]) ? $matches[1] . ' h ' : '';
+            $minuti = isset($matches[2]) ? $matches[2] . ' min ' : '';
+    
+            
+            $duration = trim($ore . $minuti);
+
+            return $duration;
+        }
+    
+    }
+
     public function __invoke(Request $request)
     {
         //recupero tutti i dettagli del ticket
@@ -25,33 +57,22 @@ class GetTasks extends Controller
             return response()->json(['error' => 'Unable to fetch tickets data'], 500);
         }
 
-        //recupero tutti i task relativi al ticket
+        //recupero tutti i task relativi al task
        
-        $urltask="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/projects/$idticket/tasks";
+        $urltask="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/user/66b9e18097ddfb5029a6f6a4/time-entries?project=$idticket";
         $response = Http::withHeaders([
             'x-api-key' => $apiKey,
       ])->withoutVerifying()->get($urltask);
       //RICORDARSI DI VERIFICARE IL CERTIFICATO (PER ORA BYPASSATO)
-
-        //creo i vettori per la sistemazione dell'orario effetuato
         
       //VERIFICA DELLA CHIAMATA
       if ($response->successful()) {
-         $datatask = $response->json();
+        $datatask = $response->json();
+        
          foreach ($datatask as &$task) {
-            
-            if ($task['duration'] === null || $task['duration'] === "PT0S") {
-                $task['duration'] = "0";
-            } else {
-                
-                preg_match('/PT(?:(\d+)H)?(?:(\d+)M)?/', $task['duration'], $matches);
-        
-                $ore = isset($matches[1]) ? $matches[1] . ' h ' : '';
-                $minuti = isset($matches[2]) ? $matches[2] . ' min ' : '';
-        
-                
-                $task['duration'] = trim($ore . $minuti);
-            }
+            $task['timeInterval']['start']=$this->convertDateFormat($task['timeInterval']['start']);
+            $task['timeInterval']['end']=$this->convertDateFormat($task['timeInterval']['end']);
+            $task['timeInterval']['duration']=$this->convertDurationFormat($task['timeInterval']['duration']);
         }
         
         return view('ViewTasks', ['tasks'=>$datatask], ['tickets'=>$dataticket]);

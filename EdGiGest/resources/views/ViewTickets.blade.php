@@ -21,9 +21,9 @@
                     <td><input type="radio" name="id" value="{{$ticket['id']}}" ></td>
                     <td>{{ $ticket['clientName'] }}</td>
                     <td>{{ $ticket['name'] }}</td>
-                    <td>@if($ticket['color']=='#8bc34a')
+                    <td>@if($ticket['color']=='#689F38')
                         Aperto
-                    @elseif($ticket['color']=='#ff8000')
+                    @elseif($ticket['color']=='#FF5722')
                         Sospeso
                     @else
                         Chiuso

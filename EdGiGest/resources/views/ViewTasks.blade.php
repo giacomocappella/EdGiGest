@@ -10,9 +10,9 @@
             <div class="DettagliTicket">
                 <div class="riga">Cliente: {{$tickets['clientName']}}</div>
                 <div class="riga">Id: {{$tickets['id']}}</div>
-                <div class="riga">Stato: @if($tickets['color']=='#8bc34a')
+                <div class="riga">Stato: @if($tickets['color']=='#689F38')
                                             Aperto
-                                        @elseif($tickets['color']=='#ff8000')
+                                        @elseif($tickets['color']=='#FF5722')
                                             Sospeso
                                         @else
                                             Chiuso
@@ -34,21 +34,23 @@
     <thead>
         <tr>
             <th></th>
-            <th>Nome attività</th>
+            <th>Inizio attività</th>
+            <th>Fine attività</th>
             <th>Durata</th>
+            <th>Descrizione</th>
         </tr>
     </thead>
     <tbody>
         @foreach($tasks as $task)
         <tr>
             <td><input type="radio" name="idtask" value="{{$task['id']}}" ></td>
-            <td>{{ $task['name'] }}</td>
-            <td>{{ $task['duration'] }}</td>
+            <td>{{ $task['timeInterval']['start'] }}</td>
+            <td>{{ $task['timeInterval']['end'] }}</td>
+            <td>{{ $task['timeInterval']['duration'] }}</td>
+            <td>{{ $task['description'] }}</td>
         </tr>
         @endforeach
     </tbody>
 </table>
-    <a href="/newtask">Crea nuova attività</button>
-</form>
 </body>
 
