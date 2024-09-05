@@ -54,6 +54,9 @@
         .bottoni button:hover, .bottoni a:hover {
             background-color: #45a049;
         }
+        .bottoni a {
+            text-decoration: none;
+        }
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -93,13 +96,16 @@
                     <span style="color: #BDBDBD;">Chiuso</span>
                 @endif
             </div>
+            <div class="riga"><strong>Ore svolte:</strong> {{$tickets['duration']}}</div>
         </div>
 
         <div class="ColonnaBottoni">
             <div class="bottoni">
                 <button>Chiudi Ticket</button>
+                <input type="hidden" name="id" value="{{ $tickets['id'] }}">
+                <a href="{{ route('suspend.ticket') }}" class="button">Sospendi Ticket</a>
                 <button>Riapri Ticket</button>
-                <a href='/'>Torna all'elenco tickets</a>
+                <a href='/'>Torna alla dashboard</a>
             </div>
         </div>
 
@@ -126,6 +132,13 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="ColonnaBottoni">
+            <div class="bottoni">
+                <a href="{{ route('dashboard') }}">Aggiungi nuova attività</a>
+                <a href="{{ route('dashboard') }}">Modifica attività</a>
+            </div>
+        </div>
     </div>
 </body>
 </html>

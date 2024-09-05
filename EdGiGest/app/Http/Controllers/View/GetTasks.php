@@ -53,6 +53,8 @@ class GetTasks extends Controller
       ])->withoutVerifying()->get($urlticket);
         if ($response->successful()) {
             $dataticket = $response->json();
+            //converto la durata
+            $dataticket['duration']=$this->convertDurationFormat($dataticket['duration']);
         } else {
             return response()->json(['error' => 'Unable to fetch tickets data'], 500);
         }

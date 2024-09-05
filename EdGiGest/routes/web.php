@@ -12,3 +12,5 @@ Route::get('/newticket','App\Http\Controllers\View\CreateTicket')->name('create.
 Route::post('/newclient/store', 'App\Http\Controllers\Post\StoreClient')->name('store.client');
 Route::post('/newticket/store', 'App\Http\Controllers\Post\StoreTicket')->name('store.ticket');
 Route::post('/newtask/store/{idticket}', 'App\Http\Controllers\Post\StoreTask')->name('store.task');
+
+Route::put('/ticket/suspend', 'App\Http\Controllers\Put\SuspendTicket')->name('suspend.ticket');
