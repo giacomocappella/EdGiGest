@@ -38,8 +38,11 @@
             margin-top: 20px;
         }
         .bottoni {
-            display: inline-block;
+            display: flex;
+            justify-content: center; 
+            gap: 10px; 
         }
+
         .bottoni button, .bottoni a {
             background-color: #4CAF50;
             color: white;
@@ -101,10 +104,24 @@
 
         <div class="ColonnaBottoni">
             <div class="bottoni">
-                <button>Chiudi Ticket</button>
-                <input type="hidden" name="id" value="{{ $tickets['id'] }}">
-                <a href="{{ route('suspend.ticket') }}" class="button">Sospendi Ticket</a>
-                <button>Riapri Ticket</button>
+                <form action="{{ route('close.ticket') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                   <input type="hidden" name="idclose" value="{{ $tickets['id'] }}">
+                   <button type="submit">Chiudi Ticket</button>
+                   </form>
+                <form action="{{ route('suspend.ticket') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="idsuspend" value="{{ $tickets['id'] }}">
+                    <button type="submit">Sospendi Ticket</button>
+                </form>
+                <form action="{{ route('reopen.ticket') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                   <input type="hidden" name="idreopen" value="{{ $tickets['id'] }}">
+                   <button type="submit">Riapri Ticket</button>
+                </form>
                 <a href='/'>Torna alla dashboard</a>
             </div>
         </div>

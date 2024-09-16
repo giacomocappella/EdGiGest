@@ -14,3 +14,5 @@ Route::post('/newticket/store', 'App\Http\Controllers\Post\StoreTicket')->name('
 Route::post('/newtask/store/{idticket}', 'App\Http\Controllers\Post\StoreTask')->name('store.task');
 
 Route::put('/ticket/suspend', 'App\Http\Controllers\Put\SuspendTicket')->name('suspend.ticket');
+Route::put('/ticket/close', 'App\Http\Controllers\Put\CloseTicket')->name('close.ticket');
+Route::put('/ticket/reopen', 'App\Http\Controllers\Put\ReopenTicket')->name('reopen.ticket');

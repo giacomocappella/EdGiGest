@@ -43,9 +43,11 @@ class GetTasks extends Controller
     public function __invoke(Request $request)
     {
         //recupero tutti i dettagli del ticket
-        $idticket=$request->input('id');
-        //salvo in sessione l'id del ticket che serve per creare le nuove attività o modificarle
-        session(['idticket'=>$idticket]);
+        if($request->input('id')==null)
+            $idticket = session('idticket');
+        else
+            $idticket=$request->input('id');
+        
         $apiKey = env('API_KEY'); 
         $urlticket="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/projects/$idticket";
         $response = Http::withHeaders([
