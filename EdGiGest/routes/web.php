@@ -8,6 +8,8 @@ Route::get('/newclient', 'App\Http\Controllers\View\CreateClient')->name('create
 Route::get('/tickets', 'App\Http\Controllers\View\GetTickets')->name('get.tickets');
 Route::get('/ticket/tasks','App\Http\Controllers\View\GetTasks')->name('get.tasks');
 Route::get('/newticket','App\Http\Controllers\View\CreateTicket')->name('create.ticket');
+Route::get('/receiptPDF','App\Http\Controllers\View\MakePDF@download')->name('create.pdf');
+
 
 Route::post('/newclient/store', 'App\Http\Controllers\Post\StoreClient')->name('store.client');
 Route::post('/newticket/store', 'App\Http\Controllers\Post\StoreTicket')->name('store.ticket');
