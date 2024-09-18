@@ -200,7 +200,7 @@ aside .sidebar a.active span {
 }
 
 aside .sidebar a:hover {
-    color: var(--color-primary);
+    color: var(--color-danger);
 }
 
 aside .sidebar a:hover span {
