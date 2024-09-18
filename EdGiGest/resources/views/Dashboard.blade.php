@@ -1,109 +1,210 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        .client {
-            margin-bottom: 20px;
-        }
-        .client h2 {
-            color: #333;
-        }
-        .ticket {
-            padding: 10px;
-            background-color: #f9f9f9;
-            margin-bottom: 10px;
-            border-left: 5px solid #689F38;
-        }
-        .ticket_suspended {
-            padding: 10px;
-            background-color: #f9f9f9;
-            margin-bottom: 10px;
-            border-left: 5px solid #FF5722;
-        }
-        .ticket h3 {
-            margin: 0;
-        }
-        .ticket .details {
-            color: #666;
-        }
-        .buttons-container {
-            margin: 20px 0;
-            text-align: center;
-        }
-        .buttons-container button, .buttons-container a {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 5px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .buttons-container button:hover, .buttons-container a:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="css\style.css">
+    <title>EdGiGest</title>
 </head>
+
+
 <body>
-    <h1>EDGIGEST - DASHBOARD</h1>
+    <div class="container">
+        <!-- Sidebar Section -->
+        <aside>
+            <div class="toggle">
+                <div class="logo">
+                    <img src="logo.png">
+                    <h2>Edgi<span class="danger">Gest</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
 
-    <!-- Bottone di navigazione -->
-    <div class="buttons-container">
-        <a href="{{ route('create.client') }}" class="button">Inserisci Nuovo Cliente</a>
-        <a href="{{ route('create.ticket') }}" class="button">Inserisci Nuovo Ticket</a>
-        <a href="{{ route('create.client') }}" class="button">Gestisci ricevute</a>
-    </div>
+            <div class="sidebar">
+                <a href="/">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a href="/newclient">
+                    <span class="material-icons-sharp">
+                        person_outline
+                    </span>
+                    <h3>Nuovo Cliente</h3>
+                </a>
+                <a href="/newticket">
+                    <span class="material-icons-sharp">
+                        receipt_long
+                    </span>
+                    <h3>Nuovo Ticket</h3>
+                    
+                </a>
+                <a href="/receipts">
+                    <span class="material-icons-sharp">
+                        insights
+                    </span>
+                    <h3>Ricevute</h3>
+                </a>
+                <a href="/tickets">
+                    <span class="material-icons-sharp">
+                        mail_outline
+                    </span>
+                    <h3>Lista Tickets</h3>
+                    <!--<span class="message-count">27</span>-->
+                </a>
+                <a href="/settings">
+                    <span class="material-icons-sharp">
+                        settings
+                    </span>
+                    <h3>Impostazioni</h3>
+                </a>
+                <a href="#">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+        <!-- End of Sidebar Section -->
 
-    <h2>Elenco dei tickets aperti e sospesi per cliente</h2>
+        <!-- Main Content -->
+        <main>
+            <h1>Statistiche</h1>
+            <!-- Analyses -->
+            <div class="statistics">
+                <div class="opened">
+                    <div class="status">
+                        <div class="info">
+                            <h2>Ticket Aperti</h2>
+                        </div>
+                        <div class="progresss">
+                            <svg>
+                                <circle cx="38" cy="38" r="36"></circle>
+                            </svg>
+                            <div class="percentage">
+                                <p>2</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="visits">
+                    <div class="status">
+                        <div class="info">
+                            <h2>Ticket Sospesi</h2>
+                        </div>
+                        <div class="progresss">
+                            <svg>
+                                <circle cx="38" cy="38" r="36"></circle>
+                            </svg>
+                            <div class="percentage">
+                                <p>3</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="searches">
+                    <div class="status">
+                        <div class="info">
+                            <h2>Clienti Totali</h2>
+                        </div>
+                        <div class="progresss">
+                            <svg>
+                                <circle cx="38" cy="38" r="36"></circle>
+                            </svg>
+                            <div class="percentage">
+                                <p>21</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Analyses -->
 
+<!-- Recent Tickets Table -->
+<div class="recent-tickets">
+    <h2>Ticket aperti e sospesi per ogni cliente</h2>
     @foreach ($groupedTickets as $clientName => $tickets)
         <div class="client">
             <h2>Cliente: {{ $clientName }}</h2>
-            
-            @foreach ($tickets as $ticket)
-                <form action="{{ route('get.tasks') }}" method="GET">
-                    @csrf
-                    @if($ticket['color'] == '#689F38')
-                        <div class="ticket">
-                            <h3>{{ $ticket['name'] }}</h3>
-                            <p class="details">Durata: {{ $ticket['duration'] }}</p>
-                            <p class="details">ID Ticket: {{ $ticket['id'] }}</p>
-                            <p class="details">Stato: Aperto</p>
-                            <p>
-                                <input type="hidden" name="id" value="{{ $ticket['id'] }}">
-                                <button type="submit">Vedi Dettagli</button>
-                            </p>
-                        </div>
-                    @endif
-                    @if($ticket['color'] == '#FF5722')
-                        <div class="ticket_suspended">
-                            <h3>{{ $ticket['name'] }}</h3>
-                            <p class="details">Durata: {{ $ticket['duration'] }}</p>
-                            <p class="details">ID Ticket: {{ $ticket['id'] }}</p>
-                            <p class="details">Stato: Sospeso</p>
-                            <p>
-                                <input type="hidden" name="id" value="{{ $ticket['id'] }}">
-                                <button type="submit">Vedi Dettagli</button>
-                            </p>
-                        </div>
-                    @endif
-                </form>
-            @endforeach
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome ticket</th>
+                        <th>Durata</th>
+                        <th>Stato</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($tickets as $ticket)
+                        <tr>
+                            <td>{{ $ticket['name'] }}</td>
+                            <td>{{ $ticket['duration'] }}</td>
+                            <td>
+                                @if($ticket['color'] == '#689F38')
+                                    <span class="ticket-status status-open">Aperto</span>
+                                @elseif($ticket['color'] == '#FF5722')
+                                    <span class="ticket-status status-pending">Sospeso</span>
+                                @endif
+                            </td>
+                            <td>
+                                <form action="{{ route('get.tasks') }}" method="GET">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $ticket['id'] }}">
+                                    <button type="submit">Vedi Dettagli</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <br><br>
         </div>
     @endforeach
+</div>
+
+<!-- End of Recent Tickets Table -->
+
+            
+
+        </main>
+        <!-- End of Main Content -->
+
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="nav">
+                <button id="menu-btn">
+                    <span class="material-icons-sharp">
+                        menu
+                    </span>
+                </button>
+                <div class="dark-mode">
+                    <span class="material-icons-sharp active">
+                        light_mode
+                    </span>
+                    <span class="material-icons-sharp">
+                        dark_mode
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script src="js\index.js"></script>
 </body>
+
+
+
+<!-------------------------------------------------------------------------------------------------------------------------->
+
+
 </html>
