@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="css\style.css">
-    <title>EdGiGest</title>
+    <title>EdGiGest - Dashboard</title>
 </head>
 
 
@@ -139,7 +139,7 @@
                         <th>Nome ticket</th>
                         <th>Durata</th>
                         <th>Stato</th>
-                        <th></th>
+                        <th>Dettagli</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -158,7 +158,7 @@
                                 <form action="{{ route('get.tasks') }}" method="GET">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $ticket['id'] }}">
-                                    <button type="submit">Vedi Dettagli</button>
+                                    <button class="details-button" type="submit">Vedi Dettagli</button>
                                 </form>
                             </td>
                         </tr>
