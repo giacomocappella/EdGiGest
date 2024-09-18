@@ -129,7 +129,7 @@
 
 <!-- Recent Tickets Table -->
 <div class="recent-tickets">
-    <h2>Ticket aperti e sospesi per ogni cliente</h2>
+    <h1>Ticket aperti e sospesi per ogni cliente</h1>
     @foreach ($groupedTickets as $clientName => $tickets)
         <div class="client">
             <h2>Cliente: {{ $clientName }}</h2>
