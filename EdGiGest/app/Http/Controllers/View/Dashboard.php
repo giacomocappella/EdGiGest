@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Collection;
+use App\Models\Client;
 
 class Dashboard extends Controller
 {
@@ -58,9 +59,25 @@ class Dashboard extends Controller
         // Raggruppa i dati filtrati per `clientName`
         $groupedData = $filteredData->groupBy('clientName');
         
-            // Passa i dati alla vista
-            return view('Dashboard', ['groupedTickets' => $groupedData]);
-      } else {
+        //Conteggio dei ticket aperti
+        $openTickets = 0;
+        $pendingTickets=0;
+
+        foreach ($groupedData as $clientName => $tickets) {
+            foreach ($tickets as $ticket) {
+                if ($ticket['color'] == '#689F38') {
+                    $openTickets++;
+                } elseif ($ticket['color'] == '#FF5722') {
+                    $pendingTickets++;
+                }
+            }
+      }
+
+      $clients=Client::count();
+
+       // Passa i dati alla vista
+       return view('Dashboard', ['groupedTickets' => $groupedData, 'openTicket' => $openTickets,  'pendingTicket' => $pendingTickets, 'totalclient' => $clients ]);
+    }else {
           // Gestisci l'errore
           return response()->json(['error' => 'Unable to fetch data'], 500);
       }

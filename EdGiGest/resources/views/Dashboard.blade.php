@@ -34,29 +34,34 @@
                 </a>
                 <a href="/newclient">
                     <span class="material-icons-sharp">
-                        person_outline
+                        person_add
                     </span>
                     <h3>Nuovo Cliente</h3>
                 </a>
+                <a href="/newclient">
+                    <span class="material-icons-sharp">
+                        group
+                    </span>
+                    <h3>Lista Clienti</h3>
+                </a>
                 <a href="/newticket">
                     <span class="material-icons-sharp">
-                        receipt_long
+                        add
                     </span>
                     <h3>Nuovo Ticket</h3>
-                    
-                </a>
-                <a href="/receipts">
-                    <span class="material-icons-sharp">
-                        insights
-                    </span>
-                    <h3>Ricevute</h3>
                 </a>
                 <a href="/tickets">
                     <span class="material-icons-sharp">
-                        mail_outline
+                        format_list_numbered
                     </span>
                     <h3>Lista Tickets</h3>
                     <!--<span class="message-count">27</span>-->
+                </a>
+                <a href="/receipts">
+                    <span class="material-icons-sharp">
+                        euro_symbol
+                    </span>
+                    <h3>Gestione Ricevute</h3>
                 </a>
                 <a href="/settings">
                     <span class="material-icons-sharp">
@@ -89,7 +94,7 @@
                                 <circle cx="38" cy="38" r="36"></circle>
                             </svg>
                             <div class="percentage">
-                                <p>2</p>
+                                <p>{{$openTicket}}</p>
                             </div>
                         </div>
                     </div>
@@ -104,7 +109,7 @@
                                 <circle cx="38" cy="38" r="36"></circle>
                             </svg>
                             <div class="percentage">
-                                <p>3</p>
+                                <p>{{$pendingTicket}}</p>
                             </div>
                         </div>
                     </div>
@@ -119,7 +124,7 @@
                                 <circle cx="38" cy="38" r="36"></circle>
                             </svg>
                             <div class="percentage">
-                                <p>21</p>
+                                <p>{{$totalclient}}</p>
                             </div>
                         </div>
                     </div>
@@ -136,7 +141,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Nome ticket</th>
+                        <th class="ticket-name-table">Nome ticket</th>
                         <th>Durata</th>
                         <th>Stato</th>
                         <th>Dettagli</th>
@@ -149,9 +154,9 @@
                             <td>{{ $ticket['duration'] }}</td>
                             <td>
                                 @if($ticket['color'] == '#689F38')
-                                    <span class="ticket-status status-open">Aperto</span>
+                                    <span class="status-open">Aperto</span>
                                 @elseif($ticket['color'] == '#FF5722')
-                                    <span class="ticket-status status-pending">Sospeso</span>
+                                    <span class="status-pending">Sospeso</span>
                                 @endif
                             </td>
                             <td>

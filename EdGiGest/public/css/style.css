@@ -296,6 +296,8 @@ main .statistics .progresss .percentage {
     justify-content: center;
     height: 100%;
     width: 100%;
+    font-size: 18px;
+    font-weight: bold;
 }
 .recent-tickets table {
     background-color: var(--color-white);
@@ -338,6 +340,12 @@ main .statistics .progresss .percentage {
 .recent-tickets table a:hover {
     color: var(--color-primary);
     text-decoration: none;
+}
+.ticket-name-table{
+    width: 450px; /* Set a fixed width in pixels (adjust as needed) */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide any overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis for overflowed text */
 }
 
 
