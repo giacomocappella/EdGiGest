@@ -83,14 +83,29 @@
     </style>
     <script>
         function confermaChiusura() {
-      let scelta = confirm("Vuoi inviare mail al cliente con il rapportino della lavorazione? Cliccando su annulla non verrà inviata la mail");
+        let scelta = confirm("Vuoi inviare mail al cliente con il rapportino della lavorazione? Cliccando su annulla non verrà inviata la mail");
 
-      if (scelta) {
-            document.getElementById('formSi').submit();
+        if (scelta) {
+            document.getElementById('formSiclose').submit();
         } else {
-            document.getElementById('formNo').submit();
+            document.getElementById('formNoclose').submit();
         }
-}
+        }  
+
+        function confermaSospensione() {
+        let scelta = confirm("Sei sicuro di voler sospendere il ticket?");
+
+        if (scelta) {
+            document.getElementById('formSisuspend').submit();
+        } //altrimenti annulla
+        }  
+        function confermaRiapertura() {
+        let scelta = confirm("Sei sicuro di voler riaprire il ticket?");
+
+        if (scelta) {
+            document.getElementById('formSiopen').submit();
+        } //altrimenti annulla
+        }   
     </script>
 </head>
 <body>
@@ -115,30 +130,30 @@
 
         <div class="ColonnaBottoni">
             <div class="bottoni">
-                <button type="submit" onclick="confermaChiusura()"">Chiudi Ticket</button>
-                <form id="formSi" action="{{ route('close.ticket.mail') }}" method="POST" style="display: none;">
+                <button onclick="confermaChiusura()"">Chiudi Ticket</button>
+                <form id="formSiclose" action="{{ route('close.ticket.mail') }}" method="POST" style="display: none;">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="idclose" value="{{ $tickets['id'] }}">
                     <input type="hidden" name="nameticket" value="{{ $tickets['name'] }}">
                     <input type="hidden" name="nameclient" value="{{ $tickets['clientName'] }}">
                 </form>
-                <form id="formNo" action="{{ route('close.ticket.nomail') }}" method="POST" style="display: none;">
+                <form id="formNoclose" action="{{ route('close.ticket.nomail') }}" method="POST" style="display: none;">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="idclose" value="{{ $tickets['id'] }}">
                 </form>
-                <form action="{{ route('suspend.ticket') }}" method="POST">
+                <button onclick="confermaSospensione()"">Sospendi Ticket</button>
+                <form id="formSisuspend" action="{{ route('suspend.ticket') }}" method="POST" style="display: none;">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="idsuspend" value="{{ $tickets['id'] }}">
-                    <button type="submit">Sospendi Ticket</button>
                 </form>
-                <form action="{{ route('reopen.ticket') }}" method="POST">
+                <button onclick="confermaRiapertura()"">Riapri Ticket</button>
+                <form id="formSiopen" action="{{ route('reopen.ticket') }}" method="POST" style="display: none;">
                     @csrf
                     @method('PUT')
-                   <input type="hidden" name="idreopen" value="{{ $tickets['id'] }}">
-                   <button type="submit">Riapri Ticket</button>
+                    <input type="hidden" name="idreopen" value="{{ $tickets['id'] }}">
                 </form>
                 <a href='/'>Torna alla dashboard</a>
             </div>
@@ -170,8 +185,21 @@
 
         <div class="ColonnaBottoni">
             <div class="bottoni">
-                <a href="{{ route('dashboard') }}">Aggiungi nuova attività</a>
-                <a href="{{ route('dashboard') }}">Modifica attività</a>
+                <form action="{{ route('create.task') }}" method="GET">
+                    @csrf
+                    <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
+                    <button type="submit">Aggiungi attività</button>
+                </form>
+                <form action="{{ route('create.task') }}" method="GET">
+                    @csrf
+                    <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
+                    <button type="submit">Modifica attività</button>
+                </form>
+                <form action="{{ route('create.task') }}" method="GET">
+                    @csrf
+                    <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
+                    <button type="submit">Elimina attività</button>
+                </form>
             </div>
         </div>
     </div>

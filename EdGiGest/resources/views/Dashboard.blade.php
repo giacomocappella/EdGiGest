@@ -151,7 +151,7 @@
                     @foreach ($tickets as $ticket)
                         <tr>
                             <td>{{ $ticket['name'] }}</td>
-                            <td>{{ $ticket['duration'] }}</td>
+                            <td>{{$ticket['duration']}}</td>
                             <td>
                                 @if($ticket['color'] == '#689F38')
                                     <span class="status-open">Aperto</span>

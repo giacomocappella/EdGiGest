@@ -10,10 +10,10 @@ use App\Models\Client;
 
 class Dashboard extends Controller
 {
-        public function convertDurationFormat($duration)
-    {
+    public function convertDurationFormat($duration)
+    {    
         if ($duration === null || $duration === "PT0S") {
-            $duration = "0 min";
+            $duration = "0 h";
         } else {
             
             preg_match('/PT(?:(\d+)H)?(?:(\d+)M)?/', $duration, $matches);
@@ -24,11 +24,12 @@ class Dashboard extends Controller
             
             $duration = trim($ore . $minuti);
 
-            return $duration;
+            
         }
-    
+        
+    return $duration;
     }
-
+    
     public function __invoke()
     {
         // La chiave API
@@ -50,6 +51,7 @@ class Dashboard extends Controller
         foreach ($data as &$ticket) {
             $ticket['duration']=$this->convertDurationFormat($ticket['duration']);
         }
+   
         //filtro solo i ticket aperti o sospesi in base al colore
           $filteredData = collect($data)->filter(function($ticket) {
             // Filtra solo i ticket aperti o sospesi, escludendo quelli chiusi
@@ -83,3 +85,4 @@ class Dashboard extends Controller
       }
     }
 }
+

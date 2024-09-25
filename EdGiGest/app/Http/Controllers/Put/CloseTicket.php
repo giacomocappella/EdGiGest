@@ -27,7 +27,7 @@ class CloseTicket extends Controller
     public function convertDurationFormat($duration)
     {
         if ($duration === null || $duration === "PT0S") {
-            $duration = "0 min";
+            $duration = "0 h";
         } else {
             
             preg_match('/PT(?:(\d+)H)?(?:(\d+)M)?/', $duration, $matches);
@@ -38,9 +38,9 @@ class CloseTicket extends Controller
             
             $duration = trim($ore . $minuti);
 
-            return $duration;
+            
         }
-    
+        return $duration;
     }
 
     public function CloseNoMail(Request $request){

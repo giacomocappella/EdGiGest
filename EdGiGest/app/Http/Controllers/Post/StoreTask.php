@@ -32,7 +32,7 @@ class StoreTask extends Controller
 
         // Verifico se la chiamata ha avuto successo
         if ($response->successful()) {
-            return redirect()->route('create.subtask')->with('success', 'Attività inserita correttamente!');
+            return redirect()->route('get.tasks')->with('success', 'Attività inserita correttamente!');
             } 
         else {
             return response()->json([

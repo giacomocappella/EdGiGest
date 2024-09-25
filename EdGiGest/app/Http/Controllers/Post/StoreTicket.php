@@ -35,7 +35,7 @@ class StoreTicket extends Controller
 
         // Verifico se la chiamata ha avuto successo
         if ($response->successful()) {
-            return redirect()->route('dashboard')->with('success', 'Ticket inserito correttamente!');
+            return redirect()->route('create.task')->with('success', 'Ticket inserito correttamente!');
             } 
         else {
             return response()->json([

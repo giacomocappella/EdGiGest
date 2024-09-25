@@ -24,7 +24,7 @@ class GetTasks extends Controller
     public function convertDurationFormat($duration)
     {
         if ($duration === null || $duration === "PT0S") {
-            $duration = "0 min";
+            $duration = "0 h";
         } else {
             
             preg_match('/PT(?:(\d+)H)?(?:(\d+)M)?/', $duration, $matches);
@@ -35,9 +35,9 @@ class GetTasks extends Controller
             
             $duration = trim($ore . $minuti);
 
-            return $duration;
+            
         }
-    
+        return $duration;
     }
 
     public function __invoke(Request $request)
