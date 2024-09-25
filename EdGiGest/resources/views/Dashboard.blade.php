@@ -63,6 +63,12 @@
                     </span>
                     <h3>Gestione Ricevute</h3>
                 </a>
+                <a href="/calendars">
+                    <span class="material-icons-sharp">
+                        calendar_month
+                    </span>
+                    <h3>Calendario</h3>
+                </a>
                 <a href="/settings">
                     <span class="material-icons-sharp">
                         settings
