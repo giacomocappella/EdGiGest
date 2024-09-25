@@ -81,6 +81,17 @@
             cursor: pointer;
         }
     </style>
+    <script>
+        function confermaChiusura() {
+      let scelta = confirm("Vuoi inviare mail al cliente con il rapportino della lavorazione? Cliccando su annulla non verrà inviata la mail");
+
+      if (scelta) {
+            document.getElementById('formSi').submit();
+        } else {
+            document.getElementById('formNo').submit();
+        }
+}
+    </script>
 </head>
 <body>
     <div class="container">
@@ -96,7 +107,7 @@
                 @elseif($tickets['color'] == '#FF5722')
                     <span style="color: #FF5722;">Sospeso</span>
                 @else
-                    <span style="color: #BDBDBD;">Chiuso</span>
+                    <span style="color: #FF0000;">Chiuso</span>
                 @endif
             </div>
             <div class="riga"><strong>Ore svolte:</strong> {{$tickets['duration']}}</div>
@@ -104,12 +115,19 @@
 
         <div class="ColonnaBottoni">
             <div class="bottoni">
-                <form action="{{ route('close.ticket') }}" method="POST">
+                <button type="submit" onclick="confermaChiusura()"">Chiudi Ticket</button>
+                <form id="formSi" action="{{ route('close.ticket.mail') }}" method="POST" style="display: none;">
                     @csrf
                     @method('PUT')
-                   <input type="hidden" name="idclose" value="{{ $tickets['id'] }}">
-                   <button type="submit">Chiudi Ticket</button>
-                   </form>
+                    <input type="hidden" name="idclose" value="{{ $tickets['id'] }}">
+                    <input type="hidden" name="nameticket" value="{{ $tickets['name'] }}">
+                    <input type="hidden" name="nameclient" value="{{ $tickets['clientName'] }}">
+                </form>
+                <form id="formNo" action="{{ route('close.ticket.nomail') }}" method="POST" style="display: none;">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="idclose" value="{{ $tickets['id'] }}">
+                </form>
                 <form action="{{ route('suspend.ticket') }}" method="POST">
                     @csrf
                     @method('PUT')

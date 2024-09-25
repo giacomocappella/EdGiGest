@@ -50,7 +50,7 @@
                     </span>
                     <h3>Nuovo Ticket</h3>
                 </a>
-                <a href="/tickets">
+                <a href="/ticket">
                     <span class="material-icons-sharp">
                         format_list_numbered
                     </span>
@@ -206,10 +206,4 @@
     </div>
     <script src="js\index.js"></script>
 </body>
-
-
-
-<!-------------------------------------------------------------------------------------------------------------------------->
-
-
 </html>
