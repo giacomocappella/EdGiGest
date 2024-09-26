@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 
 class CreateTask extends Controller
 {
-    public function __invoke()
-    {
-        return view('NewTask');
+    public function __invoke(Request $request)
+    {   
+        //recupero l'id del ticket che serve per creare l'attività
+        $idticket=$request->input('idticket');
+        return view('NewTask',['idticket'=> $idticket]);
     }
 }

@@ -3,101 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Activity</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}"> <!-- Assicurati che app.css includa il CSS fornito -->
+    <title>Crea Attività</title>
     <style>
-        .form-container {
-            background-color: var(--color-white);
-            padding: var(--card-padding);
-            border-radius: var(--card-border-radius);
-            box-shadow: var(--box-shadow);
-            width: 100%;
-            max-width: 600px;
-            margin: 2rem auto;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
         }
 
-        .form-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 1.2rem;
+        h1 {
             text-align: center;
-            color: var(--color-dark);
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .form-group {
-            margin-bottom: 1.2rem;
+            margin-bottom: 15px;
         }
 
-        .form-label {
+        .form-group label {
+            font-weight: bold;
             display: block;
-            font-weight: 500;
-            margin-bottom: 0.6rem;
-            color: var(--color-dark-variant);
+            margin-bottom: 5px;
         }
 
-        .form-input, .form-textarea {
+        .form-group input, .form-group textarea {
             width: 100%;
-            padding: 0.8rem;
-            border-radius: var(--border-radius-1);
-            border: 1px solid var(--color-light);
-            font-family: 'Poppins', sans-serif;
-            color: var(--color-dark);
-            background-color: var(--color-background);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
         }
 
-        .form-input:focus, .form-textarea:focus {
-            border-color: var(--color-primary);
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
         }
 
-        .form-textarea {
-            height: 150px;
-            resize: none;
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
         }
 
-        .form-button {
-            display: block;
-            width: 100%;
-            padding: 0.8rem;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--color-white);
-            background-color: var(--color-primary);
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .submit-btn, .cancel-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
             border: none;
-            border-radius: var(--border-radius-2);
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            font-size: 16px;
+            text-transform: uppercase;
+            text-align: center;
         }
 
-        .form-button:hover {
-            background-color: var(--color-danger);
+        .submit-btn:hover, .cancel-btn:hover {
+            background-color: #45a049;
         }
 
+        .cancel-btn {
+            background-color: #f44336;
+        }
+
+        .cancel-btn:hover {
+            background-color: #e53935;
+        }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <h1 class="form-title">Create New Activity</h1>
-        <form action="{{ route('store.task') }}" method="POST">
-            @csrf
 
-            <div class="form-group">
-                <label for="start_datetime" class="form-label">Start Date & Time</label>
-                <input type="datetime-local" id="start_datetime" name="start_datetime" class="form-input" required>
-            </div>
+<div class="form-container">
+    <h1>Crea nuova attività</h1>
+    <form action="{{ route('store.task') }}" method="POST">
+        @csrf
+        <div class="form-group">
+            <label for="Task_Start">Inizio attività</label>
+            <input type="datetime-local" id="Task_Start" name="Task_Start" value="{{ old('Task_Start') }}">
+            @error('Task_Start')
+            <div class="error">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <div class="form-group">
-                <label for="end_datetime" class="form-label">End Date & Time</label>
-                <input type="datetime-local" id="end_datetime" name="end_datetime" class="form-input" required>
-            </div>
+        <div class="form-group">
+            <label for="Task_End">Fine attività</label>
+            <input type="datetime-local" id="Task_End" name="Task_End" value="{{ old('Task_End') }}">
+            @error('Task_End')
+            <div class="error">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <div class="form-group">
-                <label for="description" class="form-label">Description</label>
-                <textarea id="description" name="description" class="form-textarea" required></textarea>
-            </div>
+        <div class="form-group">
+            <label for="Description">Descrizione attività</label>
+            <textarea id="Description" name="Description">{{ old('Description') }}</textarea>
+            @error('Description')
+            <div class="error">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <button type="submit" class="form-button">Submit</button>
-        </form>
-    </div>
+        <input type="hidden" name="idticket" value="{{ $idticket }}">
+
+        <div class="button-container">
+            <button type="submit" class="submit-btn">Crea attività</button>
+            <a href="{{ route('dashboard') }}" class="cancel-btn">Annulla</a>
+        </div>
+    </form>
+</div>
+
 </body>
 </html>
