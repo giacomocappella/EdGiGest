@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Il tuo ticket è stato chiuso</h1>
-    <p>Gentile cliente, con la presente vogliamo informare che sono terminate le attivià associate al ticket di cui riportiamo i dettagli qui sotto.</p><br>
+    <p>Gentile cliente, con la presente vogliamo informare che sono terminate le attività associate al ticket di cui riportiamo i dettagli qui sotto.</p><br>
     <h2>Nome ticket: {{ $nameticket }}</h2>
     <p>Dettagli attività eseguite</p>
     @foreach ($tasks as $task)

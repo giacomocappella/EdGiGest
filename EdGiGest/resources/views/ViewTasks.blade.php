@@ -143,13 +143,13 @@
                     @method('PUT')
                     <input type="hidden" name="idclose" value="{{ $tickets['id'] }}">
                 </form>
-                <button onclick="confermaSospensione()"">Sospendi Ticket</button>
+                <button onclick="confermaSospensione()">Sospendi Ticket</button>
                 <form id="formSisuspend" action="{{ route('suspend.ticket') }}" method="POST" style="display: none;">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="idsuspend" value="{{ $tickets['id'] }}">
                 </form>
-                <button onclick="confermaRiapertura()"">Riapri Ticket</button>
+                <button onclick="confermaRiapertura()">Riapri Ticket</button>
                 <form id="formSiopen" action="{{ route('reopen.ticket') }}" method="POST" style="display: none;">
                     @csrf
                     @method('PUT')
@@ -161,6 +161,8 @@
 
         <h2>LISTA ATTIVITÀ</h2>
         <table class="table">
+            <form action="{{ route('create.task') }}" method="GET">
+            @csrf
             <thead>
                 <tr>
                     <th>Seleziona</th>
@@ -184,24 +186,14 @@
         </table>
 
         <div class="ColonnaBottoni">
-            <div class="bottoni">
-                <form action="{{ route('create.task') }}" method="GET">
-                    @csrf
-                    <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
-                    <button type="submit">Aggiungi attività</button>
-                </form>
-                <form action="{{ route('create.task') }}" method="GET">
-                    @csrf
-                    <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
-                    <button type="submit">Modifica attività</button>
-                </form>
-                <form action="{{ route('create.task') }}" method="GET">
-                    @csrf
-                    <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
-                    <button type="submit">Elimina attività</button>
-                </form>
+            <div class="bottoni">           
+                <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
+                <button type="submit" formaction="{{ route('create.task') }}">Aggiungi attività</button>
+                <button type="submit" formaction="{{ route('edit.task') }}">Modifica attività</button>
+                <button type="submit" formaction="{{ route('create.task') }}">Elimina attività</button>               
             </div>
         </div>
+        </form>
     </div>
 </body>
 </html>

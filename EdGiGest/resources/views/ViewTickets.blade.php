@@ -97,7 +97,7 @@
             <tbody>
                 @foreach($tickets as $ticket)
                 <tr>
-                    <td class="radio-btn"><input type="radio" name="id" value="{{ $ticket['id'] }}"></td>
+                    <td class="radio-btn"><input type="radio" name="idticket" value="{{ $ticket['id'] }}"></td>
                     <td>{{ $ticket['clientName'] }}</td>
                     <td>{{ $ticket['name'] }}</td>
                     <td>

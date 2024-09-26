@@ -43,11 +43,10 @@ class GetTasks extends Controller
     public function __invoke(Request $request)
     {
         //recupero tutti i dettagli del ticket
-        if($request->input('id')==null)
-            $idticket = session('idticket');
+        if($request->input('idticket')==null)
+            $idticket = session('idticket'); //quando arrivo dalle pagine dei task
         else
-            $idticket=$request->input('id');
-        
+            $idticket=$request->input('idticket');  //quando arrivo dalla lista ticket
         $apiKey = env('API_KEY'); 
         $urlticket="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/projects/$idticket";
         $response = Http::withHeaders([

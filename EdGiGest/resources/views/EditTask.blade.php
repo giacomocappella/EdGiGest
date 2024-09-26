@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crea Attività</title>
+    <title>Modifica Attività</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -90,12 +90,13 @@
 <body>
 
 <div class="form-container">
-    <h1>Crea nuova attività</h1>
-    <form action="{{ route('store.task') }}" method="POST">
+    <h1>MODIFICA ATTIVITÀ</h1>
+    <form action="{{ route('store.edit.task') }}" method="POST">
         @csrf
+        @method('PUT')
         <div class="form-group">
             <label for="Task_Start">Inizio attività</label>
-            <input type="datetime-local" id="Task_Start" name="Task_Start" value="{{ old('Task_Start') }}">
+            <input type="datetime-local" id="Task_Start" name="Task_Start" value="{{ $task['timeInterval']['start'] }}">
             @error('Task_Start')
             <div class="error">{{ $message }}</div>
             @enderror
@@ -103,7 +104,7 @@
 
         <div class="form-group">
             <label for="Task_End">Fine attività</label>
-            <input type="datetime-local" id="Task_End" name="Task_End" value="{{ old('Task_End') }}">
+            <input type="datetime-local" id="Task_End" name="Task_End" value="{{ $task['timeInterval']['end'] }}">
             @error('Task_End')
             <div class="error">{{ $message }}</div>
             @enderror
@@ -111,16 +112,16 @@
 
         <div class="form-group">
             <label for="Description">Descrizione attività</label>
-            <textarea id="Description" name="Description">{{ old('Description') }}</textarea>
+            <textarea id="Description" name="Description">{{ $task['description']}}</textarea>
             @error('Description')
             <div class="error">{{ $message }}</div>
             @enderror
         </div>
 
-        <input type="hidden" name="idticket" value="{{ $idticket }}">
-
         <div class="button-container">
-            <button type="submit" class="submit-btn">Crea attività</button>
+            <input type=hidden name="idticket" value="{{ $idticket }}">
+            <input type=hidden name="idtask" value="{{ $task['id'] }}">
+            <button type="submit" class="submit-btn">Conferma</button>
             <a href="{{ route('get.tasks') }}" class="cancel-btn">Torna indietro</a>
         </div>
     </form>
