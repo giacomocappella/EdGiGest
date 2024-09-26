@@ -168,7 +168,7 @@
                             <td>
                                 <form action="{{ route('get.tasks') }}" method="GET">
                                     @csrf
-                                    <input type="hidden" name="id" value="{{ $ticket['id'] }}">
+                                    <input type="hidden" name="idticket" value="{{ $ticket['id'] }}">
                                     <button class="details-button" type="submit">Vedi Dettagli</button>
                                 </form>
                             </td>

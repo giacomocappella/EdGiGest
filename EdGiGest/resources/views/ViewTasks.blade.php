@@ -106,6 +106,14 @@
             document.getElementById('formSiopen').submit();
         } //altrimenti annulla
         }   
+        function confermaEliminazione() {
+        let scelta = confirm("Sei sicuro di voler eliminare l'attività?");
+
+        if (scelta) {
+            document.getElementById('formSidelete').submit();
+        } //altrimenti annulla
+        }  
+        
     </script>
 </head>
 <body>
@@ -130,7 +138,7 @@
 
         <div class="ColonnaBottoni">
             <div class="bottoni">
-                <button onclick="confermaChiusura()"">Chiudi Ticket</button>
+                <button onclick="confermaChiusura()">Chiudi Ticket</button>
                 <form id="formSiclose" action="{{ route('close.ticket.mail') }}" method="POST" style="display: none;">
                     @csrf
                     @method('PUT')
@@ -190,7 +198,7 @@
                 <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
                 <button type="submit" formaction="{{ route('create.task') }}">Aggiungi attività</button>
                 <button type="submit" formaction="{{ route('edit.task') }}">Modifica attività</button>
-                <button type="submit" formaction="{{ route('create.task') }}">Elimina attività</button>               
+                <button type="submit" onclick="confermaEliminazione()" formaction="{{ route('delete.task') }}">Elimina attività</button>          
             </div>
         </div>
         </form>

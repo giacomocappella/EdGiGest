@@ -11,7 +11,7 @@ Route::get('/newticket','App\Http\Controllers\View\CreateTicket')->name('create.
 Route::get('/ticket/newtask','App\Http\Controllers\View\CreateTask')->name('create.task');
 Route::get('/receiptPDF','App\Http\Controllers\View\MakePDF@download')->name('create.pdf');
 Route::get('/ticket/task/edit','App\Http\Controllers\View\EditTask')->name('edit.task');
-
+Route::get('/ticket/task/delete','App\Http\Controllers\Delete\DeleteTask')->name('delete.task');
 
 Route::post('/newclient/store', 'App\Http\Controllers\Post\StoreClient')->name('store.client');
 Route::post('/newticket/store', 'App\Http\Controllers\Post\StoreTicket')->name('store.ticket');
@@ -23,3 +23,4 @@ Route::put('/ticket/reopen', 'App\Http\Controllers\Put\ReopenTicket')->name('reo
 Route::put('/ticket/close/withmail','App\Http\Controllers\Put\CloseTicket@CloseWithMail')->name('close.ticket.mail');
 Route::put('/ticket/close/nomail','App\Http\Controllers\Put\CloseTicket@CloseNoMail')->name('close.ticket.nomail');
 Route::put('/ticket/task/edit/store','App\Http\Controllers\Put\StoreEditTask')->name('store.edit.task');
+

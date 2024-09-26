@@ -117,9 +117,10 @@
             @enderror
         </div>
 
-        <input type="hidden" name="idticket" value="{{ $idticket }}">
+        
 
         <div class="button-container">
+            <input type="hidden" name="idticket" value="{{ $idticket }}">
             <button type="submit" class="submit-btn">Crea attività</button>
             <a href="{{ route('get.tasks') }}" class="cancel-btn">Torna indietro</a>
         </div>
