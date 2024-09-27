@@ -117,12 +117,17 @@
             <div class="error">{{ $message }}</div>
             @enderror
         </div>
-
+        
         <div class="button-container">
-            <input type=hidden name="idticket" value="{{ $idticket }}">
+            <input type="hidden" name="idticket" value="{{ $idticket }}">
             <input type=hidden name="idtask" value="{{ $task['id'] }}">
             <button type="submit" class="submit-btn">Conferma</button>
-            <a href="{{ route('get.tasks') }}" class="cancel-btn">Torna indietro</a>
+        </form>
+            <form action="{{ route('get.tasks') }}" method="GET">
+                @csrf
+                <input type="hidden" name="idticket" value="{{ $idticket }}">
+                <button type="submit" class="cancel-btn">Torna indietro</button>
+            </form>
         </div>
     </form>
 </div>

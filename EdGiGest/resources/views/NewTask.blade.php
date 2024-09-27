@@ -122,9 +122,15 @@
         <div class="button-container">
             <input type="hidden" name="idticket" value="{{ $idticket }}">
             <button type="submit" class="submit-btn">Crea attività</button>
-            <a href="{{ route('get.tasks') }}" class="cancel-btn">Torna indietro</a>
+        </form>
+            <form action="{{ route('get.tasks') }}" method="GET">
+                @csrf
+                <input type="hidden" name="idticket" value="{{ $idticket }}">
+                <button type="submit" class="cancel-btn">Torna indietro</button>
+            </form>
         </div>
-    </form>
+    
+    
 </div>
 
 </body>
