@@ -138,31 +138,43 @@
 
         <div class="ColonnaBottoni">
             <div class="bottoni">
-                <button onclick="confermaChiusura()">Chiudi Ticket</button>
-                <form id="formSiclose" action="{{ route('close.ticket.mail') }}" method="POST" style="display: none;">
+                <form action="{{ route('edit.ticket') }}" method="GET">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="idclose" value="{{ $tickets['id'] }}">
-                    <input type="hidden" name="nameticket" value="{{ $tickets['name'] }}">
-                    <input type="hidden" name="nameclient" value="{{ $tickets['clientName'] }}">
+                    <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
+                    <button type="submit">Modifica Ticket</button>
                 </form>
-                <form id="formNoclose" action="{{ route('close.ticket.nomail') }}" method="POST" style="display: none;">
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" name="idclose" value="{{ $tickets['id'] }}">
-                </form>
-                <button onclick="confermaSospensione()">Sospendi Ticket</button>
-                <form id="formSisuspend" action="{{ route('suspend.ticket') }}" method="POST" style="display: none;">
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" name="idsuspend" value="{{ $tickets['id'] }}">
-                </form>
-                <button onclick="confermaRiapertura()">Riapri Ticket</button>
-                <form id="formSiopen" action="{{ route('reopen.ticket') }}" method="POST" style="display: none;">
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" name="idreopen" value="{{ $tickets['id'] }}">
-                </form>
+                @if($tickets['color'] == '#689F38'||$tickets['color'] == '#FF5722')
+                    <button onclick="confermaChiusura()">Chiudi Ticket</button>
+                    <form id="formSiclose" action="{{ route('close.ticket.mail') }}" method="POST" style="display: none;">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="idclose" value="{{ $tickets['id'] }}">
+                        <input type="hidden" name="nameticket" value="{{ $tickets['name'] }}">
+                        <input type="hidden" name="nameclient" value="{{ $tickets['clientName'] }}">
+                    </form>
+                    <form id="formNoclose" action="{{ route('close.ticket.nomail') }}" method="POST" style="display: none;">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="idclose" value="{{ $tickets['id'] }}">
+                    </form>
+                @endif
+                @if($tickets['color'] == '#689F38')
+                    <button onclick="confermaSospensione()">Sospendi Ticket</button>
+                    <form id="formSisuspend" action="{{ route('suspend.ticket') }}" method="POST" style="display: none;">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="idsuspend" value="{{ $tickets['id'] }}">
+                    </form>
+                @endif
+                @if($tickets['color'] == '#FF5722'||$tickets['color'] == '#FF0000')
+                    <button onclick="confermaRiapertura()">Riapri Ticket</button>
+                    <form id="formSiopen" action="{{ route('reopen.ticket') }}" method="POST" style="display: none;">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="idreopen" value="{{ $tickets['id'] }}">
+                    </form>
+                @endif
                 <a href='/'>Torna alla dashboard</a>
             </div>
         </div>
