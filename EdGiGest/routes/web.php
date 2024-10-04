@@ -9,10 +9,12 @@ Route::get('/ticket', 'App\Http\Controllers\View\GetTickets')->name('get.tickets
 Route::get('/ticket/tasks','App\Http\Controllers\View\GetTasks')->name('get.tasks');
 Route::get('/newticket','App\Http\Controllers\View\CreateTicket')->name('create.ticket');
 Route::get('/ticket/newtask','App\Http\Controllers\View\CreateTask')->name('create.task');
-Route::get('/receiptPDF','App\Http\Controllers\View\MakePDF@download')->name('create.pdf');
 Route::get('/ticket/task/edit','App\Http\Controllers\View\EditTask')->name('edit.task');
 Route::get('/ticket/task/delete','App\Http\Controllers\Delete\DeleteTask')->name('delete.task');
 Route::get('/ticket/edit','App\Http\Controllers\View\EditTicket')->name('edit.ticket');
+Route::get('/dashboard-receipts','App\Http\Controllers\View\DashboardReceipts')->name('dashboard.receipts');
+Route::get('/newreceipt','App\Http\Controllers\View\CreateReceipt')->name('create.receipt');
+Route::get('/newreceipt/searchtickets','App\Http\Controllers\View\GetTicketsSelectedClient')->name('get.ticket.selected.client');
 
 Route::post('/newclient/store', 'App\Http\Controllers\Post\StoreClient')->name('store.client');
 Route::post('/newticket/store', 'App\Http\Controllers\Post\StoreTicket')->name('store.ticket');

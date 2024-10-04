@@ -57,11 +57,11 @@
                     <h3>Lista Tickets</h3>
                     <!--<span class="message-count">27</span>-->
                 </a>
-                <a href="/receipts">
+                <a href="/newreceipt">
                     <span class="material-icons-sharp">
                         euro_symbol
                     </span>
-                    <h3>Gestione Ricevute</h3>
+                    <h3>Crea Ricevuta</h3>
                 </a>
                 <a href="/calendars">
                     <span class="material-icons-sharp">
