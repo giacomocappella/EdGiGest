@@ -61,7 +61,7 @@ class CloseTicket extends Controller
         // Verifico se la chiamata ha avuto successo
         if ($response->successful()) {
             session(['idticket' => $idticket]);
-            return redirect()->route('get.tasks');
+            return redirect()->route('dashboard');
             } 
         else {
             return response()->json([
@@ -122,7 +122,7 @@ class CloseTicket extends Controller
         if ($response->successful()) {
             //se l'api ha successo, il sistema invia la mail 
             Mail::to($clientmail)->send(new CloseTicketMail($nameticket, $datatask));
-            return redirect()->route('get.tickets');
+            return redirect()->route('dashboard');
             } 
         else {
             return response()->json([

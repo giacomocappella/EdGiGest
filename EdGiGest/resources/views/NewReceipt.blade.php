@@ -91,44 +91,53 @@
 
 <div class="form-container">
     <h1>CREAZIONE NUOVA RICEVUTA</h1>
-    @if(isset($client) && !empty($client)):
+    
     <form action="{{ route('get.ticket.selected.client') }}" method="GET">
-
-        <select id="clientList" name="Client_list" class="form-select">
+        @if(isset($client) && !empty($client))
+        <select name="clientid" class="form-select">
             @foreach ($client as $item)
                 <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
             @endforeach
         </select>
         <button type='submit'>Conferma</button>
     </form>
-    @endif
+   @endif
     @if(isset($tickets) && !empty($tickets))
     <div class="ticket-closed">
+        <p>Selezionare i ticket da includere nella ricevuta</p>
         <table>
             <thead>
                 <tr>
+                    <th>Seleziona</th>
                     <th>Nome ticket</th>
                     <th>Durata</th>
-                    <th>Ricevuta creata</th>
+                    <th>Ricevuta emessa</th>
                 </tr>
             </thead>
             <tbody>
+                <form action="{{ route('make.pdf') }}" method="GET">
+                @csrf
                 @foreach ($tickets as $item )
                 @if($item['color'] == '#FF0000')
                 <tr>
+                        <td><input type="checkbox" name="selected_tickets[]" value="{{ $item['id'] }},{{ $item['name'] }},{{ $item['duration'] }}"></td>
                         <td>{{$item['name'] }}</td>
                         <td>{{$item['duration']}}</td>
                         @if($item['note'] == '')
                         <td>No</td>
-                        @else
+                        @elseif($item['note'] == 'RICEVUTA_EMESSA')
                         <td>Si</td>
                         @endif                               
                     </tr>
                     @endif
                 @endforeach
+
             </tbody>
         </table>
-        
+        <input type="hidden" name="idclient" value="{{ $idclient }}">
+        <button type='submit'>Scarica anteprima</button>
+        </form>
+     
         
     
 </div>

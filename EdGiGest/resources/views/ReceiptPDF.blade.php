@@ -87,15 +87,15 @@
                 <th>Price</th>
             </tr>
             <tr class="items">
-                @foreach($data as $item)
+                @foreach($ticketsArray as $item)
                     <td>
-                        {{ $item['quantity'] }}
+                        {{ $item['id'] }}
                     </td>
                     <td>
-                        {{ $item['description'] }}
+                        {{ $item['name'] }}
                     </td>
                     <td>
-                        {{ $item['price'] }}
+                        {{ $item['duration'] }}
                     </td>
                 @endforeach
             </tr>

@@ -15,6 +15,7 @@ Route::get('/ticket/edit','App\Http\Controllers\View\EditTicket')->name('edit.ti
 Route::get('/dashboard-receipts','App\Http\Controllers\View\DashboardReceipts')->name('dashboard.receipts');
 Route::get('/newreceipt','App\Http\Controllers\View\CreateReceipt')->name('create.receipt');
 Route::get('/newreceipt/searchtickets','App\Http\Controllers\View\GetTicketsSelectedClient')->name('get.ticket.selected.client');
+Route::get('/newreceipt/pdf','App\Http\Controllers\View\MakePDF')->name('make.pdf');
 
 Route::post('/newclient/store', 'App\Http\Controllers\Post\StoreClient')->name('store.client');
 Route::post('/newticket/store', 'App\Http\Controllers\Post\StoreTicket')->name('store.ticket');
