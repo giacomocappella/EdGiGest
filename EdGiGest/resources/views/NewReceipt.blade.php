@@ -91,9 +91,9 @@
 
 <div class="form-container">
     <h1>CREAZIONE NUOVA RICEVUTA</h1>
-    
+     @if(isset($client) && !empty($client))
     <form action="{{ route('get.ticket.selected.client') }}" method="GET">
-        @if(isset($client) && !empty($client))
+       
         <select name="clientid" class="form-select">
             @foreach ($client as $item)
                 <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
