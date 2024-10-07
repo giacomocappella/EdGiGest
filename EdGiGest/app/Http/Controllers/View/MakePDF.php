@@ -80,7 +80,7 @@ class MakePDF extends Controller
             }
 
             //definisco l'importo orario
-            $hourlyamount=30;
+            $hourlyamount=30.00;
 
             //definisco la ritenuta d'acconto
             $withholding_tax=0.2;
@@ -108,6 +108,9 @@ class MakePDF extends Controller
             //trovo il cliente nel db attraverso il nome ottenuto da clockify dalla view
             $client=Client::where('Ragione_Sociale',$clientname)->first();
 
+            //trovo il sistemista nel db (attraverso l'id utente in futuro)
+            $sys_admin=System_admin::where('Codice_Fiscale', 'CPPGCM95A17C111Q')->first();
+
             //converto le durate e creo una variabile che contiene la somma delle stesse
             $durationhours=0;
 
@@ -121,12 +124,16 @@ class MakePDF extends Controller
             $receipt->Data = $currentdate;
             $receipt->P_IVA_CF_Cliente = $client->Partita_IVA_CF;
             $receipt->CF_Sistemista = 'CPPGCM95A17C111Q';  //per ora assegnato così
-            $receipt->Importo_Netto = $durationhours*$hourlyamount;  //numero ore per importo orario
-            $receipt->Importo_Lordo = $receipt->Importo_Netto/(1-$withholding_tax);  //conversione netto-lordo con la ritenuta al 20%
+            $receipt->Importo_Netto = number_format($durationhours*$hourlyamount,2);  //numero ore per importo orario
+            $receipt->Importo_Lordo = number_format($receipt->Importo_Netto/(1-$withholding_tax),2);  //conversione netto-lordo con la ritenuta al 20%
+            $taxsum=number_format($receipt->Importo_Lordo-$receipt->Importo_Netto,2);
+
+            //converto nuovamente la data per la ricevuta
+            $dateita = Carbon::createFromFormat('Y/m/d', $receipt->Data)->format('d/m/Y');
             
             
             //crea il pdf con i dati inseriti
-            $pdf = Pdf::loadView('ReceiptPDF', compact('ticketsArray'));
+            $pdf = Pdf::loadView('ReceiptPDF', ['tickets'=>$ticketsArray, 'client'=>$client, 'sys_admin'=>$sys_admin, 'receipt'=>$receipt, 'taxsum'=>$taxsum, 'dateita'=>$dateita]);
 
             // Nome del file
             $filename = 'ricevuta_' .  $receipt->Numero . '_' . $receipt->Anno . '.pdf';

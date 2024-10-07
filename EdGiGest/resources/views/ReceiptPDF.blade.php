@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Invoice</title>
+    <title>Ricevuta</title>
         <style>
             h4 {
         margin: 0;
@@ -26,12 +26,16 @@
         table {
             width: 100%;
             border-spacing: 0;
+            
+        }
+        th {
+                text-align: left;
         }
         table.products {
             font-size: 0.875rem;
         }
         table.products tr {
-            background-color: rgb(96 165 250);
+            background-color: rgb(105 105 105);
         }
         table.products th {
             color: #ffffff;
@@ -46,7 +50,8 @@
         .total {
             text-align: right;
             margin-top: 1rem;
-            font-size: 0.875rem;
+            font-size: 1rem;
+            line-height: 1.5;
         }
 </style>
 </head>
@@ -54,10 +59,10 @@
     <table class="w-full">
         <tr>
             <td class="w-half">
-                <img src="{{ asset('laraveldaily.png') }}" alt="laravel daily" width="200" />
+                <img src='logo.jpg' width="200" />
             </td>
             <td class="w-half">
-                <h2>Invoice ID: 834847473</h2>
+                <h3>Ricevuta n. {{$receipt['Numero']}} del {{$dateita}}</h3>
             </td>
         </tr>
     </table>
@@ -66,49 +71,63 @@
         <table class="w-full">
             <tr>
                 <td class="w-half">
-                    <div><h4>To:</h4></div>
-                    <div>John Doe</div>
-                    <div>123 Acme Str.</div>
+                    <div><h4>Spett.le</h4></div>
+                    <div>{{$client['Ragione_Sociale']}}</div>
+                    <div>{{$client['Via']}} {{$client['Civico']}}</div>
+                    <div>{{$client['Cap']}} - {{$client['Citta']}} ({{$client['Provincia']}})</div>
+                    <div>CF - P.IVA {{$client['Partita_IVA_CF']}}</div>
                 </td>
                 <td class="w-half">
-                    <div><h4>From:</h4></div>
-                    <div>Laravel Daily</div>
-                    <div>London</div>
+                    <div><h4>Prestatore occasionale:</h4></div>
+                    <div>{{$sys_admin['Cognome']}} {{$sys_admin['Nome']}}</div>
+                    <div>{{$sys_admin['Via']}} {{$sys_admin['Civico']}}</div>
+                    <div>{{$sys_admin['Cap']}} - {{$sys_admin['Citta']}} ({{$sys_admin['Provincia']}})</div>
+                    <div>CF {{$sys_admin['Codice_Fiscale']}}</div>
                 </td>
             </tr>
         </table>
     </div>
- 
+    <br>
+    <h3>CONSULENZA TECNICO INFORMATICA</h3>
+    <br>
+    <p> Ticket inclusi nella presente ricevuta:</p>
     <div class="margin-top">
         <table class="products">
             <tr>
-                <th>Qty</th>
-                <th>Description</th>
-                <th>Price</th>
+                <th>Nome Ticket</th>
+                <th>Durata</th>
             </tr>
+            @foreach($tickets as $item)
             <tr class="items">
-                @foreach($ticketsArray as $item)
-                    <td>
-                        {{ $item['id'] }}
-                    </td>
                     <td>
                         {{ $item['name'] }}
                     </td>
                     <td>
                         {{ $item['duration'] }}
                     </td>
-                @endforeach
             </tr>
+            @endforeach
         </table>
     </div>
- 
+    <br><br>
     <div class="total">
-        Total: $129.00 USD
+       <b>Saldo compenso lordo: € {{ $receipt['Importo_Lordo'] }}</b><br>
+       Ritenuta d’acconto Irpef 20% - Art. 25 D.P.R. 600/1973: - € {{$taxsum}}
+       <hr>
+       <b>Netto a pagare: € {{ $receipt['Importo_Netto'] }}</b>
     </div>
- 
+    <br><br>
     <div class="footer margin-top">
-        <div>Thank you</div>
-        <div>&copy; Laravel Daily</div>
+        <div>Operazione esclusa da IVA ai sensi dell’art. 5 D.P.R. 633/1972.</div>
+        <div><ul>
+            <li>Il sottoscritto dichiara che, nell’anno solare {{ $receipt['Anno'] }}, alla data odierna con questa prestazione non ha conseguito redditi derivanti dall’esercizio di attività di lavoro autonomo occasionale eccedenti € 5.000,00;</li>
+            <br>
+            <li>Il sottoscritto dichiara inoltre di non essere iscritto (applicazione dell’aliquota contributiva del 23,5%) a forme di previdenza obbligatorie, quali lavoratore subordinato – lavoratore in gestione separata.
+            </ul>
+        </div>
+    </div>
+    <div class="footer margin-top">
+        <div>Marca da bollo € 2,00 sull'originale.</div>
     </div>
 </body>
 </html>

@@ -48,8 +48,7 @@ class GetTicketsSelectedClient extends Controller
         }
 
         // Passa i dati alla vista
-
-        return view('NewReceipt', ['tickets'=>$data, 'idclient'=>$idclient]);
+    return view('NewReceipt', ['tickets'=>$data, 'idclient'=>$idclient]);
     } else {
         // Gestisci l'errore
         return response()->json(['error' => 'Unable to fetch data'], 500);
