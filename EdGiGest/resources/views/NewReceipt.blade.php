@@ -91,18 +91,21 @@
 
 <div class="form-container">
     <h1>CREAZIONE NUOVA RICEVUTA</h1>
+    
      @if(isset($client) && !empty($client))
+     Seleziona un cliente
     <form action="{{ route('get.ticket.selected.client') }}" method="GET">
        
         <select name="clientid" class="form-select">
             @foreach ($client as $item)
-                <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
+                <option value="{{ $item['id']}}">{{ $item['name'] }}</option>
             @endforeach
         </select>
         <button type='submit'>Conferma</button>
     </form>
    @endif
     @if(isset($tickets) && !empty($tickets))
+    <h3>Cliente: {{$tickets[0]['clientName']}}</h3>
     <div class="ticket-closed">
         <p>Selezionare i ticket da includere nella ricevuta</p>
         <table>
@@ -135,7 +138,8 @@
             </tbody>
         </table>
         <input type="hidden" name="idclient" value="{{ $idclient }}">
-        <button type='submit'>Scarica anteprima</button>
+        <input type="hidden" name="clientname" value="{{$tickets[0]['clientName']}}">
+        <button type='submit'>Visualizza anteprima</button>
         </form>
      
         

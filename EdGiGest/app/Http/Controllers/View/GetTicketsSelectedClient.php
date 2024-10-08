@@ -32,7 +32,7 @@ class GetTicketsSelectedClient extends Controller
     // La chiave API
     $apiKey = env('API_KEY'); 
     $idclient=$request->input('clientid');
-
+    $clientname=$request->input('clientname');
     //API PER RECUPERO TICKET
     $urlticket="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/projects?clients=$idclient";
     $responseticket = Http::withHeaders([
@@ -46,9 +46,8 @@ class GetTicketsSelectedClient extends Controller
         foreach ($data as &$ticket) {
             $ticket['duration']=$this->convertDurationFormat($ticket['duration']);
         }
-
         // Passa i dati alla vista
-    return view('NewReceipt', ['tickets'=>$data, 'idclient'=>$idclient]);
+    return view('NewReceipt', ['tickets'=>$data, 'idclient'=>$idclient, 'clientname'=>$clientname]);
     } else {
         // Gestisci l'errore
         return response()->json(['error' => 'Unable to fetch data'], 500);

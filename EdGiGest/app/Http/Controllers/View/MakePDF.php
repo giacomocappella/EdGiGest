@@ -144,7 +144,7 @@ class MakePDF extends Controller
             // Salva il PDF nella directory privata "storage/app/private/"
             Storage::put('private/' . $filename, $pdfcontent);
 
-            $pathpdf = ('storage/app/private/' . $filename);
+            $pathpdf = ('app/private/' . $filename);
             
             return view('PreviewPDF', [
                 'pathpdf' => $pathpdf,
