@@ -52,6 +52,6 @@
                 <input type="hidden" name="dateita" value="{{ $dateita }}">
                 <input type="hidden" name="tickets" value="{{ json_encode($tickets) }}">
             </form>
-    <a href="{{ url()->previous() }}">Annulla</a>
+    <a href="{{ url()->previous() }}">Torna indietro</a>
 </body>
 </html>

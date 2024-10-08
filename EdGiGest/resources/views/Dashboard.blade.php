@@ -38,7 +38,7 @@
                     </span>
                     <h3>Nuovo Cliente</h3>
                 </a>
-                <a href="/newclient">
+                <a href="/clients">
                     <span class="material-icons-sharp">
                         group
                     </span>

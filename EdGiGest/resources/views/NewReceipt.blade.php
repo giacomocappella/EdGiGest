@@ -102,6 +102,7 @@
             @endforeach
         </select>
         <button type='submit'>Conferma</button>
+        <a href='/'>Torna alla dashboard</a>
     </form>
    @endif
     @if(isset($tickets) && !empty($tickets))
@@ -140,6 +141,7 @@
         <input type="hidden" name="idclient" value="{{ $idclient }}">
         <input type="hidden" name="clientname" value="{{$tickets[0]['clientName']}}">
         <button type='submit'>Visualizza anteprima</button>
+        <a href="{{ url()->previous() }}">Torna indietro</a>
         </form>
      
         
