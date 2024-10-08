@@ -141,14 +141,22 @@ class MakePDF extends Controller
             // Ottieni il contenuto del PDF come stringa
             $pdfcontent = $pdf->output();
 
-            // Salva il PDF nella directory privata "storage/app/private"
+            // Salva il PDF nella directory privata "storage/app/private/"
             Storage::put('private/' . $filename, $pdfcontent);
 
-            $pathpdf = ('storege/app/private/' . $filename);
-            $receipt->Percorso_File = $pathpdf;
-            $receipt->save();
-
-            return $pdf->download($filename);
+            $pathpdf = ('storage/app/private/' . $filename);
+            
+            return view('PreviewPDF', [
+                'pathpdf' => $pathpdf,
+                'receipt' => $receipt,
+                'client' => $client,
+                'sys_admin' => $sys_admin,
+                'tickets' => $ticketsArray,
+                'hourlyAmount' => $hourlyamount,
+                'withholdingTax' => $withholding_tax,
+                'taxsum' => $taxsum,
+                'dateita' => $dateita,
+            ]);
 
 
         }

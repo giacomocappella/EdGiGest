@@ -17,9 +17,21 @@ Route::get('/newreceipt','App\Http\Controllers\View\CreateReceipt')->name('creat
 Route::get('/newreceipt/searchtickets','App\Http\Controllers\View\GetTicketsSelectedClient')->name('get.ticket.selected.client');
 Route::get('/newreceipt/pdf','App\Http\Controllers\View\MakePDF')->name('make.pdf');
 
+//per visualizzare le anteprime pdf 
+Route::get('/newreceipt/pdf/{filename}', function ($filename) {
+    // Verifica se il file esiste nella cartella "storage/app/private"
+    $file = storage_path('app/private/' . $filename);
+
+    if (!file_exists($file)) {
+        abort(404);  // Mostra errore 404 se il file non esiste
+    }
+    return response()->file($file);
+})->name('preview.pdf');
+
 Route::post('/newclient/store', 'App\Http\Controllers\Post\StoreClient')->name('store.client');
 Route::post('/newticket/store', 'App\Http\Controllers\Post\StoreTicket')->name('store.ticket');
 Route::post('/ticket/newtask/store/', 'App\Http\Controllers\Post\StoreTask')->name('store.task');
+Route::post('/newreceipt/store/', 'App\Http\Controllers\Post\StoreReceipt')->name('store.receipt');
 
 Route::put('/ticket/suspend', 'App\Http\Controllers\Put\SuspendTicket')->name('suspend.ticket');
 Route::put('/ticket/close', 'App\Http\Controllers\Put\CloseTicket@closeNoMail')->name('close.ticket');
@@ -28,3 +40,4 @@ Route::put('/ticket/close/withmail','App\Http\Controllers\Put\CloseTicket@CloseW
 Route::put('/ticket/close/nomail','App\Http\Controllers\Put\CloseTicket@CloseNoMail')->name('close.ticket.nomail');
 Route::put('/ticket/task/edit/store','App\Http\Controllers\Put\StoreEditTask')->name('store.edit.task');
 Route::put('/ticket/edit/store','App\Http\Controllers\Put\StoreEditTicket')->name('store.edit.ticket');
+
