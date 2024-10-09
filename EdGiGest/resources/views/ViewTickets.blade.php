@@ -77,6 +77,34 @@
             font-size: 14px;
             margin-top: 5px;
         }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .submit-btn, .cancel-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .submit-btn:hover, .cancel-btn:hover {
+            background-color: #45a049;
+        }
+
+        .cancel-btn {
+            background-color: #f44336;
+        }
+
+        .cancel-btn:hover {
+            background-color: #e53935;
+        }
     </style>
 </head>
 <body>
@@ -114,7 +142,8 @@
             </tbody>
         </table>
         <div class="button-container">
-            <button type="submit">Vedi dettagli</button>
+            <button type="submit" class="submit-btn">Vedi dettagli</button>
+            <a href="{{ route('dashboard') }}" class="cancel-btn">Torna alla Dashboard</a>
         </div>
     </form>
 </div>

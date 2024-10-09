@@ -38,7 +38,7 @@
                     </span>
                     <h3>Nuovo Cliente</h3>
                 </a>
-                <a href="/clients">
+                <a href="/client">
                     <span class="material-icons-sharp">
                         group
                     </span>
@@ -63,12 +63,12 @@
                     </span>
                     <h3>Crea Ricevuta</h3>
                 </a>
-                <a href="/calendars">
+                <!--<a href="/calendars">
                     <span class="material-icons-sharp">
                         calendar_month
                     </span>
                     <h3>Calendario</h3>
-                </a>
+                </a>-->
                 <a href="/settings">
                     <span class="material-icons-sharp">
                         settings

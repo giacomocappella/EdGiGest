@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Post;
+namespace App\Http\Controllers\Put;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\Http;
 
 use App\Models\Client;
 
-
-class StoreClient extends Controller
+class StoreEditClient extends Controller
 {
     public function __invoke(Request $request){
         $request->validate([
@@ -36,8 +35,9 @@ class StoreClient extends Controller
             'Provincia.required' => 'La Provincia è obbligatoria.',
         ]);
 
-        //CREO CLIENTE SU DATABASE
-        $client=new Client();
+        
+        //AGGIORNO  CLIENTE SU DATABASE
+        $client= Client::where('Ragione_Sociale', $request->input('Ragione_Sociale'))->first();
         $client->Ragione_Sociale=$request->Ragione_Sociale;
         $client->Partita_IVA_CF=$request->Partita_IVA_CF;
         $client->Mail_amministrazione=$request->Mail_amministrazione;
@@ -49,16 +49,40 @@ class StoreClient extends Controller
         $client->Cap=$request->Cap;
         $client->Provincia=$request->Provincia;
 
+
         $client->save();
 
-        //CREO CLIENTE SU CLOCKIFY TRAMITE API POST
-        // La chiave API
+        //AGGIORNO CLIENTE SU CLOCKIFY TRAMITE API PUT
+
+        //PRIMA DEVO TROVARE L'ID DEL CLIENT SU CLOCKIY
         $apiKey = env('API_KEY'); 
 
-        // URL dell'API
+        $urlidclient="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/clients";
         $response = Http::withHeaders([
             'x-api-key' => $apiKey,
-      ])->withoutVerifying()->post('https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/clients', [
+        ])->withoutVerifying()->get($urlidclient);
+        //RICORDARSI DI VERIFICARE IL CERTIFICATO (PER ORA BYPASSATO)
+
+        // Verifica se la chiamata ha avuto successo
+        if ($response->successful()) {
+            // Decodifica la risposta JSON
+            $clients = $response->json();
+
+        } else {
+            return response()->json(['error' => 'Unable to fetch data'], 500);
+        }
+        foreach($clients as $item){
+            if($item['name']==$client->Ragione_Sociale){
+                $idclient=$item['id'];
+            }
+                
+        }
+
+        // AGGIORNAMENTO DEL CLIENTE SU CLOCKIFY
+        $urlclient="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/clients/$idclient";
+        $response = Http::withHeaders([
+            'x-api-key' => $apiKey,
+      ])->withoutVerifying()->put($urlclient, [
         'name' => $request->Ragione_Sociale,
         'email' => $request->Mail_ticket,
         'address' => 'Via '.$request->Via.' '.$request->Civico.', '.$request->Cap.' '.$request->Citta.', '.$request->Provincia,
@@ -68,7 +92,7 @@ class StoreClient extends Controller
 
       // Verifico se la chiamata ha avuto successo
     if ($response->successful()) {
-        return redirect()->route('create.client')->with('success', 'Cliente inserito correttamente!');
+        return redirect()->route('get.clients');
         } 
     else {
         return response()->json([
@@ -77,5 +101,5 @@ class StoreClient extends Controller
             'message' => $response->body(),
             ], $response->status());
     }
-}
+    }
 }

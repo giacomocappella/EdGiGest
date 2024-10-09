@@ -33,4 +33,5 @@ Route::put('/ticket/close/withmail','App\Http\Controllers\Put\CloseTicket@CloseW
 Route::put('/ticket/close/nomail','App\Http\Controllers\Put\CloseTicket@CloseNoMail')->name('close.ticket.nomail');
 Route::put('/ticket/task/edit/store','App\Http\Controllers\Put\StoreEditTask')->name('store.edit.task');
 Route::put('/ticket/edit/store','App\Http\Controllers\Put\StoreEditTicket')->name('store.edit.ticket');
+Route::put('/client/edit/store','App\Http\Controllers\Put\StoreEditClient')->name('store.edit.client');
 
