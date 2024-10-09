@@ -116,7 +116,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th></th>
+                    <th>Seleziona</th>
                     <th>Cliente</th>
                     <th>Nome Ticket</th>
                     <th>Stato</th>

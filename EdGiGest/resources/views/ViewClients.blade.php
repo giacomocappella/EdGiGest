@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elenco Clienti</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css"> <!-- Assicurati che questo link punti al tuo file CSS -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,11 +47,20 @@
             font-weight: bold;
         }
 
+        .form-container {
+            width: 70%;
+            max-width: 1000px;
+            background-color: #fff;
+            padding: 20px;
+            margin: auto auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
         table td {
             background-color: #fff;
         }
 
-        .radio-btn {
+        .radio-button {
             text-align: center;
         }
 
@@ -58,7 +69,7 @@
         }
 
         button {
-            background-color: #4CAF50;
+            background-color: #006972;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -69,13 +80,7 @@
         }
 
         button:hover {
-            background-color: #45a049;
-        }
-
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-top: 5px;
+            background-color: #007f8a;
         }
         .button-container {
             display: flex;
@@ -83,7 +88,7 @@
         }
 
         .submit-btn, .cancel-btn {
-            background-color: #4CAF50;
+            background-color: #006972;
             color: white;
             padding: 10px 15px;
             border: none;
@@ -94,22 +99,81 @@
             text-align: center;
         }
 
-        .submit-btn:hover, .cancel-btn:hover {
-            background-color: #45a049;
-        }
-
-        .cancel-btn {
-            background-color: #f44336;
-        }
-
-        .cancel-btn:hover {
-            background-color: #e53935;
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <aside>
+            <div class="toggle">
+                <div class="logo">
+                    <img src="logo.png">
+                    <h2>Edgi<span class="danger">Gest</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
 
-<div class="table-container">
+            <div class="sidebar">
+                <a href="/">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a href="/newclient">
+                    <span class="material-icons-sharp">
+                        person_add
+                    </span>
+                    <h3>Nuovo Cliente</h3>
+                </a>
+                <a href="/client">
+                    <span class="material-icons-sharp">
+                        group
+                    </span>
+                    <h3>Lista Clienti</h3>
+                </a>
+                <a href="/newticket">
+                    <span class="material-icons-sharp">
+                        add
+                    </span>
+                    <h3>Nuovo Ticket</h3>
+                </a>
+                <a href="/ticket">
+                    <span class="material-icons-sharp">
+                        format_list_numbered
+                    </span>
+                    <h3>Lista Tickets</h3>
+                </a>
+                <a href="/newreceipt">
+                    <span class="material-icons-sharp">
+                        euro_symbol
+                    </span>
+                    <h3>Crea Ricevuta</h3>
+                </a>
+                <a href="/settings">
+                    <span class="material-icons-sharp">
+                        settings
+                    </span>
+                    <h3>Impostazioni</h3>
+                </a>
+                <a href="#">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+
+<div class="form-container">
     <h1>Elenco Clienti</h1>
     <form action="{{ route('edit.client') }}" method="GET">
         @csrf
@@ -124,15 +188,14 @@
             <tbody>
                 @foreach($clients as $client)
                 <tr>
-                    <td class="radio-btn"><input type="radio" name="clientname" value="{{ $client }}"></td>
+                    <td class="radio-button"><input type="radio" name="clientname" value="{{ $client }}"></td>
                     <td>{{ $client }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
         <div class="button-container">
-            <button type="submit" class="submit-btn">Modifica</button>
-            <a href="{{ route('dashboard') }}" class="cancel-btn">Torna alla Dashboard</a>
+            <button type="submit">Modifica</button>
         </div>
     </form>
 </div>
