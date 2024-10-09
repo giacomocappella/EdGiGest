@@ -244,7 +244,7 @@
 
         <div class="form-group">
             <label for="Provincia">Provincia</label>
-            <input type="text" name="Provincia" value="{{ old($client['Provincia']) }}">
+            <input type="text" name="Provincia" value="{{($client['Provincia']) }}">
             @error('Provincia')
                 <div class="error">{{ $message }}</div>
             @enderror
