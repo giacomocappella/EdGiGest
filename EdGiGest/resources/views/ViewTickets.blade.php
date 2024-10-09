@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elenco Tickets</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -56,7 +58,15 @@
         .button-container {
             text-align: right;
         }
-
+        .form-container {
+            width: 70%;
+            max-width: 1000px;
+            background-color: #fff;
+            padding: 20px;
+            margin: auto auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
         button {
             background-color: #4CAF50;
             color: white;
@@ -83,7 +93,7 @@
         }
 
         .submit-btn, .cancel-btn {
-            background-color: #4CAF50;
+            background-color: #006972;
             color: white;
             padding: 10px 15px;
             border: none;
@@ -95,7 +105,7 @@
         }
 
         .submit-btn:hover, .cancel-btn:hover {
-            background-color: #45a049;
+            background-color: #007f8a;
         }
 
         .cancel-btn {
@@ -108,8 +118,73 @@
     </style>
 </head>
 <body>
+    <div class="container">
+        <aside>
+            <div class="toggle">
+                <div class="logo">
+                    <img src="logo.png">
+                    <h2>Edgi<span class="danger">Gest</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
 
-<div class="table-container">
+            <div class="sidebar">
+                <a href="/">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a href="/newclient">
+                    <span class="material-icons-sharp">
+                        person_add
+                    </span>
+                    <h3>Nuovo Cliente</h3>
+                </a>
+                <a href="/client">
+                    <span class="material-icons-sharp">
+                        group
+                    </span>
+                    <h3>Lista Clienti</h3>
+                </a>
+                <a href="/newticket">
+                    <span class="material-icons-sharp">
+                        add
+                    </span>
+                    <h3>Nuovo Ticket</h3>
+                </a>
+                <a href="/ticket">
+                    <span class="material-icons-sharp">
+                        format_list_numbered
+                    </span>
+                    <h3>Lista Tickets</h3>
+                </a>
+                <a href="/newreceipt">
+                    <span class="material-icons-sharp">
+                        euro_symbol
+                    </span>
+                    <h3>Crea Ricevuta</h3>
+                </a>
+                <a href="/settings">
+                    <span class="material-icons-sharp">
+                        settings
+                    </span>
+                    <h3>Impostazioni</h3>
+                </a>
+                <a href="#">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+
+<div class="form-container">
     <h1>Elenco Tickets</h1>
     <form action="{{ route('get.tasks') }}" method="GET">
         @csrf
@@ -143,10 +218,9 @@
         </table>
         <div class="button-container">
             <button type="submit" class="submit-btn">Vedi dettagli</button>
-            <a href="{{ route('dashboard') }}" class="cancel-btn">Torna alla Dashboard</a>
         </div>
     </form>
 </div>
-
+</div>
 </body>
 </html>

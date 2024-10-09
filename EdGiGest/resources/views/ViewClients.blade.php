@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css"> <!-- Assicurati che questo link punti al tuo file CSS -->
     <style>
-        body {
+        body { 
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
