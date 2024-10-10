@@ -11,18 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
-            $table->string('Ragione_Sociale');
-            $table->string('Partita_IVA_CF')->primary();
-            $table->string('Mail_amministrazione');
-            $table->string('Mail_ticket');
-            $table->string('Contatto_telefonico')->nullable();
+        Schema::create('system_admins', function (Blueprint $table) {
+            $table->string('Nome');
+            $table->string('Cognome');
+            $table->string('Codice_Fiscale')->primary();
+            $table->string('Indirizzo_Mail');
+            $table->string('Password');
             $table->string('Via');
             $table->string('Civico');
             $table->string('Citta');
             $table->integer('Cap');
             $table->string('Provincia');
-       });
+
+        });
     }
 
     /**
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('system_admins');
     }
 };

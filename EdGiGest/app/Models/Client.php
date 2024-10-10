@@ -11,8 +11,13 @@ class Client extends Model
 
     //disabilito i campi automatici update e create at
     public $timestamps = false;
-    //public $primaryKey = 'Partita_IVA_CF';
-    
+
+    public $primaryKey='Partita_IVA_CF';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     protected $fillable = [
         'Ragione_Sociale',
         'Partita_IVA_CF',

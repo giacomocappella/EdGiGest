@@ -25,7 +25,7 @@ class Receipt extends Model
 
     public function client()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(Client::class, 'Partita_IVA_CF', 'P_IVA_CF_Cliente');
     }
 
     public function system_admin()

@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->string('Partita_IVA_CF')->nullable(false)->change();
-            $table->unique('Partita_IVA_CF');
+            $table->string('Partita_IVA_CF')->nullable(false)->change()->primary();
         });
 
         DB::statement('
