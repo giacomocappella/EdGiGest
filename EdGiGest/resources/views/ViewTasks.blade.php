@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elenco Attività</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -11,14 +13,7 @@
             margin: 0;
             padding: 20px;
         }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            max-width: 900px;
-            margin: auto;
-        }
+        
         h1, h2 {
             color: #333;
             text-align: center;
@@ -44,7 +39,7 @@
         }
 
         .bottoni button, .bottoni a {
-            background-color: #4CAF50;
+            background-color: #006972;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -55,7 +50,7 @@
             cursor: pointer;
         }
         .bottoni button:hover, .bottoni a:hover {
-            background-color: #45a049;
+            background-color: #007f8a;
         }
         .bottoni a {
             text-decoration: none;
@@ -66,7 +61,7 @@
             margin-top: 20px;
         }
         .table thead {
-            background-color: #4CAF50;
+            background-color: #006972;
             color: white;
         }
         .table th, .table td {
@@ -74,11 +69,18 @@
             text-align: center;
             border-bottom: 1px solid #ddd;
         }
-        .table tr:hover {
-            background-color: #f1f1f1;
-        }
+
         .table input[type="radio"] {
             cursor: pointer;
+        }
+        .form-container {
+            width: 70%;
+            max-width: 1000px;
+            background-color: #fff;
+            padding: 20px;
+            margin: auto auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
     </style>
     <script>
@@ -118,8 +120,73 @@
 </head>
 <body>
     <div class="container">
-        <h1>ELENCO ATTIVITÀ</h1>
-        <h2>Ticket: {{$tickets['name']}}</h2>
+        <aside>
+            <div class="toggle">
+                <div class="logo">
+                    <img src="/logo.png">
+                    <h2>Edgi<span class="danger">Gest</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="/">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a href="/newclient">
+                    <span class="material-icons-sharp">
+                        person_add
+                    </span>
+                    <h3>Nuovo Cliente</h3>
+                </a>
+                <a href="/client">
+                    <span class="material-icons-sharp">
+                        group
+                    </span>
+                    <h3>Lista Clienti</h3>
+                </a>
+                <a href="/newticket">
+                    <span class="material-icons-sharp">
+                        add
+                    </span>
+                    <h3>Nuovo Ticket</h3>
+                </a>
+                <a href="/ticket">
+                    <span class="material-icons-sharp">
+                        format_list_numbered
+                    </span>
+                    <h3>Lista Tickets</h3>
+                </a>
+                <a href="/newreceipt">
+                    <span class="material-icons-sharp">
+                        euro_symbol
+                    </span>
+                    <h3>Crea Ricevuta</h3>
+                </a>
+                <a href="/settings">
+                    <span class="material-icons-sharp">
+                        settings
+                    </span>
+                    <h3>Impostazioni</h3>
+                </a>
+                <a href="#">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+
+    <div class="form-container">
+        <h1>Ticket: {{$tickets['name']}}</h1>
 
         <div class="DettagliTicket">
             <div class="riga"><strong>Cliente:</strong> {{$tickets['clientName']}}</div>
@@ -138,12 +205,14 @@
 
         <div class="ColonnaBottoni">
             <div class="bottoni">
+                @if($tickets['color'] == '#689F38'||$tickets['color'] == '#FF5722')
                 <form action="{{ route('edit.ticket') }}" method="GET">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
                     <button type="submit">Modifica Ticket</button>
                 </form>
+                @endif
                 @if($tickets['color'] == '#689F38'||$tickets['color'] == '#FF5722')
                     <button onclick="confermaChiusura()">Chiudi Ticket</button>
                     <form id="formSiclose" action="{{ route('close.ticket.mail') }}" method="POST" style="display: none;">
@@ -175,11 +244,10 @@
                         <input type="hidden" name="idreopen" value="{{ $tickets['id'] }}">
                     </form>
                 @endif
-                <a href='/'>Torna alla dashboard</a>
             </div>
         </div>
-
-        <h2>LISTA ATTIVITÀ</h2>
+        <br><br>
+        <h2>Lista Attività</h2>
         <table class="table">
             <form action="{{ route('create.task') }}" method="GET">
             @csrf
@@ -206,14 +274,18 @@
         </table>
 
         <div class="ColonnaBottoni">
-            <div class="bottoni">           
+            @if($tickets['color'] == '#689F38')
+            <div class="bottoni">         
                 <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
                 <button type="submit" formaction="{{ route('create.task') }}">Aggiungi attività</button>
                 <button type="submit" formaction="{{ route('edit.task') }}">Modifica attività</button>
-                <button type="submit" onclick="confermaEliminazione()" formaction="{{ route('delete.task') }}">Elimina attività</button>          
+                <button type="submit" onclick="confermaEliminazione()" formaction="{{ route('delete.task') }}">Elimina attività</button>     
+                   
             </div>
+            @endif
         </div>
         </form>
+    </div>
     </div>
 </body>
 </html>
