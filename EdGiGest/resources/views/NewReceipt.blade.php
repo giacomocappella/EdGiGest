@@ -108,7 +108,7 @@
     @if(isset($tickets) && !empty($tickets))
     <h3>Cliente: {{$tickets[0]['clientName']}}</h3>
     <div class="ticket-closed">
-        <p>Selezionare i ticket da includere nella ricevuta</p>
+        <p>Selezionare i ticket da includere nella ricevuta. Per i ticket non selezionabili la ricevuta è già stata emessa.</p>
         <table>
             <thead>
                 <tr>
@@ -124,7 +124,7 @@
                 @foreach ($tickets as $item )
                 @if($item['color'] == '#FF0000')
                 <tr>
-                        <td><input type="checkbox" name="selected_tickets[]" value="{{ $item['id'] }},{{ $item['name'] }},{{ $item['duration'] }}"></td>
+                        <td><input type="checkbox" name="selected_tickets[]" value="{{ $item['id'] }},{{ $item['name'] }},{{ $item['duration'] }}" {{ $item['note'] == 'RICEVUTA_EMESSA' ? 'checked disabled' : '' }}></td>
                         <td>{{$item['name'] }}</td>
                         <td>{{$item['duration']}}</td>
                         @if($item['note'] == '')

@@ -22,7 +22,7 @@ class StoreEditTask extends Controller
 
         $request->validate([
             'Task_Start' => 'required|date_format:Y-m-d\TH:i',
-            'Task_End' => 'required|date_format:Y-m-d\TH:i',
+            'Task_End' => 'required|date_format:Y-m-d\TH:i|after:Task_Start',
             'Description' => 'required|string|max:3000',
                 ], [
             'Task_Start.required' => 'La data e l\'ora di inizio attività sono obbligatori.',

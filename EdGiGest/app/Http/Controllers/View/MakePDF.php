@@ -47,6 +47,11 @@ class MakePDF extends Controller
             //recupero l'id client per recuperare i dati dal database
             $idclient=$request->input('idclient');
 
+            //se non viene selezionato alcun ticket, torna alla scelta dei clienti
+            if($tickets==null){
+            return redirect()->route('create.receipt');
+        }
+
             //recupero il nome del cliente da clickify (serve per la ricerca dei dati dal database)
             $apiKey = env('API_KEY'); 
             $urlclient="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/clients/$idclient";

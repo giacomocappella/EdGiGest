@@ -28,7 +28,7 @@ class GetTicketsSelectedClient extends Controller
     }
 
     public function __invoke(Request $request){
-
+        
     // La chiave API
     $apiKey = env('API_KEY'); 
     $idclient=$request->input('clientid');
