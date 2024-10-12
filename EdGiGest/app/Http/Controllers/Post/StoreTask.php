@@ -25,6 +25,7 @@ class StoreTask extends Controller
              ], [
             'Task_Start.required' => 'La data e l\'ora di inizio attività sono obbligatori.',
             'Task_End.required' => 'La data e l\'ora di inizio attività sono obbligatori.',
+            'Task_End.after' => 'La data e l\'ora inseriti non possono essere precedenti a quelli di inzio attività.',
             'Description.required' => 'La descrizione dell\'attività è obbligatoria.'
             ]);
         

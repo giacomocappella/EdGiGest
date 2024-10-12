@@ -163,7 +163,7 @@
         @csrf
         <div class="form-group">
             <label for="Task_Start">Inizio attività</label>
-            <input type="datetime-local" id="Task_Start" name="Task_Start" value="{{ old('Task_Start') }}">
+            <input type="datetime-local" id="Task_Start" name="Task_Start" value="{{ old('Task_Start', \Carbon\Carbon::now()->format('Y-m-d\T00:00'))}}">
             @error('Task_Start')
             <div class="error">{{ $message }}</div>
             @enderror
@@ -171,7 +171,7 @@
 
         <div class="form-group">
             <label for="Task_End">Fine attività</label>
-            <input type="datetime-local" id="Task_End" name="Task_End" value="{{ old('Task_End') }}">
+            <input type="datetime-local" id="Task_End" name="Task_End" value="{{ old('Task_End', \Carbon\Carbon::now()->format('Y-m-d\T00:00'))}}">
             @error('Task_End')
             <div class="error">{{ $message }}</div>
             @enderror

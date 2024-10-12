@@ -14,7 +14,7 @@ class StoreClient extends Controller
     public function __invoke(Request $request){
         $request->validate([
             'Ragione_Sociale' => 'required|string|max:255',
-            'Partita_IVA_CF' => 'required|string|max:16', 
+            'Partita_IVA_CF' => 'required|string|max:16|unique:clients,Partita_IVA_CF', 
             'Mail_amministrazione' => 'required|email',
             'Mail_ticket' => 'required|email', 
             'Contatto_telefonico' => 'required|string|max:20', 
@@ -26,6 +26,7 @@ class StoreClient extends Controller
              ], [
             'Ragione_Sociale.required' => 'La Ragione Sociale è obbligatoria.',
             'Partita_IVA_CF.required' => 'La Partita IVA o Codice Fiscale è obbligatoria.',
+            'Partita_IVA_CF.unique' => 'La Partita IVA inserita è già presente nel sistema.',
             'Mail_amministrazione.required' => 'La Mail di amministrazione è obbligatoria.',
             'Mail_ticket.required' => 'La Mail per invio ticket è obbligatoria.', 
             'Contatto_telefonico.required' => 'Il Contatto telefonico è obbligatorio.', 
