@@ -11,6 +11,8 @@ class CreateTask extends Controller
     {   
         //recupero l'id del ticket che serve per creare l'attività
         $idticket=$request->input('idticket');
-        return view('NewTask',['idticket'=> $idticket]);
+        $nameticket=$request->input('nameticket');
+
+        return view('NewTask',['idticket'=> $idticket, 'nameticket'=> $nameticket]);
     }
 }

@@ -277,6 +277,7 @@
             @if($tickets['color'] == '#689F38')
             <div class="bottoni">         
                 <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
+                <input type="hidden" name="nameticket" value="{{ $tickets['name'] }}">
                 <button type="submit" formaction="{{ route('create.task') }}">Aggiungi attività</button>
                 <button type="submit" formaction="{{ route('edit.task') }}">Modifica attività</button>
                 <button type="submit" onclick="confermaEliminazione()" formaction="{{ route('delete.task') }}">Elimina attività</button>     

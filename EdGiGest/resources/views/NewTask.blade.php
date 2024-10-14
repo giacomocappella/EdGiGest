@@ -20,6 +20,12 @@
             font-size: 24px;
             margin-bottom: 20px;
         }
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
 
         .form-container {
             width: 70%;
@@ -34,7 +40,16 @@
         .form-group {
             margin-bottom: 15px;
         }
-
+        .DettagliTicket {
+            background-color: #fafafa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .riga {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
         .form-group label {
             font-weight: bold;
             display: block;
@@ -159,6 +174,7 @@
 
 <div class="form-container">
     <h1>Crea Nuova Attività</h1>
+    <h2><strong>Ticket di riferimento:</strong> {{$nameticket}}</h2>
     <form action="{{ route('store.task') }}" method="POST">
         @csrf
         <div class="form-group">
