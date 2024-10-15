@@ -61,6 +61,7 @@ img {
     display: block;
     width: 100%;
     object-fit: cover;
+    filter: drop-shadow(0px 0px 12px grey);
 }
 
 h1 {

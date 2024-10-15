@@ -51,7 +51,9 @@ class StoreReceipt extends Controller
         // Salva la ricevuta nel database
         $receipt->save();
 
-        return view ('ReceiptSaved');
+        $sendmail='no';
+
+        return view ('ReceiptSaved',['sendmail'=> $sendmail]);
     }
     //gestisce lo store con invio mail
     public function StoreSendMail(Request $request)
@@ -94,12 +96,15 @@ class StoreReceipt extends Controller
         $receipt->Importo_Netto = $request->input('importo_netto');
         $receipt->Importo_Lordo = $request->input('importo_lordo');
         $receipt->Percorso_File = $request->input('percorso_file');
-        dd($receipt);
+
         // Salva la ricevuta nel database
         $receipt->save();
 
         Mail::to($clientmail, "support@caregnatoedoardo.it")->send(new SendReceiptMail(storage_path($receipt->Percorso_File)));
 
-        return view ('ReceiptSaved');
+        $sendmail='yes';
+
+        return view ('ReceiptSaved',['sendmail'=> $sendmail]);
+
     }
 }

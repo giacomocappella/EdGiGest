@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crea ricevuta</title>
+    <title>Crea Ricevuta</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css"> <!-- Assicurati che questo link punti al tuo file CSS -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,10 +22,11 @@
         }
 
         .form-container {
-            max-width: 600px;
+            width: 70%;
+            max-width: 1000px;
             background-color: #fff;
             padding: 20px;
-            margin: 0 auto;
+            margin: auto auto;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -63,7 +66,7 @@
         }
 
         .submit-btn, .cancel-btn {
-            background-color: #4CAF50;
+            background-color: #006972;
             color: white;
             padding: 10px 15px;
             border: none;
@@ -75,41 +78,135 @@
         }
 
         .submit-btn:hover, .cancel-btn:hover {
-            background-color: #45a049;
+            background-color: #007f8a;
+        }
+        .table-container {
+            max-width: 800px;
+            background-color: #fff;
+            padding: 20px;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .cancel-btn {
-            background-color: #f44336;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
         }
 
-        .cancel-btn:hover {
-            background-color: #e53935;
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        table td {
+            background-color: #fff;
+        }
+
+        .riga {
+            margin-bottom: 10px;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <aside>
+            <div class="toggle">
+                <div class="logo">
+                    <img src="/logo.png">
+                    <h2>Edgi<span class="danger">Gest</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="/">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a href="/newclient">
+                    <span class="material-icons-sharp">
+                        person_add
+                    </span>
+                    <h3>Nuovo Cliente</h3>
+                </a>
+                <a href="/client">
+                    <span class="material-icons-sharp">
+                        group
+                    </span>
+                    <h3>Lista Clienti</h3>
+                </a>
+                <a href="/newticket">
+                    <span class="material-icons-sharp">
+                        add
+                    </span>
+                    <h3>Nuovo Ticket</h3>
+                </a>
+                <a href="/ticket">
+                    <span class="material-icons-sharp">
+                        format_list_numbered
+                    </span>
+                    <h3>Lista Tickets</h3>
+                </a>
+                <a href="/newreceipt">
+                    <span class="material-icons-sharp">
+                        euro_symbol
+                    </span>
+                    <h3>Crea Ricevuta</h3>
+                </a>
+                <a href="/settings">
+                    <span class="material-icons-sharp">
+                        settings
+                    </span>
+                    <h3>Impostazioni</h3>
+                </a>
+                <a href="#">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
 
 <div class="form-container">
-    <h1>CREAZIONE NUOVA RICEVUTA</h1>
+    <h1>Creazione Nuova Ricevuta</h1>
+    <div class="form-group">
+        @if(isset($client) && !empty($client))
+        <div class="riga"><strong>Seleziona un cliente</strong></div>
+        <form action="{{ route('get.ticket.selected.client') }}" method="GET">
+        
+            <select name="clientid" class="form-select">
+                @foreach ($client as $item)
+                    <option value="{{ $item['id']}}">{{ $item['name'] }}</option>
+                @endforeach
+            </select>
+    </div>
+    <div class="button-container">
+        <button type='submit' class="submit-btn" >Conferma</button>
+    </div>
+        </form>
     
-     @if(isset($client) && !empty($client))
-     Seleziona un cliente
-    <form action="{{ route('get.ticket.selected.client') }}" method="GET">
-       
-        <select name="clientid" class="form-select">
-            @foreach ($client as $item)
-                <option value="{{ $item['id']}}">{{ $item['name'] }}</option>
-            @endforeach
-        </select>
-        <button type='submit'>Conferma</button>
-        <a href='/'>Torna alla dashboard</a>
-    </form>
    @endif
     @if(isset($tickets) && !empty($tickets))
-    <h3>Cliente: {{$tickets[0]['clientName']}}</h3>
-    <div class="ticket-closed">
-        <p>Selezionare i ticket da includere nella ricevuta. Per i ticket non selezionabili la ricevuta è già stata emessa.</p>
-        <table>
+    <div class="form-group">
+    <div class="riga"><strong>Cliente: </strong>{{$tickets[0]['clientName']}} </div>
+    <div class="riga">Selezionare i ticket da includere nella ricevuta. Per i ticket non selezionabili la ricevuta è già stata emessa.</div>
+        <table class="table">
             <thead>
                 <tr>
                     <th>Seleziona</th>
@@ -140,16 +237,23 @@
         </table>
         <input type="hidden" name="idclient" value="{{ $idclient }}">
         <input type="hidden" name="clientname" value="{{$tickets[0]['clientName']}}">
-        <button type='submit'>Visualizza anteprima</button>
-        <a href="{{ url()->previous() }}">Torna indietro</a>
+
+        <div class="button-container">
+            <button type='submit' class="submit-btn">Visualizza anteprima</button>
+            <form action="{{ route('create.receipt') }}" method="GET">
+                @csrf
+                <button type="submit" class="cancel-btn">Torna indietro</button>
+            </form>
+        </div>
         </form>
      
         
     
+
 </div>
 @endif
     
 </div>
-
+</div>
 </body>
 </html>
