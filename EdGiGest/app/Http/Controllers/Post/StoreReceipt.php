@@ -68,7 +68,7 @@ class StoreReceipt extends Controller
             $urlticket="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/projects/$idticket";
         
             $response = Http::withHeaders([
-            'x-api-key' => $apiKey,
+            'x-api-key' => $apiKey, 
             ])->withoutVerifying()->put($urlticket, [
             'note' => "RICEVUTA_EMESSA",
             ]);
