@@ -9,9 +9,6 @@ class Receipt extends Model
 {
     use HasFactory;
 
-    //disabilito i campi automatici update e create at
-    public $timestamps = false;
-
     protected $fillable = [
         'Anno',
         'Numero',

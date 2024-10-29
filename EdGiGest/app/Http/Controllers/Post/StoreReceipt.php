@@ -100,7 +100,7 @@ class StoreReceipt extends Controller
         // Salva la ricevuta nel database
         $receipt->save();
 
-        Mail::to($clientmail, "support@caregnatoedoardo.it")->send(new SendReceiptMail(storage_path($receipt->Percorso_File)));
+        Mail::to($clientmail, "info@edgitech.it")->send(new SendReceiptMail(storage_path($receipt->Percorso_File)));
 
         $sendmail='yes';
 

@@ -196,7 +196,7 @@
 
 <div class="form-container">
     <h1>Anteprima Ricevuta</h1>
-    <iframe src="{{ route('preview.pdf', ['filename' => basename($pathpdf)]) }}#zoom=65" width="100%" height="500px"></iframe>
+    <iframe src="{{ route('preview.pdf', ['filename' => basename($pathpdf)]) }}#zoom=65" width="100%" height="600px"></iframe>
     
     <div class="button-container">
     <button onclick="confermaInvio()" class="submit-btn">Crea ricevuta</button>
