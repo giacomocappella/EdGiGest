@@ -62,7 +62,7 @@ class StoreClient extends Controller
       ])->withoutVerifying()->post('https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/clients', [
         'name' => $request->Ragione_Sociale,
         'email' => $request->Mail_ticket,
-        'address' => 'Via '.$request->Via.' '.$request->Civico.', '.$request->Cap.' '.$request->Citta.', '.$request->Provincia,
+        'address' => $request->Via.' '.$request->Civico.', '.$request->Cap.' '.$request->Citta.', '.$request->Provincia,
       ]);
       //RICORDARSI DI VERIFICARE IL CERTIFICATO (PER ORA BYPASSATO)
 
