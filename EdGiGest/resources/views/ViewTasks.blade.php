@@ -124,7 +124,7 @@
             <div class="toggle">
                 <div class="logo">
                     <img src="/logo.png">
-                    <h2>Edgi<span class="danger">Gest</span></h2>
+                    <h2>EdGi<span class="danger">Gest</span></h2>
                 </div>
                 <div class="close" id="close-btn">
                     <span class="material-icons-sharp">
