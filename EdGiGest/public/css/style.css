@@ -690,4 +690,30 @@ main .recent-tickets a {
     .status-pending {
         color: #FF5722;
     }
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+    
+    .sidebar-footer {
+        margin-top: auto;
+    }
+    
+    .button-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+    }
+    
+    .button-link span.material-icons-sharp {
+        margin-right: 8px;
+    }
+    
+    .button-link h3 {
+        margin: 0;
+    }
+    
 }

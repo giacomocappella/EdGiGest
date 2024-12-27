@@ -75,12 +75,23 @@
                     </span>
                     <h3>Impostazioni</h3>
                 </a>
-                <a href="#">
+                <a href="/profile" class="button-link sidebar-footer"> 
+                    <span class="material-icons-sharp"> 
+                        account_circle 
+                    </span> 
+                    <h3>{{ Auth::user()->name }}</h3>
+                    
+                </a>
+                <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
+                    @csrf
+                </form>
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="button-link">
                     <span class="material-icons-sharp">
                         logout
                     </span>
                     <h3>Logout</h3>
                 </a>
+                
             </div>
         </aside>
         <!-- End of Sidebar Section -->
@@ -205,11 +216,3 @@
                     </span>
                 </div>
 
-            </div>
-
-        </div>
-
-    </div>
-    <script src="js\index.js"></script>
-</body>
-</html>
