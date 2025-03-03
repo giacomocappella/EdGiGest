@@ -88,6 +88,17 @@
         .cancel-btn:hover {
             background-color: #e53935;
         }
+        .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Distanza tra label e checkbox */
+         }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -176,9 +187,9 @@
             <label for="Cliente">Cliente</label>
             <select name="Client_list" class="form-select">
                 @foreach ($items as $item)
-                    <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
+                <option value="{{ $item->Partita_IVA_CF }}">{{ $item->Ragione_Sociale }}</option>
                 @endforeach
-            </select>
+            </select>            
         </div>
 
         <div class="form-group">
@@ -188,10 +199,16 @@
                 <div class="error">{{ $message }}</div>
             @enderror
         </div>
-
+        
+        <div class="form-group checkbox-group">
+            <label for="Doppio_Tecnico">Doppio Tecnico</label>
+            <input type="checkbox" id="Doppio_Tecnico" name="Doppio_Tecnico" value="1" {{ old('Doppio_Tecnico') ? 'checked' : '' }}>
+        </div>
+        
         <div class="button-container">
             <button type="submit" class="submit-btn">Crea ticket e apri nuova attività</button>
         </div>
+        
     </form>
 </div>
 </div>

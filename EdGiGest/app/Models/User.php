@@ -29,6 +29,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'CF',
+        'Via',
+        'Civico',
+        'Citta',
+        'CAP',
+        'Provincia',
+        'current_team_id',
     ];
 
     /**
@@ -64,4 +71,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'current_team_id', 'Partita_IVA_CF_Cliente');
+    }
+
 }

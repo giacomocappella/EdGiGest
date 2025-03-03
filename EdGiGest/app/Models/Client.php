@@ -36,4 +36,10 @@ class Client extends Model
         return $this->hasMany(Receipt::class);
     }
 
+    public function tickets()
+{
+    return $this->hasMany(Ticket::class, 'Partita_IVA_CF_Cliente'); 
+}
+
+
 }

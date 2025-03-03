@@ -202,7 +202,7 @@
         
             <select name="clientid" class="form-select">
                 @foreach ($client as $item)
-                    <option value="{{ $item['id']}}">{{ $item['name'] }}</option>
+                    <option value="{{ $item->Partita_IVA_CF}}">{{ $item->Ragione_Sociale }}</option>
                 @endforeach
             </select>
     </div>
@@ -214,53 +214,85 @@
    @endif
     @if(isset($tickets) && !empty($tickets))
     <div class="form-group">
-    <div class="riga"><strong>Cliente: </strong>{{$tickets[0]['clientName']}} </div>
-    <div class="riga">Selezionare i ticket da includere nella ricevuta. Per i ticket non selezionabili la ricevuta è già stata emessa.</div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Seleziona</th>
-                    <th>Nome ticket</th>
-                    <th>Durata</th>
-                    <th>Ricevuta emessa</th>
-                </tr>
-            </thead>
-            <tbody>
-                <form action="{{ route('make.pdf') }}" method="GET">
-                @csrf
-                @foreach ($tickets as $item )
-                @if($item['color'] == '#FF0000')
-                <tr>
-                        <td><input type="checkbox" name="selected_tickets[]" value="{{ $item['id'] }},{{ $item['name'] }},{{ $item['duration'] }}" {{ $item['note'] == 'RICEVUTA_EMESSA' ? 'checked disabled' : '' }}></td>
-                        <td>{{$item['name'] }}</td>
-                        <td>{{$item['duration']}}</td>
-                        @if($item['note'] == '')
-                        <td>No</td>
-                        @elseif($item['note'] == 'RICEVUTA_EMESSA')
-                        <td>Si</td>
-                        @endif                               
+        <div class="riga"><strong>Cliente: </strong>{{$clientname}}</div>
+        <div class="riga">Selezionare i ticket da includere nella ricevuta. Per i ticket non selezionabili la ricevuta è già stata emessa.</div>
+    
+        <form action="{{ route('make.pdf') }}" method="GET">
+            @csrf
+    
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Seleziona</th>
+                        <th>#</th>
+                        <th>Nome ticket</th>
+                        <th>Durata</th>
+                        <th>Tecnici</th>
+                        <th>Ricevuta emessa</th>
                     </tr>
-                    @endif
-                @endforeach
-
-            </tbody>
-        </table>
-        <input type="hidden" name="idclient" value="{{ $idclient }}">
-        <input type="hidden" name="clientname" value="{{$tickets[0]['clientName']}}">
-
-        <div class="button-container">
-            <button type='submit' class="submit-btn">Visualizza anteprima</button>
+                </thead>
+                <tbody>
+                    @foreach ($tickets as $item)
+                        @if($item->Stato == "Chiuso")
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="selected_tickets[]" value="{{ $item->id }}" 
+                                        {{ $item->Rendicontato == 1 ? 'checked disabled' : '' }}>
+                                </td>
+                                <td>{{$item->id }}</td>
+                                <td>{{$item->Nome }}</td>
+                                <td>{{$item->Ore_totali}}</td>
+                                <td>@if($item->Doppio_tecnico==1) 2 @else 1 @endif</td>
+                                <td>{{ $item->Rendicontato == 1 ? 'Si' : 'No' }}</td>
+                            </tr>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+    
+            <input type="hidden" name="idclient" value="{{ $idclient }}">
+            <input type="hidden" name="clientname" value="{{$clientname}}">
+    
+            <!-- Selezione Tecnico -->
+            <div class="form-group" style="display: flex; align-items: center; gap: 20px;">
+                <label style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="enable_technician" name="enable_technician"
+                        onchange="toggleTechnicianSelect()">
+                    Ricevuta singola
+                </label>
+                <select name="technician_id" id="technician_select" disabled style="width: 200px;">
+                    <option value="">-- Seleziona Tecnico --</option>
+                    @foreach($users as $technician)
+                        <option value="{{ $technician->id }}">{{ $technician->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+    
+            <script>
+                function toggleTechnicianSelect() {
+                    let checkbox = document.getElementById('enable_technician');
+                    let select = document.getElementById('technician_select');
+                    
+                    if (checkbox.checked) {
+                        select.disabled = false;
+                    } else {
+                        select.disabled = true;
+                        select.value = ""; // Reset valore quando deselezionato
+                    }
+                }
+            </script>
+    
+            <div class="button-container" style="display: flex; gap: 15px; align-items: center;">
+                <button type='submit' class="submit-btn">Visualizza anteprima</button>
+            </form>
+    
             <form action="{{ route('create.receipt') }}" method="GET">
                 @csrf
                 <button type="submit" class="cancel-btn">Torna indietro</button>
             </form>
         </div>
-        </form>
-     
-        
+    </div>
     
-
-</div>
 @endif
     
 </div>

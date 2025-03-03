@@ -134,7 +134,7 @@
                 <div class="searches">
                     <div class="status">
                         <div class="info">
-                            <h2>Clienti Totali</h2>
+                            <h2>Clienti</h2>
                         </div>
                         <div class="progresss">
                             <svg>
@@ -151,7 +151,7 @@
 
 <!-- Recent Tickets Table -->
 <div class="recent-tickets">
-    <h1>Ticket aperti e sospesi per ogni cliente</h1>
+    <h1>Ticket aperti e sospesi per ogni cliente</h1><br>
     @foreach ($groupedTickets as $clientName => $tickets)
         <div class="client">
             <h2>Cliente: {{ $clientName }}</h2>
@@ -160,6 +160,7 @@
                     <tr>
                         <th class="ticket-name-table">Nome ticket</th>
                         <th>Durata</th>
+                        <th>Tecnici impiegati</th>
                         <th>Stato</th>
                         <th>Dettagli</th>
                     </tr>
@@ -167,19 +168,20 @@
                 <tbody>
                     @foreach ($tickets as $ticket)
                         <tr>
-                            <td>{{ $ticket['name'] }}</td>
-                            <td>{{$ticket['duration']}}</td>
+                            <td>{{ $ticket->Nome}}</td>
+                            <td>{{$ticket->Ore_totali}} h</td>
+                            <td>@if($ticket->Doppio_tecnico==1) 2 @else 1 @endif</td>
                             <td>
-                                @if($ticket['color'] == '#689F38')
+                                @if($ticket->Stato == 'Aperto')
                                     <span class="status-open">Aperto</span>
-                                @elseif($ticket['color'] == '#FF5722')
+                                @elseif($ticket->Stato == 'Sospeso')
                                     <span class="status-pending">Sospeso</span>
                                 @endif
                             </td>
                             <td>
                                 <form action="{{ route('get.tasks') }}" method="GET">
                                     @csrf
-                                    <input type="hidden" name="idticket" value="{{ $ticket['id'] }}">
+                                    <input type="hidden" name="idticket" value="{{ $ticket->id }}">
                                     <button class="details-button" type="submit">Vedi Dettagli</button>
                                 </form>
                             </td>

@@ -184,37 +184,47 @@
 
 <div class="form-container">
     <h1>Crea Nuova Attività</h1>
-    <h2><strong>Ticket di riferimento:</strong> {{$nameticket}}</h2>
+    <h2><strong>Ticket #{{$idticket}}: {{$tickets->Nome}}</strong><br>
+    Tecnici impiegati:@if($tickets->Doppio_tecnico==1) 2 @else 1 @endif</h2>    
     <form action="{{ route('store.task') }}" method="POST">
         @csrf
+    
         <div class="form-group">
-            <label for="Task_Start">Inizio attività</label>
-            <input type="datetime-local" id="Task_Start" name="Task_Start" value="{{ old('Task_Start', \Carbon\Carbon::now()->format('Y-m-d\T00:00'))}}">
+            <label for="Task_Date">Data attività</label>
+            <input type="date" id="Task_Date" name="Task_Date" value="{{ old('Task_Date', \Carbon\Carbon::now()->format('Y-m-d')) }}">
+            @error('Task_Date')
+            <div class="error">{{ $message }}</div>
+            @enderror
+        </div>
+    
+        <div class="form-group">
+            <label for="Task_Start">Orario Inizio</label>
+            <input type="time" id="Task_Start" name="Task_Start" value="{{ old('Task_Start') }}">
             @error('Task_Start')
             <div class="error">{{ $message }}</div>
             @enderror
         </div>
-
+    
         <div class="form-group">
-            <label for="Task_End">Fine attività</label>
-            <input type="datetime-local" id="Task_End" name="Task_End" value="{{ old('Task_End', \Carbon\Carbon::now()->format('Y-m-d\T00:00'))}}">
+            <label for="Task_End">Orario Fine</label>
+            <input type="time" id="Task_End" name="Task_End" value="{{ old('Task_End') }}">
             @error('Task_End')
             <div class="error">{{ $message }}</div>
             @enderror
         </div>
-
+    
         <div class="form-group">
             <label for="Description">Descrizione attività</label>
-            <textarea id="Description" name="Description" rows="20">{{ old('Description') }}</textarea>
+            <textarea id="Description" name="Description" rows="15">{{ old('Description') }}</textarea>
             @error('Description')
             <div class="error">{{ $message }}</div>
             @enderror
         </div>
-
-        
+           
 
         <div class="button-container">
             <input type="hidden" name="idticket" value="{{ $idticket }}">
+            <input type="hidden" name="tech" value="{{ $tickets->Doppio_tecnico }}">
             <button type="submit" class="submit-btn">Crea attività</button>
         </form>
             <form action="{{ route('get.tasks') }}" method="GET">

@@ -4,15 +4,12 @@ namespace App\Http\Controllers\Put;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
+use App\Models\Ticket;
+use App\Models\Task;
 
 class StoreEditTask extends Controller
 {
-
-    public function convertDate($inputDate) {
-        $date = \DateTime::createFromFormat('Y-m-d\TH:i', $inputDate);
-        return $date->format('Y-m-d\TH:i:s\Z');
-    }
 
     public function __invoke(Request $request)
     {
@@ -21,49 +18,67 @@ class StoreEditTask extends Controller
         $idtask=$request->input('idtask');
 
         $request->validate([
-            'Task_Start' => 'required|date_format:Y-m-d\TH:i',
-            'Task_End' => 'required|date_format:Y-m-d\TH:i|after:Task_Start',
+            'Task_Date' => 'required|date_format:Y-m-d',
+            'Task_Start' => 'required|date_format:H:i',
+            'Task_End' => 'required|date_format:H:i|after:Task_Start',
             'Description' => 'required|string|max:3000',
-                ], [
-            'Task_Start.required' => 'La data e l\'ora di inizio attività sono obbligatori.',
-            'Task_End.required' => 'La data e l\'ora di inizio attività sono obbligatori.',
-            'Task_End.after' => 'La data e l\'ora inseriti non possono essere precedenti a quelli di inzio attività.',
-            'Description.required' => 'La descrizione dell\'attività è obbligatoria.'
-            ]);
+        ], [
+            'Task_Date.required' => 'La data dell\'attività è obbligatoria.',
+            'Task_Date.date_format' => 'Il formato della data non è valido.',
         
-        //converto le date per adattarle a quelle richieste in clockify
-        $request->Task_Start=$this->convertDate($request->Task_Start);
-        $request->Task_End=$this->convertDate($request->Task_End);
-    
-        //CREO TASK SU CLOCKIFY TRAMITE API POST
-        // La chiave API
-        $apiKey = env('API_KEY'); 
-        // URL dell'API
-        $urltask="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/time-entries/$idtask";
-    
-        $response = Http::withHeaders([
-            'x-api-key' => $apiKey,
-        ])->withoutVerifying()->put($urltask, [
-        'start' => $request->Task_Start,
-        'end' => $request->Task_End,
-        'description' => $request->Description,
-        'projectId' => $idticket,
+            'Task_Start.required' => 'L\'orario di inizio attività è obbligatorio.',
+            'Task_Start.date_format' => 'Il formato dell\'orario di inizio non è valido.',
+        
+            'Task_End.required' => 'L\'orario di fine attività è obbligatorio.',
+            'Task_End.date_format' => 'Il formato dell\'orario di fine non è valido.',
+            'Task_End.after' => 'L\'orario di fine non può essere precedente all\'orario di inizio.',
+        
+            'Description.required' => 'La descrizione dell\'attività è obbligatoria.',
+            'Description.string' => 'La descrizione deve essere un testo.',
+            'Description.max' => 'La descrizione non può superare i 3000 caratteri.',
         ]);
-        //RICORDARSI DI VERIFICARE IL CERTIFICATO (PER ORA BYPASSATO)
+        
+        //recupero il ticket
+        $ticket = Ticket::findOrFail($idticket);
 
+        //recupero il task
+        $task = Task::findOrFail($idtask);
 
-        // Verifico se la chiamata ha avuto successo
-        if ($response->successful()) {
-            session(['idticket' => $idticket]);
-            return redirect()->route('get.tasks')->with('success', 'Attività inserita correttamente!');
-            } 
-        else {
-            return response()->json([
-                'error' => 'Request failed',
-                'status' => $response->status(),
-                'message' => $response->body(),
-                ], $response->status());
+        //calcolo le ore utilizzate
+        $start = Carbon::parse($request->Task_Date . ' ' . $request->Task_Start);
+        $end = Carbon::parse($request->Task_Date . ' ' . $request->Task_End);
+        
+        $task->Data = $request->Task_Date;
+        $task->Ora_inizio = $request->Task_Start;
+        $task->Ora_fine   = $request->Task_End;
+        $task->Descrizione = $request->Description;
+
+        $olddurationticket=$ticket->Ore_totali;
+        $olddurationtask=$task->Durata;
+        $tech=$ticket->Doppio_tecnico;
+
+        //Aggiornamento della durata su task e ticket
+        if($tech==1)
+        {
+            $ore_task = $start->diffInMinutes($end) / 60 *2;
+            $task->Durata=$ore_task; 
         }
+          
+        else
+        {
+            $ore_task = $start->diffInMinutes($end) / 60; 
+            $task->Durata=$ore_task;
+        }
+          
+        //aggiornamento della durata sul ticket
+        $ticket->Ore_totali=$olddurationticket-$olddurationtask+$task->Durata;
+
+        $ticket->save();
+        $task->save();
+        
+        session(['idticket' => $idticket]);
+        return redirect()->route('get.tasks')->with('success', 'Attività inserita correttamente!');
+                    
     }
 }
 

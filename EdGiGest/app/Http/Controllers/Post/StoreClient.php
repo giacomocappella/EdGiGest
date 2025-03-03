@@ -52,31 +52,7 @@ class StoreClient extends Controller
 
         $client->save();
 
-        //CREO CLIENTE SU CLOCKIFY TRAMITE API POST
-        // La chiave API
-        $apiKey = env('API_KEY'); 
-
-        // URL dell'API
-        $response = Http::withHeaders([
-            'x-api-key' => $apiKey,
-      ])->withoutVerifying()->post('https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/clients', [
-        'name' => $request->Ragione_Sociale,
-        'email' => $request->Mail_ticket,
-        'address' => $request->Via.' '.$request->Civico.', '.$request->Cap.' '.$request->Citta.', '.$request->Provincia,
-      ]);
-      //RICORDARSI DI VERIFICARE IL CERTIFICATO (PER ORA BYPASSATO)
-
-
-      // Verifico se la chiamata ha avuto successo
-    if ($response->successful()) {
         return redirect()->route('create.client')->with('success', 'Cliente inserito correttamente!');
-        } 
-    else {
-        return response()->json([
-            'error' => 'Request failed',
-            'status' => $response->status(),
-            'message' => $response->body(),
-            ], $response->status());
-    }
+      
 }
 }

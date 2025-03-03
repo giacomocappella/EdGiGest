@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Post;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Client;
-use Illuminate\Support\Facades\Http;
+use App\Models\Ticket;
 
 class StoreTicket extends Controller
 {
@@ -17,33 +16,17 @@ class StoreTicket extends Controller
              ], [
             'Ticket_name.required' => 'Il nome del ticket è obbligatorio.',
             ]);
-
-        //CREO TICKET SU CLOCKIFY TRAMITE API POST
-        // La chiave API
-        $apiKey = env('API_KEY'); 
-
-        // URL dell'API
-        $response = Http::withHeaders([
-            'x-api-key' => $apiKey,
-        ])->withoutVerifying()->post('https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/projects', [
-        'clientId' => $client,
-        'name' => $request->Ticket_name,
-        'color'=> '#689F38',  //ad ogni ticket creato (e aperto) assegno il colore verde (= ticket aperto)
-        ]);
-        //RICORDARSI DI VERIFICARE IL CERTIFICATO (PER ORA BYPASSATO)
-
-
-        // Verifico se la chiamata ha avuto successo
-        if ($response->successful()) {
-            $ticketdetail=$response->json();
-            return redirect()->route('create.task',['idticket'=>$ticketdetail['id'], 'nameticket'=>$ticketdetail['name']])->with('success', 'Ticket inserito correttamente!');
-            } 
-        else {
-            return response()->json([
-                'error' => 'Request failed',
-                'status' => $response->status(),
-                'message' => $response->body(),
-                ], $response->status());
-        }
+            $ticket=new Ticket();
+            $ticket->Nome=$request->Ticket_name;
+            $ticket->Partita_IVA_CF_Cliente=$request->input('Client_list');
+            $ticket->Ore_totali=0;
+            $ticket->Stato="Aperto";
+            $ticket->Rendicontato=0;
+            $ticket->Doppio_tecnico=$request->has('Doppio_Tecnico');
+    
+            $ticket->save();
+            
+            return redirect()->route('create.task',['idticket'=>$ticket->id, 'nameticket'=>$ticket->Nome, 'tech'=>$ticket->Doppio_tecnico])->with('success', 'Ticket inserito correttamente!');
+            
     }
 }

@@ -4,15 +4,11 @@ namespace App\Http\Controllers\View;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use App\Models\Ticket;
+use App\Models\Task;
 
 class EditTask extends Controller
 {
-    public function reconvertDate($inputDate) {
-        $date = new \DateTime($inputDate);
-        return $date->format('Y-m-d\TH:i');
-    }
-
     public function __invoke(Request $request)
     {
         $idtask=$request->input('idtask');
@@ -23,26 +19,13 @@ class EditTask extends Controller
             return redirect()->route('get.tasks');
         }
 
-        $apiKey = env('API_KEY'); 
-        $urltask="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/time-entries/$idtask";
-        $response = Http::withHeaders([
-            'x-api-key' => $apiKey,
-        ])->withoutVerifying()->get($urltask);
-        //RICORDARSI DI VERIFICARE IL CERTIFICATO (PER ORA BYPASSATO)
+        //recupero il task selezionato 
+        $datatask=Task::find($idtask);
+
+        $dataticket=Ticket::find($idticket);
+
+        return view('EditTask', ['task'=>$datatask, 'tickets'=>$dataticket, 'idticket'=>$idticket]);
         
-        //VERIFICA DELLA CHIAMATA
-        if ($response->successful()) {
-            $datatask = $response->json();
-            //ri-converto inizio e fine attività per la vista
-            $datatask['timeInterval']['start']=$this->reconvertDate($datatask['timeInterval']['start']);
-            $datatask['timeInterval']['end']=$this->reconvertDate($datatask['timeInterval']['end']);
-            return view('EditTask', ['task'=>$datatask , 'idticket'=>$idticket]);
-        } 
-        else {
-          
-          return response()->json(['error' => 'Unable to fetch data'], 500);
-        
-        }
         
     }
 }

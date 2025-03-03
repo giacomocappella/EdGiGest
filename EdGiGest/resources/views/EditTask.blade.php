@@ -20,7 +20,12 @@
             font-size: 24px;
             margin-bottom: 20px;
         }
-
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
         .form-container {
             width: 70%;
             max-width: 1000px;
@@ -167,48 +172,67 @@
             </div>
         </aside>
 
-<div class="form-container">
-    <h1>Modifica Attività</h1>
-    <form action="{{ route('store.edit.task') }}" method="POST">
-        @csrf
-        @method('PUT')
-        <div class="form-group">
-            <label for="Task_Start">Inizio attività</label>
-            <input type="datetime-local" id="Task_Start" name="Task_Start" value="{{ $task['timeInterval']['start'] }}">
-            @error('Task_Start')
-            <div class="error">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="Task_End">Fine attività</label>
-            <input type="datetime-local" id="Task_End" name="Task_End" value="{{ $task['timeInterval']['end'] }}">
-            @error('Task_End')
-            <div class="error">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="Description">Descrizione attività</label>
-            <textarea id="Description" name="Description" rows="20" >{{ $task['description']}}</textarea>
-            @error('Description')
-            <div class="error">{{ $message }}</div>
-            @enderror
+        <div class="form-container">
+            <h1>Modifica Attività</h1>
+            <h2><strong>Ticket #{{$idticket}}: {{$tickets->Nome}}</strong><br>
+            Tecnici impiegati:@if($tickets->Doppio_tecnico==1) 2 @else 1 @endif</h2>    
+            <form action="{{ route('store.edit.task') }}" method="POST">
+                @csrf
+                @method('PUT')
+        
+                <!-- Campo Data -->
+                <div class="form-group">
+                    <label for="Task_Date">Data attività</label>
+                    <input type="date" id="Task_Date" name="Task_Date" 
+                        value="{{ old('Task_Date', \Carbon\Carbon::parse($task->Ora_inizio)->format('Y-m-d')) }}">
+                    @error('Task_Date')
+                    <div class="error">{{ $message }}</div>
+                    @enderror
+                </div>
+        
+                <!-- Campo Orario Inizio -->
+                <div class="form-group">
+                    <label for="Task_Start">Orario Inizio</label>
+                    <input type="time" id="Task_Start" name="Task_Start" 
+                        value="{{ old('Task_Start', \Carbon\Carbon::parse($task->Ora_inizio)->format('H:i')) }}">
+                    @error('Task_Start')
+                    <div class="error">{{ $message }}</div>
+                    @enderror
+                </div>
+        
+                <!-- Campo Orario Fine -->
+                <div class="form-group">
+                    <label for="Task_End">Orario Fine</label>
+                    <input type="time" id="Task_End" name="Task_End" 
+                        value="{{ old('Task_End', \Carbon\Carbon::parse($task->Ora_fine)->format('H:i')) }}">
+                    @error('Task_End')
+                    <div class="error">{{ $message }}</div>
+                    @enderror
+                </div>
+        
+                <!-- Campo Descrizione -->
+                <div class="form-group">
+                    <label for="Description">Descrizione attività</label>
+                    <textarea id="Description" name="Description" rows="15">{{ old('Description', $task->Descrizione) }}</textarea>
+                    @error('Description')
+                    <div class="error">{{ $message }}</div>
+                    @enderror
+                </div>
+        
+                <div class="button-container">
+                    <input type="hidden" name="idticket" value="{{ $idticket }}">
+                    <input type="hidden" name="idtask" value="{{ $task->id }}">
+                    <button type="submit" class="submit-btn">Conferma</button>
+                </form>
+        
+                <form action="{{ route('get.tasks') }}" method="GET">
+                    @csrf
+                    <input type="hidden" name="idticket" value="{{ $idticket }}">
+                    <button type="submit" class="cancel-btn">Torna indietro</button>
+                </form>
+            </div>
         </div>
         
-        <div class="button-container">
-            <input type="hidden" name="idticket" value="{{ $idticket }}">
-            <input type=hidden name="idtask" value="{{ $task['id'] }}">
-            <button type="submit" class="submit-btn">Conferma</button>
-        </form>
-            <form action="{{ route('get.tasks') }}" method="GET">
-                @csrf
-                <input type="hidden" name="idticket" value="{{ $idticket }}">
-                <button type="submit" class="cancel-btn">Torna indietro</button>
-            </form>
-        </div>
-    </form>
-</div>
 </div>
 </body>
 </html>

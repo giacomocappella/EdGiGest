@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\View;
-
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Ticket;
 
 class CreateTask extends Controller
 {
@@ -11,8 +11,10 @@ class CreateTask extends Controller
     {   
         //recupero l'id del ticket che serve per creare l'attività
         $idticket=$request->input('idticket');
-        $nameticket=$request->input('nameticket');
+        
+        //recupero il ticket associato
+        $ticket=Ticket::find($idticket);
 
-        return view('NewTask',['idticket'=> $idticket, 'nameticket'=> $nameticket]);
+        return view('NewTask',['idticket'=> $idticket, 'tickets'=>$ticket]);
     }
 }

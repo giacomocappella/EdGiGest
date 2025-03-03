@@ -177,24 +177,24 @@
         @method('PUT')
         <div class="form-group">
             <label for="Cliente">Cliente</label>
-            <input type="text" id="clientname" value="{{$ticket['clientName']}}" readonly>
+            <input type="text" id="clientname" value="{{$ticket->Ragione_Sociale}}" readonly>
         </div>
 
         <div class="form-group">
             <label for="Ticket_name">Nome Ticket</label>
-            <input type="text" name="Ticket_name" value="{{ $ticket['name'] }}">
+            <input type="text" name="Ticket_name" value="{{ $ticket->Nome }}">
             @error('Ticket_name')
                 <div class="error">{{ $message }}</div>
             @enderror
         </div>
 
         <div class="button-container">
-            <input type="hidden" name="idticket" value="{{ $ticket ['id'] }}">
+            <input type="hidden" name="idticket" value="{{ $ticket->id }}">
             <button type="submit" class="submit-btn">Modifica Ticket</button>
         </form>
         <form action="{{ route('get.tasks') }}" method="GET">
             @csrf
-            <input type="hidden" name="idticket" value="{{ $ticket ['id'] }}">
+            <input type="hidden" name="idticket" value="{{ $ticket->id }}">
             <button type="submit" class="cancel-btn">Torna indietro</button>
         </form>
         </div>

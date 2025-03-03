@@ -194,43 +194,41 @@
             </div>
         </aside>
 
-<div class="form-container">
-    <h1>Elenco Tickets</h1>
-    <form action="{{ route('get.tasks') }}" method="GET">
-        @csrf
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Seleziona</th>
-                    <th>Cliente</th>
-                    <th>Nome Ticket</th>
-                    <th>Stato</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($tickets as $ticket)
-                <tr>
-                    <td class="radio-btn"><input type="radio" name="idticket" value="{{ $ticket['id'] }}"></td>
-                    <td>{{ $ticket['clientName'] }}</td>
-                    <td>{{ $ticket['name'] }}</td>
-                    <td>
-                        @if($ticket['color'] == '#689F38')
-                            Aperto
-                        @elseif($ticket['color'] == '#FF5722')
-                            Sospeso
-                        @else
-                            Chiuso
-                        @endif
-                    </td>
-                </tr>
+        <div class="form-container">
+            <h1>Elenco Tickets</h1>
+            <form action="{{ route('get.tasks') }}" method="GET">
+                @csrf
+                
+                @foreach($tickets->groupBy('Ragione_Sociale') as $cliente => $ticketGroup)
+                <h2>Cliente: {{ $cliente }}</h2> <!-- Titolo con il nome del cliente --><br>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Seleziona</th>
+                            <th>Nome Ticket</th>
+                            <th>Stato</th>
+                            <th>Data Ultimo Aggiornamento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($ticketGroup as $ticket)
+                        <tr>
+                            <td class="radio-btn"><input type="radio" name="idticket" value="{{ $ticket->id }}"></td>
+                            <td>{{ $ticket->Nome }}</td>
+                            <td>{{ $ticket->Stato }}</td>
+                            <td>{{ \Carbon\Carbon::parse($ticket->updated_at)->format('d.m.Y H:i') }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
                 @endforeach
-            </tbody>
-        </table>
-        <div class="button-container">
-            <button type="submit" class="submit-btn">Vedi dettagli</button>
+                
+                <div class="button-container">
+                    <button type="submit" class="submit-btn">Vedi dettagli</button>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
-</div>
+        
 </body>
 </html>

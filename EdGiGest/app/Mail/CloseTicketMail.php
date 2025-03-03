@@ -13,26 +13,26 @@ class CloseTicketMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $nameticket;
-    public $datatask;
+    public $ticket;
+    public $tasks;
     public $clientmail;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($nameticket, $datatask)
+    public function __construct($ticket, $tasks)
     {
-        $this->nameticket = $nameticket;
-        $this->datatask = $datatask;
+        $this->ticket = $ticket;
+        $this->tasks = $tasks;
     }
 
     public function build()
     {
-        return $this->subject('Rapportino Chiusura Ticket - EdGiTech')
+        return $this->subject('Report Chiusura Ticket #' . $this->ticket->id . ' - EdGiTech')
                     ->view('MailTicketClosed')
                     ->with([
-                        'nameticket' => $this->nameticket,
-                        'tasks'=> $this->datatask,
+                        'ticket' => $this->ticket,
+                        'tasks'=> $this->tasks,
                         ]);
     }
 }

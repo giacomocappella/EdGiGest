@@ -82,6 +82,19 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        .aperto {
+            color: green;
+        }
+
+        .sospeso {
+            color: orange;
+        }
+
+        .chiuso {
+            color: red;
+        }
+
+
     </style>
     <script>
         function confermaChiusura() {
@@ -196,62 +209,55 @@
         </aside>
 
     <div class="form-container">
-        <h1>Ticket: {{$tickets['name']}}</h1>
+        <h1>Ticket: {{$tickets->Nome}}</h1>
 
         <div class="DettagliTicket">
-            <div class="riga"><strong>Cliente:</strong> {{$tickets['clientName']}}</div>
-            <div class="riga"><strong>Id:</strong> {{$tickets['id']}}</div>
-            <div class="riga"><strong>Stato:</strong> 
-                @if($tickets['color'] == '#689F38')
-                    <span style="color: #4CAF50;">Aperto</span>
-                @elseif($tickets['color'] == '#FF5722')
-                    <span style="color: #FF5722;">Sospeso</span>
-                @else
-                    <span style="color: #FF0000;">Chiuso</span>
-                @endif
-            </div>
-            <div class="riga"><strong>Ore svolte:</strong> {{$tickets['duration']}}</div>
+            <div class="riga"><strong>Cliente:</strong> {{$tickets->Ragione_Sociale}}</div>
+            <div class="riga"><strong>Ticket # </strong> {{$tickets->id}}</div>
+            <div class="riga">
+                <strong>Stato: <span class="{{ strtolower($tickets->Stato) }}">{{ $tickets->Stato }}</span></strong>
+            </div>         
+            <div class="riga"><strong>Ore totali:</strong> {{$tickets->Ore_totali}} h</div>
+            <div class="riga"><strong>Tecnici impiegati:@if($tickets->Doppio_tecnico==1) 2 @else 1 @endif</strong></div>
         </div>
-
+    
         <div class="ColonnaBottoni">
             <div class="bottoni">
-                @if($tickets['color'] == '#689F38'||$tickets['color'] == '#FF5722')
+                @if($tickets->Stato == 'Aperto'||$tickets->Stato == 'Sospeso')
                 <form action="{{ route('edit.ticket') }}" method="GET">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
+                    <input type="hidden" name="idticket" value="{{ $tickets->id }}">
                     <button type="submit">Modifica Ticket</button>
                 </form>
                 @endif
-                @if($tickets['color'] == '#689F38'||$tickets['color'] == '#FF5722')
+                @if($tickets->Stato == 'Aperto'||$tickets->Stato == 'Sospeso')
                     <button onclick="confermaChiusura()">Chiudi Ticket</button>
                     <form id="formSiclose" action="{{ route('close.ticket.mail') }}" method="POST" style="display: none;">
                         @csrf
                         @method('PUT')
-                        <input type="hidden" name="idclose" value="{{ $tickets['id'] }}">
-                        <input type="hidden" name="nameticket" value="{{ $tickets['name'] }}">
-                        <input type="hidden" name="nameclient" value="{{ $tickets['clientName'] }}">
+                        <input type="hidden" name="idclose" value="{{ $tickets->id }}">
                     </form>
                     <form id="formNoclose" action="{{ route('close.ticket.nomail') }}" method="POST" style="display: none;">
                         @csrf
                         @method('PUT')
-                        <input type="hidden" name="idclose" value="{{ $tickets['id'] }}">
+                        <input type="hidden" name="idclose" value="{{ $tickets->id }}">
                     </form>
                 @endif
-                @if($tickets['color'] == '#689F38')
+                @if($tickets->Stato == 'Aperto')
                     <button onclick="confermaSospensione()">Sospendi Ticket</button>
                     <form id="formSisuspend" action="{{ route('suspend.ticket') }}" method="POST" style="display: none;">
                         @csrf
                         @method('PUT')
-                        <input type="hidden" name="idsuspend" value="{{ $tickets['id'] }}">
+                        <input type="hidden" name="idsuspend" value="{{ $tickets->id }}">
                     </form>
                 @endif
-                @if($tickets['color'] == '#FF5722'||$tickets['color'] == '#FF0000')
+                @if($tickets->Stato == 'Sospeso'||$tickets->Stato == 'Chiuso')
                     <button onclick="confermaRiapertura()">Riapri Ticket</button>
                     <form id="formSiopen" action="{{ route('reopen.ticket') }}" method="POST" style="display: none;">
                         @csrf
                         @method('PUT')
-                        <input type="hidden" name="idreopen" value="{{ $tickets['id'] }}">
+                        <input type="hidden" name="idreopen" value="{{ $tickets->id }}">
                     </form>
                 @endif
             </div>
@@ -264,6 +270,7 @@
             <thead>
                 <tr>
                     <th>Seleziona</th>
+                    <th>Data attività</th>
                     <th>Inizio attività</th>
                     <th>Fine attività</th>
                     <th>Durata</th>
@@ -273,21 +280,23 @@
             <tbody>
                 @foreach($tasks as $task)
                 <tr>
-                    <td><input type="radio" name="idtask" value="{{$task['id']}}"></td>
-                    <td>{{ $task['timeInterval']['start'] }}</td>
-                    <td>{{ $task['timeInterval']['end'] }}</td>
-                    <td>{{ $task['timeInterval']['duration'] }}</td>
-                    <td>{{ $task['description'] }}</td>
+                    <td><input type="radio" name="idtask" value="{{$task->id}}"></td>
+                    <td>{{ \Carbon\Carbon::parse($task->Data)->format('d.m.Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($task->Ora_inizio)->format('H:i') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($task->Ora_fine)->format('H:i') }}</td>
+                    <td>{{ $task->Durata }} h</td>
+                    <td>{{ $task->Descrizione }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
 
         <div class="ColonnaBottoni">
-            @if($tickets['color'] == '#689F38')
+            @if($tickets->Stato == 'Aperto')
             <div class="bottoni">         
-                <input type="hidden" name="idticket" value="{{ $tickets['id'] }}">
-                <input type="hidden" name="nameticket" value="{{ $tickets['name'] }}">
+                <input type="hidden" name="idticket" value="{{ $tickets->id }}">
+                <input type="hidden" name="nameticket" value="{{ $tickets->Nome }}">
+                
                 <button type="submit" formaction="{{ route('create.task') }}">Aggiungi attività</button>
                 <button type="submit" formaction="{{ route('edit.task') }}">Modifica attività</button>
                 <button type="submit" onclick="confermaEliminazione()" formaction="{{ route('delete.task') }}">Elimina attività</button>     
