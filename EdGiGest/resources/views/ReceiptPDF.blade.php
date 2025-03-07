@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Ricevuta</title>
-        <style>
-            h4 {
-        margin: 0;
+    <style>
+        h4 {
+            margin: 0;
         }
         .w-full {
             width: 100%;
@@ -26,10 +26,9 @@
         table {
             width: 100%;
             border-spacing: 0;
-            
         }
         th {
-                text-align: left;
+            text-align: left;
         }
         table.products {
             font-size: 0.875rem;
@@ -53,7 +52,11 @@
             font-size: 1rem;
             line-height: 1.5;
         }
-</style>
+        .signature {
+            text-align: right;
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 <body>
     <table class="w-full">
@@ -128,7 +131,8 @@
         </div>
     </div>
     <div class="footer margin-top">
-        <div>Marca da bollo € 2,00 sull'originale.</div>
+        <div>Marca da bollo € 2,00 e firma autografa sull'originale.</div>
     </div>
+
 </body>
 </html>
