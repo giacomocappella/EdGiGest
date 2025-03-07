@@ -72,38 +72,39 @@
             <tr>
                 <td class="w-half">
                     <div><h4>Spett.le</h4></div>
-                    <div>{{$client['Ragione_Sociale']}}</div>
-                    <div>{{$client['Via']}} {{$client['Civico']}}</div>
-                    <div>{{$client['Cap']}} - {{$client['Citta']}} ({{$client['Provincia']}})</div>
-                    <div>CF - P.IVA {{$client['Partita_IVA_CF']}}</div>
+                    <div>{{$client->Ragione_Sociale}}</div>
+                    <div>{{$client->Via}} {{$client->Civico}}</div>
+                    <div>{{$client->Cap}} - {{$client->Citta}} ({{$client->Provincia}})</div>
+                    <div>CF - P.IVA {{$client->Partita_IVA_CF}}</div>
                 </td>
                 <td class="w-half">
                     <div><h4>Prestatore occasionale:</h4></div>
-                    <div>{{$sys_admin['Cognome']}} {{$sys_admin['Nome']}}</div>
-                    <div>{{$sys_admin['Via']}} {{$sys_admin['Civico']}}</div>
-                    <div>{{$sys_admin['Cap']}} - {{$sys_admin['Citta']}} ({{$sys_admin['Provincia']}})</div>
-                    <div>CF {{$sys_admin['Codice_Fiscale']}}</div>
+                    <div>{{$sys_admin->name}}</div>
+                    <div>{{$sys_admin->Via}} {{$sys_admin->Civico}}</div>
+                    <div>{{$sys_admin->CAP}} - {{$sys_admin->Citta}} ({{$sys_admin->Provincia}})</div>
+                    <div>CF {{$sys_admin->CF}}</div>
                 </td>
             </tr>
         </table>
     </div>
     <br>
-    <h3>CONSULENZA TECNICO INFORMATICA</h3>
+    <h2 style="text-align: center;">RICEVUTA DI PRESTAZIONE OCCASIONALE </h2>
+    <h3 style="text-align: center;">CONSULENZA TECNICO INFORMATICA</h3>
     <br>
     <p> Ticket inclusi nella presente ricevuta:</p>
     <div class="margin-top">
         <table class="products">
             <tr>
+                <th>#</th>
                 <th>Nome Ticket</th>
-                <th>Durata</th>
             </tr>
             @foreach($tickets as $item)
             <tr class="items">
                     <td>
-                        {{ $item['name'] }}
+                        {{ $item->id }}
                     </td>
                     <td>
-                        {{ $item['duration'] }}
+                        {{ $item->Nome }}
                     </td>
             </tr>
             @endforeach
@@ -111,16 +112,16 @@
     </div>
     <br><br>
     <div class="total">
-       <b>Saldo compenso lordo: € {{ $receipt['Importo_Lordo'] }}</b><br>
-       Ritenuta d’acconto Irpef 20% - Art. 25 D.P.R. 600/1973: - € {{$taxsum}}
+        <b>Saldo compenso lordo: € {{ number_format($receipt->Importo_Lordo, 2, ',', '.') }}</b><br>
+        Ritenuta d’acconto Irpef 20% - Art. 25 D.P.R. 600/1973: - € {{ number_format($taxsum, 2, ',', '.') }} <br>
        <hr>
-       <b>Netto a pagare: € {{ $receipt['Importo_Netto'] }}</b>
+       <b>Netto a pagare: € {{ number_format($receipt->Importo_Netto, 2, ',', '.') }}</b>
     </div>
     <br><br>
     <div class="footer margin-top">
         <div>Operazione esclusa da IVA ai sensi dell’art. 5 D.P.R. 633/1972.</div>
         <div><ul>
-            <li>Il sottoscritto dichiara che, nell’anno solare {{ $receipt['Anno'] }}, alla data odierna con questa prestazione non ha conseguito redditi derivanti dall’esercizio di attività di lavoro autonomo occasionale eccedenti € 5.000,00;</li>
+            <li>Il sottoscritto dichiara che, nell’anno solare {{ $receipt->Anno }}, alla data odierna con questa prestazione non ha conseguito redditi derivanti dall’esercizio di attività di lavoro autonomo occasionale eccedenti € 5.000,00;</li>
             <br>
             <li>Il sottoscritto dichiara inoltre di non essere iscritto (applicazione dell’aliquota contributiva del 23,5%) a forme di previdenza obbligatorie, quali lavoratore subordinato – lavoratore in gestione separata.
             </ul>

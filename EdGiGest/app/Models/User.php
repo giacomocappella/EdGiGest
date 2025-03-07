@@ -75,5 +75,5 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Client::class, 'current_team_id', 'Partita_IVA_CF_Cliente');
     }
-
+   
 }

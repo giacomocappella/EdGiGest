@@ -50,7 +50,10 @@ class CloseTicket extends Controller
         $ticket->Stato = 'Chiuso';
         $ticket->save();
         
-        Mail::to($emailTicket,"info@edgitech.it")->send(new CloseTicketMail($ticket, $tasks));  
+        Mail::to($emailTicket)
+                ->bcc("info@edgitech.it") // Aggiunge info@edgitech.it in CCN
+                ->send(new CloseTicketMail($ticket, $tasks));
+ 
         session(['idticket' => $idticket]);
         return redirect()->route('get.tasks');
          

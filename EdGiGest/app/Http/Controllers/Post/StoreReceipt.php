@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Http;
 
 use App\Models\Receipt;
 use App\Models\Client;
+use App\Models\Ticket;
+use App\Models\User;
+
 use App\Mail\SendReceiptMail;
 
 class StoreReceipt extends Controller
@@ -18,24 +20,14 @@ class StoreReceipt extends Controller
     public function __invoke(Request $request)
     {
         //recupero i ticket per modificare il campo note in "ricevuta ok"
-        $tickets=json_decode($request->input('tickets'), true);
-
-        //chiamate API per modificare il campo
-        $apiKey = env('API_KEY'); 
-        foreach($tickets as $ticket){
-            $idticket=$ticket['id'];
-            $urlticket="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/projects/$idticket";
-        
-            $response = Http::withHeaders([
-            'x-api-key' => $apiKey,
-            ])->withoutVerifying()->put($urlticket, [
-            'note' => "RICEVUTA_EMESSA",
-            ]);
-            //RICORDARSI DI VERIFICARE IL CERTIFICATO (PER ORA BYPASSATO)
-            if (!$response->successful())                             
-                return response()->json(['error' => 'Unable to fetch data'], 500);
+        $ticketsrec=json_decode($request->input('tickets'), true);
+ 
+        foreach($ticketsrec as $item)
+        {
+            $ticket=Ticket::find($item['id']);
+            $ticket->Rendicontato=1;  
+            $ticket->save();
         }
-            
 
         //creo oggetto ricevuta e poi lo salvo con tutti i dati provenienti dalla view
         $receipt = new Receipt();
@@ -59,32 +51,25 @@ class StoreReceipt extends Controller
     public function StoreSendMail(Request $request)
     {
         //recupero i ticket per modificare il campo note in "ricevuta ok"
-        $tickets=json_decode($request->input('tickets'), true);
+        $ticketsrec=json_decode($request->input('tickets'), true);
 
-        //chiamate API per modificare il campo
-        $apiKey = env('API_KEY'); 
-        foreach($tickets as $ticket){
-            $idticket=$ticket['id'];
-            $urlticket="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/projects/$idticket";
-        
-            $response = Http::withHeaders([
-            'x-api-key' => $apiKey, 
-            ])->withoutVerifying()->put($urlticket, [
-            'note' => "RICEVUTA_EMESSA",
-            ]);
-            //RICORDARSI DI VERIFICARE IL CERTIFICATO (PER ORA BYPASSATO)
-            if (!$response->successful())                             
-                return response()->json(['error' => 'Unable to fetch data'], 500);
+        foreach($ticketsrec as $item)
+        {
+            $ticket=Ticket::find($item['id']);
+            $ticket->Rendicontato=1;  
+            $ticket->save();
         }
 
-        $nameclient = $request->input('clientname');
+        $idclient = $request->input('p_iva_cf_cliente');
 
         //recupero mail del cliente
-        $client=Client::where('Ragione_Sociale',$nameclient)->first();
-        if($client)
-            $clientmail=$client->Mail_amministrazione;
-        else
-            echo "Cliente non trovato.";
+        $client=Client::findOrFail($idclient);
+        $clientmail=$client->Mail_amministrazione;
+
+        //recupero il sistemista associato
+        $cfuser=$request->input('cf_sistemista');
+
+        $user = User::where('CF', $cfuser)->firstOrFail();
 
         //creo oggetto ricevuta e poi lo salvo con tutti i dati provenienti dalla view
         $receipt = new Receipt();
@@ -100,7 +85,10 @@ class StoreReceipt extends Controller
         // Salva la ricevuta nel database
         $receipt->save();
 
-        Mail::to($clientmail, "info@edgitech.it")->send(new SendReceiptMail(storage_path($receipt->Percorso_File)));
+        Mail::to($clientmail)
+                ->bcc("info@edgitech.it") // Aggiunge info@edgitech.it in CCN
+                ->send(new SendReceiptMail(storage_path($receipt->Percorso_File), $user));
+
 
         $sendmail='yes';
 

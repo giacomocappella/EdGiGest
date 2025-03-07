@@ -206,6 +206,7 @@
                     <thead>
                         <tr>
                             <th>Seleziona</th>
+                            <th>#</th>
                             <th>Nome Ticket</th>
                             <th>Stato</th>
                             <th>Data Ultimo Aggiornamento</th>
@@ -215,6 +216,7 @@
                         @foreach($ticketGroup as $ticket)
                         <tr>
                             <td class="radio-btn"><input type="radio" name="idticket" value="{{ $ticket->id }}"></td>
+                            <td>{{$ticket->id}}</td>
                             <td>{{ $ticket->Nome }}</td>
                             <td>{{ $ticket->Stato }}</td>
                             <td>{{ \Carbon\Carbon::parse($ticket->updated_at)->format('d.m.Y H:i') }}</td>
@@ -222,11 +224,13 @@
                         @endforeach
                     </tbody>
                 </table>
-                @endforeach
-                
                 <div class="button-container">
                     <button type="submit" class="submit-btn">Vedi dettagli</button>
                 </div>
+                <br>
+                @endforeach
+                
+                
             </form>
         </div>
         

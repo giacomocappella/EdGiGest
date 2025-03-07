@@ -16,17 +16,19 @@ Route::get('/ticket/newtask','App\Http\Controllers\View\CreateTask')->name('crea
 Route::get('/ticket/task/edit','App\Http\Controllers\View\EditTask')->name('edit.task')->middleware('auth');
 Route::get('/ticket/task/delete','App\Http\Controllers\Delete\DeleteTask')->name('delete.task')->middleware('auth');
 Route::get('/ticket/edit','App\Http\Controllers\View\EditTicket')->name('edit.ticket')->middleware('auth');
-Route::get('/dashboard-receipts','App\Http\Controllers\View\DashboardReceipts')->name('dashboard.receipts')->middleware('auth');
 Route::get('/newreceipt','App\Http\Controllers\View\CreateReceipt')->name('create.receipt')->middleware('auth');
 Route::get('/newreceipt/searchtickets','App\Http\Controllers\View\GetTicketsSelectedClient')->name('get.ticket.selected.client')->middleware('auth');
 Route::get('/newreceipt/pdf','App\Http\Controllers\View\MakePDF')->name('make.pdf')->middleware('auth');
 Route::get('/newreceipt/pdf/{filename}', 'App\Http\Controllers\View\PreviewPDF')->name('preview.pdf')->middleware('auth');
+Route::get('/newreceipt/pdf/double/{filename}', 'App\Http\Controllers\View\PreviewPDF2tech')->name('preview2tech.pdf')->middleware('auth');
 
 Route::post('/newclient/store', 'App\Http\Controllers\Post\StoreClient')->name('store.client')->middleware('auth');
 Route::post('/newticket/store', 'App\Http\Controllers\Post\StoreTicket')->name('store.ticket')->middleware('auth');
 Route::post('/ticket/newtask/store/', 'App\Http\Controllers\Post\StoreTask')->name('store.task')->middleware('auth');
 Route::post('/newreceipt/store/', 'App\Http\Controllers\Post\StoreReceipt')->name('store.receipt')->middleware('auth');
 Route::post('/newreceipt/store/mail', 'App\Http\Controllers\Post\StoreReceipt@StoreSendMail')->name('store.receipt.mail')->middleware('auth');
+Route::post('/newreceipt/store/double', 'App\Http\Controllers\Post\StoreReceipt2')->name('store.receipt2')->middleware('auth');
+Route::post('/newreceipt/store/double/mail/', 'App\Http\Controllers\Post\StoreReceipt2@StoreSendMail')->name('store.receipt.mail2')->middleware('auth');
 
 Route::put('/ticket/suspend', 'App\Http\Controllers\Put\SuspendTicket')->name('suspend.ticket')->middleware('auth');
 Route::put('/ticket/close', 'App\Http\Controllers\Put\CloseTicket@closeNoMail')->name('close.ticket')->middleware('auth');

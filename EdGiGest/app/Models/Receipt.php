@@ -19,6 +19,7 @@ class Receipt extends Model
         'P_IVA_CF_Cliente',
         'CF_Sistemista',
     ];
+    public $timestamps = false;
 
     public function client()
     {

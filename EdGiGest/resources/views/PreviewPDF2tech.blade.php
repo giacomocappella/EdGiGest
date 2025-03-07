@@ -115,6 +115,23 @@
         margin-bottom: 10px;
         font-size: 16px;
     }
+
+    .pdf-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+    .pdf-box {
+        flex: 1;
+        min-width: 45%;
+    }
+    @media (max-width: 768px) {
+        .pdf-box {
+            min-width: 100%;
+        }
+    }
+</style>
 </style>
 <script>
     function confermaInvio() {
@@ -204,43 +221,37 @@
             </div>
         </aside>
 
-<div class="form-container">
-    <h1>Anteprima Ricevuta</h1>
-    <iframe src="{{ route('preview.pdf', ['filename' => basename($pathpdf)]) }}#zoom=65" width="100%" height="600px"></iframe>
+        <div class="form-container">
+        <h1>Anteprima Ricevute</h1>
     
-    <div class="button-container">
-    <button onclick="confermaInvio()" class="submit-btn">Crea ricevuta</button>
-            <form id="formNoclose" action="{{ route('store.receipt') }}" method="POST" style="display: none;">
-                @csrf
-                <input type="hidden" name="numero" value="{{ $receipt->Numero }}">
-                <input type="hidden" name="anno" value="{{ $receipt->Anno }}">
-                <input type="hidden" name="data" value="{{ $receipt->Data }}">
-                <input type="hidden" name="p_iva_cf_cliente" value="{{ $client->Partita_IVA_CF }}">
-                <input type="hidden" name="cf_sistemista" value="{{ $sys_admin->CF }}">
-                <input type="hidden" name="importo_netto" value="{{ number_format($receipt->Importo_Netto, 2) }}">
-                <input type="hidden" name="importo_lordo" value="{{ number_format($receipt->Importo_Lordo, 2) }}">
-                <input type="hidden" name="percorso_file" value="{{ $pathpdf }}">
-                <input type="hidden" name="taxsum" value="{{ $taxsum }}">
-                <input type="hidden" name="dateita" value="{{ $dateita }}">
-                <input type="hidden" name="tickets" value="{{ json_encode($tickets) }}">
-            </form>
-            <form id="formSiclose" action="{{ route('store.receipt.mail') }}" method="POST" style="display: none;">
-                @csrf
-                <input type="hidden" name="numero" value="{{ $receipt->Numero }}">
-                <input type="hidden" name="anno" value="{{ $receipt->Anno }}">
-                <input type="hidden" name="data" value="{{ $receipt->Data }}">
-                <input type="hidden" name="p_iva_cf_cliente" value="{{ $client->Partita_IVA_CF }}">
-                <input type="hidden" name="cf_sistemista" value="{{ $sys_admin->CF }}">
-                <input type="hidden" name="importo_netto" value="{{ number_format($receipt->Importo_Netto, 2) }}">
-                <input type="hidden" name="importo_lordo" value="{{ number_format($receipt->Importo_Lordo, 2) }}">
-                <input type="hidden" name="percorso_file" value="{{ $pathpdf }}">
-                <input type="hidden" name="taxsum" value="{{ $taxsum }}">
-                <input type="hidden" name="dateita" value="{{ $dateita }}">
-                <input type="hidden" name="tickets" value="{{ json_encode($tickets) }}">
-            </form>
-            <button type="button" class="submit-btn" onclick="window.history.back();">Torna indietro</button>
+        <div class="pdf-container" style="display: flex; gap: 20px; justify-content: center;">
+            @foreach ($pdfPaths as $pdfPath)
+                <iframe src="{{ route('preview2tech.pdf', ['filename' => basename($pdfPath)]) }}#zoom=50" 
+                        width="48%" height="600px"></iframe>
+            @endforeach
+        </div>
+        
+    
+        <div class="button-container">
+            <button onclick="confermaInvio()" class="submit-btn">Crea ricevute</button>
+    
 
-    </div>
+            <form id="formNoclose" action="{{ route('store.receipt2') }}" method="POST" style="display: none;">
+                @csrf
+                <input type="hidden" name="receipts" value="{{ json_encode($receipts) }}">
+                <input type="hidden" name="client" value="{{ json_encode($client) }}">
+                <input type="hidden" name="tickets" value="{{ json_encode($tickets) }}">
+            </form>
+    
+
+            <form id="formSiclose" action="{{ route('store.receipt.mail2') }}" method="POST" style="display: none;">
+                @csrf
+                <input type="hidden" name="receipts" value="{{ json_encode($receipts) }}">
+                <input type="hidden" name="client" value="{{ json_encode($client) }}">
+                <input type="hidden" name="tickets" value="{{ json_encode($tickets) }}">
+            </form>
+    
+            <button type="button" class="submit-btn" onclick="window.history.back();">Torna indietro</button>
         </div>
     </div>
 </body>

@@ -158,6 +158,7 @@
             <table>
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th class="ticket-name-table">Nome ticket</th>
                         <th>Durata</th>
                         <th>Tecnici impiegati</th>
@@ -167,7 +168,9 @@
                 </thead>
                 <tbody>
                     @foreach ($tickets as $ticket)
+                        @if(in_array($ticket->Stato, ['Aperto', 'Sospeso']))
                         <tr>
+                            <td>{{$ticket->id}}</td>
                             <td>{{ $ticket->Nome}}</td>
                             <td>{{$ticket->Ore_totali}} h</td>
                             <td>@if($ticket->Doppio_tecnico==1) 2 @else 1 @endif</td>
@@ -186,6 +189,7 @@
                                 </form>
                             </td>
                         </tr>
+                        @endif
                     @endforeach
                 </tbody>
             </table>
