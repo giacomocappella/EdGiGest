@@ -55,7 +55,6 @@
                         format_list_numbered
                     </span>
                     <h3>Lista Tickets</h3>
-                    <!--<span class="message-count">27</span>-->
                 </a>
                 <a href="/newreceipt">
                     <span class="material-icons-sharp">

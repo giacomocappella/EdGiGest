@@ -52,5 +52,17 @@
                 </x-button>
             </div>
         </form>
+
+        <!-- Link di registrazione -->
+        <div class="flex items-center justify-end mt-4">
+            <p class="text-sm text-gray-600">
+                {{ __('Oppure') }}
+            </p>
+            <a href="{{ route('register') }}">
+                <x-button class="ms-4">
+                    {{ __('Registrati') }}
+                </x-button>
+            </a>
+        </div>
     </x-authentication-card>
 </x-guest-layout>

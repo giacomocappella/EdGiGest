@@ -24,9 +24,13 @@ class AuthenticatedSessionController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
-            // Personalizza il reindirizzamento post-login
-            return redirect('/');
+            $user = Auth::user();
+            if ($user->current_team_id !== '0000000000') {
+                
+                return redirect()->route('dashboard.client');
+            }
+            else                
+                return redirect('/');
         }
 
         return back()->withErrors([

@@ -1,11 +1,22 @@
 <?php
 
+namespace App\Http\Controllers\View;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\View;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use Illuminate\Support\Facades\Auth;
 
 
-Route::get('/', 'App\Http\Controllers\View\Dashboard')->name('dashboard')->middleware('auth');
+
+Route::get('/', function(){
+    if(Auth::user()->current_team_id=='0000000000'){
+        return app(Dashboard::class)();
+    }
+    else
+        return app(DashboardClient::class)();
+})->middleware('auth');
+Route::get('/dashboardclient', 'App\Http\Controllers\View\DashboardClient')->name('dashboard.client')->middleware('auth');
 Route::get('/newclient', 'App\Http\Controllers\View\CreateClient')->name('create.client')->middleware('auth');
 Route::get('/client', 'App\Http\Controllers\View\GetClients')->name('get.clients')->middleware('auth');
 Route::get('/client/edit', 'App\Http\Controllers\View\EditClient')->name('edit.client')->middleware('auth');
@@ -21,6 +32,9 @@ Route::get('/newreceipt/searchtickets','App\Http\Controllers\View\GetTicketsSele
 Route::get('/newreceipt/pdf','App\Http\Controllers\View\MakePDF')->name('make.pdf')->middleware('auth');
 Route::get('/newreceipt/pdf/{filename}', 'App\Http\Controllers\View\PreviewPDF')->name('preview.pdf')->middleware('auth');
 Route::get('/newreceipt/pdf/double/{filename}', 'App\Http\Controllers\View\PreviewPDF2tech')->name('preview2tech.pdf')->middleware('auth');
+Route::get('/profile', 'App\Http\Controllers\View\ViewProfile')->name('profile')->middleware('auth');
+
+
 
 Route::post('/newclient/store', 'App\Http\Controllers\Post\StoreClient')->name('store.client')->middleware('auth');
 Route::post('/newticket/store', 'App\Http\Controllers\Post\StoreTicket')->name('store.ticket')->middleware('auth');
@@ -38,6 +52,7 @@ Route::put('/ticket/close/nomail','App\Http\Controllers\Put\CloseTicket@CloseNoM
 Route::put('/ticket/task/edit/store','App\Http\Controllers\Put\StoreEditTask')->name('store.edit.task')->middleware('auth');
 Route::put('/ticket/edit/store','App\Http\Controllers\Put\StoreEditTicket')->name('store.edit.ticket')->middleware('auth');
 Route::put('/client/edit/store','App\Http\Controllers\Put\StoreEditClient')->name('store.edit.client')->middleware('auth');
+Route::put('/profile/edit/store', 'App\Http\Controllers\Put\StoreEditProfile')->name('store.edit.profile')->middleware('auth');
 
 Route::get('/dashboard', function () { return redirect('/'); });
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

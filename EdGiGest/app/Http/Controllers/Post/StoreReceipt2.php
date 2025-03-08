@@ -71,9 +71,7 @@ class StoreReceipt2 extends Controller
         // Recupero mail del cliente
         $idclient = $client['Partita_IVA_CF'];
         $clientData = Client::findOrFail($idclient);
-        //$clientMail = $clientData->Email;
-
-        $clientMail="info@edgitech.it";
+        $clientMail = $clientData->Email;
 
         // Array per salvare le ricevute create
         $savedReceipts = [];

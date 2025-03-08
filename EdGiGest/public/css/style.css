@@ -515,6 +515,10 @@ main .recent-tickets a {
     color: #FF5722;
 }
 
+.status-close {
+    color: #ff2222;
+}
+
 .right-section .dark-mode {
     background-color: var(--color-light);
     display: flex;

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Put;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 use App\Models\Client;
 
@@ -52,54 +51,8 @@ class StoreEditClient extends Controller
 
         $client->save();
 
-        //AGGIORNO CLIENTE SU CLOCKIFY TRAMITE API PUT
-
-        //PRIMA DEVO TROVARE L'ID DEL CLIENT SU CLOCKIY
-        $apiKey = env('API_KEY'); 
-
-        $urlidclient="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/clients";
-        $response = Http::withHeaders([
-            'x-api-key' => $apiKey,
-        ])->withoutVerifying()->get($urlidclient);
-        //RICORDARSI DI VERIFICARE IL CERTIFICATO (PER ORA BYPASSATO)
-
-        // Verifica se la chiamata ha avuto successo
-        if ($response->successful()) {
-            // Decodifica la risposta JSON
-            $clients = $response->json();
-
-        } else {
-            return response()->json(['error' => 'Unable to fetch data'], 500);
-        }
-        foreach($clients as $item){
-            if($item['name']==$client->Ragione_Sociale){
-                $idclient=$item['id'];
-            }
-                
-        }
-
-        // AGGIORNAMENTO DEL CLIENTE SU CLOCKIFY
-        $urlclient="https://api.clockify.me/api/v1/workspaces/66b9e18097ddfb5029a6f6a3/clients/$idclient";
-        $response = Http::withHeaders([
-            'x-api-key' => $apiKey,
-      ])->withoutVerifying()->put($urlclient, [
-        'name' => $request->Ragione_Sociale,
-        'email' => $request->Mail_ticket,
-        'address' => 'Via '.$request->Via.' '.$request->Civico.', '.$request->Cap.' '.$request->Citta.', '.$request->Provincia,
-      ]);
-      //RICORDARSI DI VERIFICARE IL CERTIFICATO (PER ORA BYPASSATO)
-
-
-      // Verifico se la chiamata ha avuto successo
-    if ($response->successful()) {
+        
         return redirect()->route('get.clients');
-        } 
-    else {
-        return response()->json([
-            'error' => 'Request failed',
-            'status' => $response->status(),
-            'message' => $response->body(),
-            ], $response->status());
-    }
+
     }
 }
