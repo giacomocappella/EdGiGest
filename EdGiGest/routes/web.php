@@ -16,12 +16,13 @@ Route::get('/', function(){
     else
         return app(DashboardClient::class)();
 })->middleware('auth');
-Route::get('/dashboardclient', 'App\Http\Controllers\View\DashboardClient')->name('dashboard.client')->middleware('auth');
+Route::get('/dashboard/client', 'App\Http\Controllers\View\DashboardClient')->name('dashboard.client')->middleware('auth');
 Route::get('/newclient', 'App\Http\Controllers\View\CreateClient')->name('create.client')->middleware('auth');
 Route::get('/client', 'App\Http\Controllers\View\GetClients')->name('get.clients')->middleware('auth');
 Route::get('/client/edit', 'App\Http\Controllers\View\EditClient')->name('edit.client')->middleware('auth');
 Route::get('/ticket', 'App\Http\Controllers\View\GetTickets')->name('get.tickets')->middleware('auth');
 Route::get('/ticket/tasks','App\Http\Controllers\View\GetTasks')->name('get.tasks')->middleware('auth');
+Route::get('/ticket/tasks/client','App\Http\Controllers\View\GetTasksClient')->name('get.tasks.client')->middleware('auth');
 Route::get('/newticket','App\Http\Controllers\View\CreateTicket')->name('create.ticket')->middleware('auth');
 Route::get('/ticket/newtask','App\Http\Controllers\View\CreateTask')->name('create.task')->middleware('auth');
 Route::get('/ticket/task/edit','App\Http\Controllers\View\EditTask')->name('edit.task')->middleware('auth');

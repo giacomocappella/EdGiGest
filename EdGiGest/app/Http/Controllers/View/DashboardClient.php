@@ -24,6 +24,7 @@ class DashboardClient extends Controller
 
         $groupedData = Ticket::join('clients', 'tickets.Partita_IVA_CF_Cliente', '=', 'clients.Partita_IVA_CF')
             ->where('tickets.Partita_IVA_CF_Cliente', $user->current_team_id) 
+            ->orderBy('tickets.id', 'desc')
             ->select('tickets.*', 'clients.Ragione_Sociale')
             ->get();
 

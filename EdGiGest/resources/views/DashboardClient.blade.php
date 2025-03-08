@@ -25,12 +25,7 @@
                 </div>
             </div>
 
-            <div class="sidebar">
-                <a href="/dashboardclient">
-                    <span class="material-icons-sharp">
-                        dashboard
-                    </span>
-                    <h3>Dashboard</h3>
+            <div class="sidebar">   
                 <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
                     @csrf
                 </form>
@@ -50,8 +45,7 @@
             
 <!-- Recent Tickets Table -->
 <div class="recent-tickets">
-    <h1>Ticket associati al cliente:</h1><br>
-    <h2>{{$clientname}}</h2>
+    <h1>Ticket associati al cliente: {{$clientname}}</h1><br>
     <table>
         <thead>
             <tr>
@@ -80,7 +74,7 @@
                         @endif
                     </td>
                     <td>
-                        <form action="{{ route('get.tasks') }}" method="GET">
+                        <form action="{{ route('get.tasks.client') }}" method="GET">
                             @csrf
                             <input type="hidden" name="idticket" value="{{ $ticket->id }}">
                             <button class="details-button" type="submit">Vedi Dettagli</button>
