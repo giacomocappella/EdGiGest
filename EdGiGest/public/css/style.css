@@ -19,6 +19,20 @@
     --box-shadow: 0 2rem 3rem var(--color-light);
 }
 
+
+
+/* Quando la sidebar è "chiusa", nascondila */
+.sidebar.closed {
+    display: none;
+}
+
+/* Aggiungi eventuali transizioni per una chiusura più fluida */
+.sidebar {
+    transition: transform 0.3s ease-in-out;
+}
+
+
+
 .dark-mode-variables {
     --color-background: #181a1e;
     --color-white: #202528;

@@ -21,7 +21,7 @@ class Ticket extends Model
     ];
 
     protected $casts = [
-        'Ore_totali' => 'decimal:2',
+        'Ore_totali' => 'decimal:10',
         'Rendicontato' => 'boolean',
         'Doppio_tecnico' => 'boolean',
     ];

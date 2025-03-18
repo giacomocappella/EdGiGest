@@ -109,6 +109,12 @@
                     </span>
                     <h3>Nuovo Ticket</h3>
                 </a>
+                <a href="/newservice">
+                    <span class="material-icons-sharp">
+                        add_to_queue 
+                    </span>
+                    <h3>Nuovo Servizio</h3>
+                </a>
                 <a href="/ticket">
                     <span class="material-icons-sharp">
                         format_list_numbered

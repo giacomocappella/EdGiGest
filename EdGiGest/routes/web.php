@@ -24,6 +24,7 @@ Route::get('/ticket', 'App\Http\Controllers\View\GetTickets')->name('get.tickets
 Route::get('/ticket/tasks','App\Http\Controllers\View\GetTasks')->name('get.tasks')->middleware('auth');
 Route::get('/ticket/tasks/client','App\Http\Controllers\View\GetTasksClient')->name('get.tasks.client')->middleware('auth');
 Route::get('/newticket','App\Http\Controllers\View\CreateTicket')->name('create.ticket')->middleware('auth');
+Route::get('/newservice','App\Http\Controllers\View\CreateService')->name('create.service')->middleware('auth');
 Route::get('/ticket/newtask','App\Http\Controllers\View\CreateTask')->name('create.task')->middleware('auth');
 Route::get('/ticket/task/edit','App\Http\Controllers\View\EditTask')->name('edit.task')->middleware('auth');
 Route::get('/ticket/task/delete','App\Http\Controllers\Delete\DeleteTask')->name('delete.task')->middleware('auth');
@@ -40,6 +41,7 @@ Route::get('/profile', 'App\Http\Controllers\View\ViewProfile')->name('profile')
 Route::post('/newclient/store', 'App\Http\Controllers\Post\StoreClient')->name('store.client')->middleware('auth');
 Route::post('/newticket/store', 'App\Http\Controllers\Post\StoreTicket')->name('store.ticket')->middleware('auth');
 Route::post('/ticket/newtask/store/', 'App\Http\Controllers\Post\StoreTask')->name('store.task')->middleware('auth');
+Route::post('/newservice/store', 'App\Http\Controllers\Post\StoreService')->name('store.service')->middleware('auth');
 Route::post('/newreceipt/store/', 'App\Http\Controllers\Post\StoreReceipt')->name('store.receipt')->middleware('auth');
 Route::post('/newreceipt/store/mail', 'App\Http\Controllers\Post\StoreReceipt@StoreSendMail')->name('store.receipt.mail')->middleware('auth');
 Route::post('/newreceipt/store/double', 'App\Http\Controllers\Post\StoreReceipt2')->name('store.receipt2')->middleware('auth');

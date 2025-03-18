@@ -78,7 +78,7 @@
                     <div>{{$client->Ragione_Sociale}}</div>
                     <div>{{$client->Via}} {{$client->Civico}}</div>
                     <div>{{$client->Cap}} - {{$client->Citta}} ({{$client->Provincia}})</div>
-                    <div>CF - P.IVA {{$client->Partita_IVA_CF}}</div>
+                    <div>CF / P.IVA {{$client->Partita_IVA_CF}}</div>
                 </td>
                 <td class="w-half">
                     <div><h4>Prestatore occasionale:</h4></div>

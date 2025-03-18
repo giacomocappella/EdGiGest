@@ -140,7 +140,7 @@
             <div class="riga">
                 <strong>Stato: <span class="{{ strtolower($tickets->Stato) }}">{{ $tickets->Stato }}</span></strong>
             </div>         
-            <div class="riga"><strong>Ore totali:</strong> {{$tickets->Ore_totali}} h</div>
+            <div class="riga"><strong>Ore totali:</strong> {{ number_format($tickets->Ore_totali, 2, ',', '') }} h</div>
             <div class="riga"><strong>Tecnici impiegati:@if($tickets->Doppio_tecnico==1) 2 @else 1 @endif</strong></div>
         </div>
         <br><br>

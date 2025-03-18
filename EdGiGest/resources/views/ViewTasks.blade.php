@@ -93,6 +93,12 @@
         .chiuso {
             color: red;
         }
+        .table td:nth-child(6) { 
+        max-width: 500px; /* Aumenta la larghezza della colonna */
+        word-wrap: break-word; /* Permette la rottura della parola se troppo lunga */
+        white-space: pre-wrap; /* Mantiene la formattazione del testo */
+        text-align: left; /* Allinea il testo a sinistra */
+        }
 
 
     </style>
@@ -171,6 +177,12 @@
                     </span>
                     <h3>Nuovo Ticket</h3>
                 </a>
+                <a href="/newservice">
+                    <span class="material-icons-sharp">
+                        add_to_queue 
+                    </span>
+                    <h3>Nuovo Servizio</h3>
+                </a>
                 <a href="/ticket">
                     <span class="material-icons-sharp">
                         format_list_numbered
@@ -217,7 +229,7 @@
             <div class="riga">
                 <strong>Stato: <span class="{{ strtolower($tickets->Stato) }}">{{ $tickets->Stato }}</span></strong>
             </div>         
-            <div class="riga"><strong>Ore totali:</strong> {{$tickets->Ore_totali}} h</div>
+            <div class="riga"><strong>Ore totali:</strong> {{ number_format($tickets->Ore_totali, 2, ',', '') }} h</div>
             <div class="riga"><strong>Tecnici impiegati:@if($tickets->Doppio_tecnico==1) 2 @else 1 @endif</strong></div>
         </div>
     

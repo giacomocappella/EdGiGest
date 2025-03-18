@@ -50,6 +50,12 @@
                     </span>
                     <h3>Nuovo Ticket</h3>
                 </a>
+                <a href="/newservice">
+                    <span class="material-icons-sharp">
+                        add_to_queue 
+                    </span>
+                    <h3>Nuovo Servizio</h3>
+                </a>
                 <a href="/ticket">
                     <span class="material-icons-sharp">
                         format_list_numbered
@@ -171,7 +177,7 @@
                         <tr>
                             <td>{{$ticket->id}}</td>
                             <td>{{ $ticket->Nome}}</td>
-                            <td>{{$ticket->Ore_totali}} h</td>
+                            <td>{{ number_format($ticket->Ore_totali, 2,',') }} h</td>
                             <td>@if($ticket->Doppio_tecnico==1) 2 @else 1 @endif</td>
                             <td>
                                 @if($ticket->Stato == 'Aperto')
@@ -221,3 +227,20 @@
                     </span>
                 </div>
 
+            </div>
+        </div>
+    </div>
+    <!-- Optional JS Scripts -->
+    <script src="js/script.js" defer></script>
+
+    <script>
+        // Funzione per aprire/chiudere il menu
+        const closeBtn = document.getElementById('close-btn');
+        const sidebar = document.getElementById('sidebar');
+
+        closeBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('closed');
+        });
+    </script>
+</body>
+</html>

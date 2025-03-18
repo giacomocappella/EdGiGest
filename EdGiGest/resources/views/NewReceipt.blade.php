@@ -156,6 +156,12 @@
                     </span>
                     <h3>Nuovo Ticket</h3>
                 </a>
+                <a href="/newservice">
+                    <span class="material-icons-sharp">
+                        add_to_queue 
+                    </span>
+                    <h3>Nuovo Servizio</h3>
+                </a>
                 <a href="/ticket">
                     <span class="material-icons-sharp">
                         format_list_numbered
@@ -241,7 +247,7 @@
                                 </td>
                                 <td>{{$item->id }}</td>
                                 <td>{{$item->Nome }}</td>
-                                <td>{{$item->Ore_totali}}</td>
+                                <td>{{ number_format($item->Ore_totali, 2, ',', '') }} h</td>
                                 <td>@if($item->Doppio_tecnico==1) 2 @else 1 @endif</td>
                                 <td>{{ $item->Rendicontato == 1 ? 'Si' : 'No' }}</td>
                             </tr>

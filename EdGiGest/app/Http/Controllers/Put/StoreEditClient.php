@@ -36,7 +36,7 @@ class StoreEditClient extends Controller
 
         
         //AGGIORNO  CLIENTE SU DATABASE
-        $client= Client::where('Ragione_Sociale', $request->input('Ragione_Sociale'))->first();
+        $client= Client::where('Ragione_Sociale', $request->input('ragione_soc'))->first();
         $client->Ragione_Sociale=$request->Ragione_Sociale;
         $client->Partita_IVA_CF=$request->Partita_IVA_CF;
         $client->Mail_amministrazione=$request->Mail_amministrazione;

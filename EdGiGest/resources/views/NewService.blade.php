@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifica Attività</title>
+    <title>Inserimento Nuovo Servizio</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css"> <!-- Assicurati che questo link punti al tuo file CSS -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,12 +20,7 @@
             font-size: 24px;
             margin-bottom: 20px;
         }
-        h2 {
-            text-align: center;
-            color: #333;
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
+
         .form-container {
             width: 70%;
             max-width: 1000px;
@@ -46,7 +41,7 @@
             margin-bottom: 5px;
         }
 
-        .form-group input, .form-group textarea {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -54,12 +49,12 @@
             font-size: 16px;
         }
 
-        .form-group input:focus, .form-group textarea:focus {
+        .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: #4CAF50;
         }
 
-        .error {
+        .error { 
             color: red;
             font-size: 14px;
             margin-top: 5px;
@@ -87,11 +82,22 @@
         }
 
         .cancel-btn {
-            background-color: #006972;
+            background-color: #f44336;
         }
 
         .cancel-btn:hover {
-            background-color: #007f8a;
+            background-color: #e53935;
+        }
+        .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Distanza tra label e checkbox */
+         }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -100,7 +106,7 @@
         <aside>
             <div class="toggle">
                 <div class="logo">
-                    <img src="/logo.png">
+                    <img src="logo.png">
                     <h2>EdGi<span class="danger">Gest</span></h2>
                 </div>
                 <div class="close" id="close-btn">
@@ -178,67 +184,45 @@
             </div>
         </aside>
 
-        <div class="form-container">
-            <h1>Modifica Attività</h1>
-            <h2><strong>Ticket #{{$idticket}}: {{$tickets->Nome}}</strong><br>
-            Tecnici impiegati:@if($tickets->Doppio_tecnico==1) 2 @else 1 @endif</h2>    
-            <form action="{{ route('store.edit.task') }}" method="POST">
-                @csrf
-                @method('PUT')
-        
-                <!-- Campo Data -->
-                <div class="form-group">
-                    <label for="Task_Date">Data attività</label>
-                    <input type="date" id="Task_Date" name="Task_Date" 
-                        value="{{ old('Task_Date', \Carbon\Carbon::parse($task->Ora_inizio)->format('Y-m-d')) }}">
-                    @error('Task_Date')
-                    <div class="error">{{ $message }}</div>
-                    @enderror
-                </div>
-        
-                <!-- Campo Orario Inizio -->
-                <div class="form-group">
-                    <label for="Task_Start">Orario Inizio</label>
-                    <input type="time" id="Task_Start" name="Task_Start" 
-                        value="{{ old('Task_Start', \Carbon\Carbon::parse($task->Ora_inizio)->format('H:i')) }}">
-                    @error('Task_Start')
-                    <div class="error">{{ $message }}</div>
-                    @enderror
-                </div>
-        
-                <!-- Campo Orario Fine -->
-                <div class="form-group">
-                    <label for="Task_End">Orario Fine</label>
-                    <input type="time" id="Task_End" name="Task_End" 
-                        value="{{ old('Task_End', \Carbon\Carbon::parse($task->Ora_fine)->format('H:i')) }}">
-                    @error('Task_End')
-                    <div class="error">{{ $message }}</div>
-                    @enderror
-                </div>
-        
-                <!-- Campo Descrizione -->
-                <div class="form-group">
-                    <label for="Description">Descrizione attività</label>
-                    <textarea id="Description" name="Description" rows="15">{{ old('Description', $task->Descrizione) }}</textarea>
-                    @error('Description')
-                    <div class="error">{{ $message }}</div>
-                    @enderror
-                </div>
-        
-                <div class="button-container">
-                    <input type="hidden" name="idticket" value="{{ $idticket }}">
-                    <input type="hidden" name="idtask" value="{{ $task->id }}">
-                    <button type="submit" class="submit-btn">Conferma</button>
-                </form>
-        
-                <form action="{{ route('get.tasks') }}" method="GET">
-                    @csrf
-                    <input type="hidden" name="idticket" value="{{ $idticket }}">
-                    <button type="submit" class="cancel-btn">Torna indietro</button>
-                </form>
-            </div>
+<div class="form-container">
+    <h1>Inserimento Nuovo Servizio</h1>
+
+    <form action="{{ route('store.service') }}" method="POST">
+        @csrf
+        <div class="form-group">
+            <label for="Cliente">Cliente</label>
+            <select name="Client_list" class="form-select">
+                @foreach ($items as $item)
+                <option value="{{ $item->Partita_IVA_CF }}">{{ $item->Ragione_Sociale }}</option>
+                @endforeach
+            </select>            
+        </div>
+
+        <div class="form-group">
+            <label for="Service_name">Nome Servizio</label>
+            <input type="text" name="Service_name" value="{{ old('Service_name') }}">
+            @error('Service_name')
+                <div class="error">{{ $message }}</div>
+            @enderror
         </div>
         
+        <div class="form-group">
+            <label for="Amount_service">Ammontare in euro</label>
+            <input type="text" name="Amount_service" id="Amount_service" 
+                   value="{{ old('Amount_service') }}" 
+                   pattern="^\d+([,]\d{1,2})?$" 
+                   placeholder="Es. 123,45">
+            @error('Amount_service')
+                <div class="error">{{ $message }}</div>
+            @enderror
+        </div>
+        
+        <div class="button-container">
+            <button type="submit" class="submit-btn">Crea servizio</button>
+        </div>
+        
+    </form>
+</div>
 </div>
 </body>
 </html>

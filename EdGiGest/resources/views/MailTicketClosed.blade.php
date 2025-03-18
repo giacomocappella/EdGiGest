@@ -17,7 +17,7 @@
     <p>Gentile cliente, con la presente vogliamo informare che sono terminate le attività associate al ticket di cui riportiamo i dettagli qui sotto.</p><br>
     
     <h2>Ticket #{{$ticket->id}}: {{ $ticket->Nome }}</h2>
-    <p>Ore totali ticket: {{$ticket->Ore_totali}}</p>
+    <p>Ore totali ticket: {{ number_format($ticket->Ore_totali, 2, ',', '.') }} h</p>
     <p>Dettagli attività eseguite:</p>
     @foreach ($tasks as $task)
         <p><b>Data attività:</b> {{ \Carbon\Carbon::parse($task->Data)->format('d.m.Y') }}<br>
