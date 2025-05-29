@@ -86,7 +86,7 @@ class StoreReceipt extends Controller
         $receipt->save();
 
         Mail::to($clientmail)
-                ->bcc("info@edgitech.it") // Aggiunge info@edgitech.it in CCN
+                ->bcc("amministrazione@edgitech.it") // Aggiunge amministrazione@edgitech.it in CCN
                 ->send(new SendReceiptMail(storage_path($receipt->Percorso_File), $user));
 
 

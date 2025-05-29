@@ -108,7 +108,7 @@ class StoreReceipt2 extends Controller
 
         // Invio la mail con i due PDF allegati
         Mail::to($clientMail)
-            ->bcc("info@edgitech.it") // Aggiunge info@edgitech.it in CCN
+            ->bcc("amministrazione@edgitech.it") // Aggiunge amministrazione@edgitech.it in CCN
             ->send(new SendReceiptMail2($pathpdf,$users));
 
         $sendmail = 'yes';

@@ -170,8 +170,8 @@
             <form action="{{ route('create.receipt') }}" method="get">
                 <button type="submit" class="submit-btn">Torna alla creazione ricevute</button>
             </form>
-            <form action="{{ route('dashboard') }}" method="get">
-                <button type="submit" class="submit-btn">Torna alla Dashboard</button>
+            <form action="{{ route('get.tickets') }}" method="get">
+                <button type="submit" class="submit-btn">Torna alla lista Ticket</button>
             </form>
 
         </div> 

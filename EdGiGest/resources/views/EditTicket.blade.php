@@ -192,6 +192,7 @@
             @error('Ticket_name')
                 <div class="error">{{ $message }}</div>
             @enderror
+
         </div>
 
         <div class="button-container">
