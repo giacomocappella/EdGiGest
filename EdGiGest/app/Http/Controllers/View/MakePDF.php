@@ -77,9 +77,9 @@ class MakePDF extends Controller
                 $receipt->Data = $currentdate;
                 $receipt->P_IVA_CF_Cliente = $client->Partita_IVA_CF;
                 $receipt->CF_Sistemista = $sys_admin->CF;
-                $receipt->Importo_Netto = number_format($durationhours*$hourlyamount,2);  //numero ore per importo orario
-                $receipt->Importo_Lordo = number_format($receipt->Importo_Netto/(1-$withholding_tax),2);  //conversione netto-lordo con la ritenuta al 20%
-                $taxsum=number_format($receipt->Importo_Lordo-$receipt->Importo_Netto,2);
+                $receipt->Importo_Netto = ($durationhours*$hourlyamount);  //numero ore per importo orario
+                $receipt->Importo_Lordo = ($receipt->Importo_Netto/(1-$withholding_tax));  //conversione netto-lordo con la ritenuta al 20%
+                $taxsum=($receipt->Importo_Lordo-$receipt->Importo_Netto);
 
                 //converto nuovamente la data per la ricevuta
                 $dateita = Carbon::createFromFormat('Y/m/d', $receipt->Data)->format('d/m/Y');
@@ -175,9 +175,9 @@ class MakePDF extends Controller
                     $number = $lastReceipt ? $lastReceipt->Numero + 1 : 1;
 
                     // Calcola l'importo netto e lordo (basato sulle ore divise)
-                    $importoNetto = number_format($halfHours * $hourlyamount, 2);
-                    $importoLordo = number_format($importoNetto / (1 - $withholding_tax), 2);
-                    $taxsum = number_format($importoLordo - $importoNetto, 2);
+                    $importoNetto = ($halfHours * $hourlyamount);
+                    $importoLordo = ($importoNetto / (1 - $withholding_tax));
+                    $taxsum = ($importoLordo - $importoNetto);
 
                     // Crea la nuova ricevuta per il tecnico
                     $receipt = new Receipt();

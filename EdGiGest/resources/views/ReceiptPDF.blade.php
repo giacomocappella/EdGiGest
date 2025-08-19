@@ -62,7 +62,7 @@
     <table class="w-full">
         <tr>
             <td class="w-half">
-                <img src='logo.jpg' width="200" />
+                <img src='logo.jpg' width="100" />
             </td>
             <td class="w-half">
                 <h3>Ricevuta n. {{$receipt['Numero']}} del {{$dateita}}</h3>
