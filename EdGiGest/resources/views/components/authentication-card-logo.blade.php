@@ -1,3 +1,4 @@
-<img src="{{ asset('edgigest.png') }}" alt="Logo" class="w-100 h-40 fill-current text-gray-500">
-
-
+<img src="{{ asset('edgigest.png') }}" 
+     alt="Logo" 
+     class="mx-auto object-contain max-h-64 sm:max-h-40 md:max-h-48 lg:max-h-56" 
+     style="max-width: 500px;">
