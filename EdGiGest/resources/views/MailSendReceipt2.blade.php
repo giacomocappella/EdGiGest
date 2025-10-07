@@ -27,7 +27,7 @@
         Cordiali Saluti.
     </p>
 
-    <p>EdGiTech - info@edgitech.it</p>
+    <p>EdGiTech - amministrazione@edgitech.it</p>
     <p class="confidential-note">
         <b>Nota di riservatezza:</b> La presente comunicazione, unitamente alle informazioni in essa contenute e ogni documento o file allegato, è strettamente riservata e può contenere informazioni confidenziali. È rivolta unicamente ai destinatari cui è indirizzata e agli altri soggetti da questi autorizzati a riceverla.<br><br>
 
