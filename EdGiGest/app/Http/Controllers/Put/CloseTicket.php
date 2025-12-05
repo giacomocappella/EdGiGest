@@ -29,7 +29,7 @@ class CloseTicket extends Controller
         $ticket->save();
    
         //chiudo e invio solo la mail a info
-        Mail::to("info@edgitech.it")->send(new CloseTicketMail($ticket, $tasks));
+        Mail::to("amministrazione@edgitech.it")->send(new CloseTicketMail($ticket, $tasks));
         session(['idticket' => $idticket]);
         return redirect()->route('get.tasks');
             
@@ -51,7 +51,7 @@ class CloseTicket extends Controller
         $ticket->save();
         
         Mail::to($emailTicket)
-                ->bcc("info@edgitech.it") // Aggiunge info@edgitech.it in CCN
+                ->bcc("amministrazione@edgitech.it") // Aggiunge amministrazione@edgitech.it in CCN
                 ->send(new CloseTicketMail($ticket, $tasks));
  
         session(['idticket' => $idticket]);

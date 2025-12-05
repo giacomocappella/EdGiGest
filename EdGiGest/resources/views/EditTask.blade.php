@@ -190,7 +190,7 @@
                 <div class="form-group">
                     <label for="Task_Date">Data attività</label>
                     <input type="date" id="Task_Date" name="Task_Date" 
-                        value="{{ old('Task_Date', \Carbon\Carbon::parse($task->Ora_inizio)->format('Y-m-d')) }}">
+                        value="{{ old('Task_Date', \Carbon\Carbon::parse($task->Data)->format('Y-m-d')) }}">
                     @error('Task_Date')
                     <div class="error">{{ $message }}</div>
                     @enderror

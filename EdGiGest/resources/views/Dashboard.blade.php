@@ -158,6 +158,7 @@
 <div class="recent-tickets">
     <h1>Ticket aperti e sospesi per ogni cliente</h1><br>
     @foreach ($groupedTickets as $clientName => $tickets)
+        @if($tickets->whereIn('Stato', ['Aperto', 'Sospeso'])->count() > 0)
         <div class="client">
             <h2>Cliente: {{ $clientName }}</h2>
             <table>
@@ -200,6 +201,7 @@
             </table>
             <br><br>
         </div>
+        @endif
     @endforeach
 </div>
 
