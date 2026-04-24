@@ -17,7 +17,7 @@ class SendReceiptMail extends Mailable
     public $user;
     /**
      * Create a new message instance.
-     */
+     */ 
     public function __construct($pathpdf, $user)
     {
 
@@ -27,7 +27,7 @@ class SendReceiptMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Ricevuta di prestazione occasionale - EdGiTech')
+        return $this->subject('Invio documentazione fiscale relativa ai servizi erogati - EdGiTech')
                     ->view('MailSendReceipt')
                     ->attach($this->pathpdf)
                     ->with([

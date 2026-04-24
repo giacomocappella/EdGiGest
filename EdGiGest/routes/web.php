@@ -35,8 +35,7 @@ Route::get('/newreceipt/pdf','App\Http\Controllers\View\MakePDF')->name('make.pd
 Route::get('/newreceipt/pdf/{filename}', 'App\Http\Controllers\View\PreviewPDF')->name('preview.pdf')->middleware('auth');
 Route::get('/newreceipt/pdf/double/{filename}', 'App\Http\Controllers\View\PreviewPDF2tech')->name('preview2tech.pdf')->middleware('auth');
 Route::get('/profile', 'App\Http\Controllers\View\ViewProfile')->name('profile')->middleware('auth');
-
-
+Route::get('newreceipt/download-xml/{filename}', 'App\Http\Controllers\View\DownloadXML')->name('download.xml')->middleware('auth');
 
 Route::post('/newclient/store', 'App\Http\Controllers\Post\StoreClient')->name('store.client')->middleware('auth');
 Route::post('/newticket/store', 'App\Http\Controllers\Post\StoreTicket')->name('store.ticket')->middleware('auth');

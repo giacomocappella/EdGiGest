@@ -47,6 +47,15 @@
             font-size: 16px;
         }
 
+        select {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+
         .button-container {
             display: flex;
             justify-content: center;
@@ -125,7 +134,7 @@
                     <span class="material-icons-sharp">
                         euro_symbol
                     </span>
-                    <h3>Crea Ricevuta</h3>
+                    <h3>Crea Fattura</h3>
                 </a>
                 <a href="/settings">
                     <span class="material-icons-sharp">
@@ -177,10 +186,32 @@
             </div>
 
             <div class="form-group">
+                <label>Partita IVA</label>
+                <input type="text" name="Partita_Iva" value="{{ $user->Partita_Iva }}" required>
+            </div>
+
+            <div class="form-group">
+            <label>Tipo Collaborazione</label>
+                <select name="Tipo_collab" required>
+                    <option value="Occasionale" {{ $user->Tipo_collab == 'Occasionale' ? 'selected' : '' }}>
+                        Occasionale
+                    </option>
+                    <option value="Forfettario" {{ $user->Tipo_collab == 'Forfettario' ? 'selected' : '' }}>
+                        Forfettario
+                    </option>
+                </select>
+             </div>
+
+            <div class="form-group">
+                <label>Costo orario netto</label>
+                <input type="text" name="Costo_orario_netto" value="{{ $user->Costo_orario_netto }}" required>
+            </div>
+            
+            <div class="form-group">
                 <label>Via</label>
                 <input type="text" name="Via" value="{{ $user->Via }}">
             </div>
-
+ 
             <div class="form-group">
                 <label>Civico</label>
                 <input type="text" name="Civico" value="{{ $user->Civico }}">

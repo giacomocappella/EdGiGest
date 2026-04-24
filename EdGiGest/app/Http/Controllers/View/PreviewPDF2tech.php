@@ -13,12 +13,11 @@ class PreviewPDF2tech extends Controller
 
 
     if (!file_exists($filePath)) {
-        abort(404);  // Errore se il file non esiste
+        abort(404);  // Errore se il file non esiste 
     }
 
     return response()->file($filePath);
     }
-
-    
+ 
     
 }

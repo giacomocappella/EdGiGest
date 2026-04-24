@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Invio ricevuta di prestazione occasionale</title>
+    <title>Invio documentazione fiscale relativa ai servizi erogati - EdGiTech</title>
     <style>
         .confidential-note {
             font-size: 10px;
@@ -13,18 +13,29 @@
     </style>
 </head>
 <body>
-    <p>Gentile cliente, con la presente trasmettiamo la ricevuta della prestazione occasionale svolta.</p>
-    <p>Di seguito vengono riportati gli IBAN per l'accredito delle competenze.</p>
+
+    <p>
+        Gentile Cliente,<br><br>
+
+        con la presente si trasmette fattura di cortesia relativa ai servizi per Voi svolti.<br>
+        Si precisa che la relativa <b>fattura elettronica</b> è stata contestualmente trasmessa tramite Sistema di Interscambio (SdI).
+    </p>
+
+    <p>
+        Di seguito vengono riportati gli IBAN per l'accredito delle competenze:
+    </p>
 
     @foreach($user as $singleUser)
         <p>
-            <b>{{ $singleUser->name }}</b><br>
+            <b>Dott. {{ $singleUser->name }}</b><br>
             IBAN: <b>{{ $singleUser->iban }}</b>
         </p><br>
     @endforeach
 
-    <p>Rimaniamo a disposizione per eventuali chiarimenti.<br>
-        Cordiali Saluti.
+    <p>
+        A disposizione per eventuali chiarimenti.<br><br>
+
+        Cordiali saluti.
     </p>
 
     <p>EdGiTech - amministrazione@edgitech.it</p>

@@ -25,7 +25,7 @@ class StoreService extends Controller
             $ticket=new Ticket();
             $ticket->Nome=$request->Service_name;
             $ticket->Partita_IVA_CF_Cliente=$request->input('Client_list');
-            $ticket->Ore_totali=bcdiv($request->Amount_service, 30, 10);            
+            $ticket->Ore_totali=bcdiv($request->Amount_service, 50, 10);            
             $ticket->Stato="Chiuso";
             $ticket->Rendicontato=0;
             $ticket->Doppio_tecnico=0;

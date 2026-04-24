@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-
+ 
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -36,6 +36,9 @@ class User extends Authenticatable
         'CAP',
         'Provincia',
         'current_team_id',
+        'Partita_Iva',
+        'Tipo_collab',
+        'Costo_orario_netto',
     ];
 
     /**

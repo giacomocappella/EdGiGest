@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ricevuta Creata</title>
+    <title>Fatture Create</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css"> <!-- Assicurati che questo link punti al tuo file CSS -->
 </head>
@@ -132,7 +132,7 @@
                         <span class="material-icons-sharp">
                             euro_symbol
                         </span>
-                        <h3>Crea Ricevuta</h3>
+                        <h3>Crea Fattura</h3>
                     </a>
                     <a href="/settings">
                         <span class="material-icons-sharp">
@@ -161,17 +161,17 @@
      
     <div class="form-container">
     @if($sendmail=='yes')
-        <h1>Ricevuta creata e inviata correttamente!</h1>
+        <h1>Fatture create e inviate correttamente!</h1>
     @else
-    <h1>Ricevuta creata correttamente!</h1>
+    <h1>Fatture create correttamente!</h1>
     @endif
     
         <div class="button-container">
             <form action="{{ route('create.receipt') }}" method="get">
-                <button type="submit" class="submit-btn">Torna alla creazione ricevute</button>
+                <button type="submit" class="submit-btn">Torna alla creazione fatture</button>
             </form>
             <form action="{{ route('get.tickets') }}" method="get">
-                <button type="submit" class="submit-btn">Torna alla lista Ticket</button>
+                <button type="submit" class="submit-btn">Torna alla lista ticket</button>
             </form>
 
         </div> 

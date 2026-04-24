@@ -8,17 +8,33 @@
             color: gray;
             margin-top: 20px;
             border-top: 1px solid #ccc;
-            padding-top: 10px;
+            padding-top: 10px; 
         }
     </style>
 </head>
 <body>
-    <p>Gentile cliente, con la presente trasmettiamo la ricevuta della prestazione occasionale svolta.</p>
-    <p>Di seguito viene riportato l'IBAN per l'accredito delle competenze.</p>
-    <p>{{$user->name}}<br>
-    <b>{{$user->iban}}</b></p><br>
-    <p>Rimaniamo a disposizione per eventuali chiarimenti.<br>
-        Cordiali Saluti.
+
+    <p>
+        Gentile Cliente,<br><br>
+
+        con la presente si trasmette fattura di cortesia relativa ai servizi per Voi svolti.<br>
+        Si precisa che la relativa <b>fattura elettronica</b> è stata contestualmente trasmessa tramite Sistema di Interscambio (SdI).
+    </p>
+
+    <p>
+        Di seguito viene riportato l'IBAN per l'accredito delle competenze:
+    </p>
+
+    
+    <p>
+        <b>Dott. {{ $user->name }}</b><br>
+        IBAN: <b>{{ $user->iban }}</b>
+    </p><br>
+    
+    <p>
+        A disposizione per eventuali chiarimenti.<br><br>
+
+        Cordiali saluti.
     </p>
 
     <p>EdGiTech - amministrazione@edgitech.it</p>

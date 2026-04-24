@@ -12,6 +12,7 @@ use App\Models\Ticket;
 use App\Models\Client;
 use App\Models\Receipt;
 use App\Models\User;
+use App\Models\Invoice;
 
 class MakePDF extends Controller
 {
@@ -20,8 +21,6 @@ class MakePDF extends Controller
             $singolaric = $request->has('enable_technician'); 
             if($singolaric==true)
             {
-                $techid = $request->input('technician_id'); // ID del tecnico selezionato 
-
                 $idtickets=$request->input('selected_tickets');
 
                 //se non viene selezionato alcun ticket, torna alla scelta dei clienti
@@ -37,9 +36,13 @@ class MakePDF extends Controller
 
                 //calcolo ore totali
                 $durationhours = $tickets->sum('Ore_totali');
+             
+                //definisco l'importo orario dei tecnici
+                $hourlyamount_occasionale = User::where('CF', 'CPPGCM95A17C111Q')
+                    ->value('Costo_orario_netto');
 
-                //definisco l'importo orario
-                $hourlyamount=30.00;
+                $hourlyamount_forfettario=User::where('CF', 'CRGDRD94S03C111U')
+                    ->value('Costo_orario_netto');
 
                 //definisco la ritenuta d'acconto
                 $withholding_tax=0.2;
@@ -50,69 +53,170 @@ class MakePDF extends Controller
                 //ottengo la data odierna che sarà la data della ricevuta
                 $currentdate = Carbon::now()->format('Y/m/d');
 
-                //trovo il sistemista nel db (attraverso l'id utente in futuro)
-                $sys_admin=User::findOrFail($techid);
+                // Ottiengo i tecnici dal database (solo quelli con partita IVA 0000000000)
+                $tech = User::where('id', $request->input('technician_id'))->firstOrFail();
 
-                //creazione nuova istanza ricevuta su database 
-                //recupero l'ultima ricevuta nell'anno correte
-                $lastreceipt = Receipt::where('Anno', $anno)
-                                        ->where('CF_Sistemista', $sys_admin->CF)
-                                        ->orderBy('Numero', 'desc')
-                                        ->first();
-                // Calcola il prossimo numero ricevuta
-                if ($lastreceipt) {
-                    $number = $lastreceipt->Numero + 1;
-                } else {
-                    $number = 1; // Se non esistono ricevute per l'anno corrente, si parte da 1
-                }
+                // Trova il cliente nel database
+                $client = Client::findOrFail($idclient);
 
-                //trovo il cliente nel db
-                $client=Client::findOrFail($idclient);
+                //inizializzo array
+                $receipts = []; // Array per salvare le ricevute
+                $invoices = []; // Array per salvare le fatture
 
+                if($tech->Tipo_collab == 'Occasionale')
+                    {
+                        // Recupera l'ultima ricevuta per l'anno corrente del tecnico
+                        $lastReceipt = Receipt::where('Anno', $anno)
+                                            ->where('CF_Sistemista', $tech->CF)
+                                            ->orderBy('Numero', 'desc')
+                                            ->first();
 
+                        // Calcola il prossimo numero di ricevuta
+                        $number = $lastReceipt ? $lastReceipt->Numero + 1 : 1;
 
-                $receipt = new Receipt();
-                $receipt->Numero = $number;
-                $receipt->Anno = $anno;
-                $receipt->Data = $currentdate;
-                $receipt->P_IVA_CF_Cliente = $client->Partita_IVA_CF;
-                $receipt->CF_Sistemista = $sys_admin->CF;
-                $receipt->Importo_Netto = number_format($durationhours*$hourlyamount,2);  //numero ore per importo orario
-                $receipt->Importo_Lordo = number_format($receipt->Importo_Netto/(1-$withholding_tax),2);  //conversione netto-lordo con la ritenuta al 20%
-                $taxsum=number_format($receipt->Importo_Lordo-$receipt->Importo_Netto,2);
+                        // Calcola l'importo netto e lordo (basato sulle ore divise)
+                        $importoNetto = $durationhours * $hourlyamount_occasionale;
+                        $importoLordo = $importoNetto / (1 - $withholding_tax);
+                        $taxsum = $importoLordo - $importoNetto;
 
 
-                //converto nuovamente la data per la ricevuta
-                $dateita = Carbon::createFromFormat('Y/m/d', $receipt->Data)->format('d/m/Y');
-                
-                
-                //crea il pdf con i dati inseriti
-                $pdf = Pdf::loadView('ReceiptPDF', ['tickets'=>$tickets, 'client'=>$client, 'sys_admin'=>$sys_admin, 'receipt'=>$receipt, 'taxsum'=>$taxsum, 'dateita'=>$dateita]);
+                        // Crea la nuova ricevuta per il tecnico
+                        $receipt = new Receipt();
+                        $receipt->Numero = $number;
+                        $receipt->Anno = $anno;
+                        $receipt->Data = $currentdate;
+                        $receipt->P_IVA_CF_Cliente = $client->Partita_IVA_CF;
+                        $receipt->CF_Sistemista = $tech->CF;
+                        $receipt->Importo_Netto = $importoNetto;
+                        $receipt->Importo_Lordo = $importoLordo;
+                        $receipt->Percorso_File = "app/private/{$anno}_{$number}_{$tech->CF}_ricevuta.pdf";
 
-                // Nome del file
-                $filename = 'ricevuta_' . $sys_admin->CF . '_' . $receipt->Numero . '_' . $receipt->Anno . '.pdf';
+                        // Converti la data nel formato italiano
+                        $dateita = Carbon::createFromFormat('Y/m/d', $receipt->Data)->format('d/m/Y');
 
-                // Ottieni il contenuto del PDF come stringa
-                $pdfcontent = $pdf->output();
+                        // Genera il PDF per il tecnico
+                        $pdf = Pdf::loadView('ReceiptPDF', [
+                            'tickets' => $tickets,
+                            'client' => $client,
+                            'sys_admin' => $tech,
+                            'receipt' => $receipt,
+                            'taxsum' => $taxsum,
+                            'dateita' => $dateita
+                        ]);
 
-                // Salva il PDF nella directory privata "storage/app/private/"
-                Storage::put('private/' . $filename, $pdfcontent);
+                        // Salva il PDF
+                        $filename = "{$anno}_{$number}_{$tech->CF}_ricevuta.pdf";
 
-                $pathpdf = ('app/private/' . $filename);
-                
-                return view('PreviewPDF', [
-                    'pathpdf' => $pathpdf,
-                    'receipt' => $receipt,
-                    'client' => $client,
-                    'sys_admin' => $sys_admin,
-                    'tickets' => $tickets,
-                    'hourlyAmount' => $hourlyamount,
-                    'withholdingTax' => $withholding_tax,
-                    'taxsum' => $taxsum,
-                    'dateita' => $dateita,
-                ]);
+                        Storage::put("private/{$filename}", $pdf->output());
 
+                        // Salva il percorso del PDF
+                        $pdfPaths = "app/private/{$filename}";
 
+                        // Aggiungi la ricevuta all'array
+                        $receipts[] = $receipt;
+
+                        return view('PreviewPDF', [
+                            'pathpdf' => $pdfPaths,
+                            'receipt' => $receipts,
+                            'client' => $client,
+                            'tickets' => $tickets,
+                            'sys_admin' => $tech,
+                        ]);
+                    }
+                    
+                    elseif($tech->Tipo_collab == 'Forfettario')
+                    {
+                       
+                        $lastInvoice = Invoice::where('anno', $anno)
+                                            ->where('sistemista_id', $tech->id)
+                                            ->orderBy('numero', 'desc')
+                                            ->first();
+
+                        // Calcola il prossimo numero di fattura
+                        $number = $lastInvoice ? $lastInvoice->numero + 1 : 1;
+
+                        //progressivo invio
+                        $userletter=substr($tech->name, 0, 1);
+                        $progressivo=$anno
+                            . $userletter
+                            . str_pad($number, 5, '0', STR_PAD_LEFT);
+
+                        // Calcola l'importo 
+                        $importo = $durationhours * $hourlyamount_forfettario;
+
+                        // Splitto il nome per dopo
+                        $parts = explode(' ', $tech->name);
+
+                        $nome = $parts[0] ?? '';
+                        $cognome = $parts[1] ?? '';
+
+                        // Crea la nuova fattura
+                        $invoice = new Invoice();
+                        $invoice->numero = $number;
+                        $invoice->anno = $anno;
+                        $invoice->data_emissione = $currentdate;
+                        $invoice->tipo_documento = 'TD01';
+                        $invoice->progressivo_invio = $progressivo;
+                        $invoice->client_id = $client->Partita_IVA_CF;
+                        $invoice->sistemista_id = $tech->id;
+                        $invoice->prezzo_totale = $importo;
+                        $invoice->importo_totale = $importo * 1.04;
+                        $invoice->aliquota_iva = '0.00';
+                        $invoice->natura = 'N2.2';
+                        $invoice->modalita_pagamento = 'MP05';
+                        $invoice->data_scadenza = Carbon::parse($currentdate)->addDays(10)->format('Y/m/d');
+                        $invoice->percorso_xml = "app/private/{$anno}_{$number}_{$tech->Partita_Iva}_fattura.xml";
+                        $invoice->percorso_pdf = "app/private/{$anno}_{$number}_{$tech->Partita_Iva}_fattura.pdf";
+                        $invoice->stato = "generata";
+
+                        // Converti la data nel formato italiano
+                        $dateita = Carbon::createFromFormat('Y/m/d', $invoice->data_emissione)->format('d/m/Y');
+
+                        // Genera il PDF fattura di cortesia
+                        $pdf = Pdf::loadView('InvoicePDF', [
+                            'tickets' => $tickets,
+                            'client' => $client,
+                            'sys_admin' => $tech,
+                            'invoice' => $invoice,
+                            'dateita' => $dateita
+                        ]);
+
+                        // Salva il PDF
+                        $filename = "{$anno}_{$number}_{$tech->Partita_Iva}_fattura.pdf";
+
+                        Storage::put("private/{$filename}", $pdf->output());
+
+                        // Salva il percorso del PDF
+                        $pdfPaths = "app/private/{$filename}";
+
+                        //Genera XML
+                        $xml= view ('InvoiceXML', [
+                            'invoice' => $invoice,
+                            'client' => $client,
+                            'tech' => $tech,
+                            'nome' => $nome,
+                            'cognome' => $cognome,
+                        ])->render();
+
+                        $filenameXml = "{$anno}_{$number}_{$tech->Partita_Iva}_fattura.xml";
+
+                        Storage::put("private/{$filenameXml}", $xml);
+
+                        $xmlPaths = "app/private/{$filenameXml}";
+
+                        // Aggiungi la fattura all'array
+                        $invoices[] = $invoice;
+
+                        return view('PreviewPDF', [
+                            'pathpdf' => $pdfPaths,
+                            'xmlPath' => $xmlPaths,
+                            'invoice' => $invoices,
+                            'client' => $client,
+                            'tickets' => $tickets,
+                            'sys_admin' => $tech,
+                        ]);
+                    }
+                         
             }        
                 
             
@@ -135,8 +239,20 @@ class MakePDF extends Controller
                 //calcolo ore totali
                 $durationhours = $tickets->sum('Ore_totali');
 
-                //definisco l'importo orario
-                $hourlyamount=30.00;
+                //importo le percentuali
+                $giacomo_percent=$request->input('giacomo_percent');
+                $edoardo_percent=$request->input('edoardo_percent');
+
+                //calcolo le ore effettive per tecnico
+                $giacomo_hours=$durationhours*$giacomo_percent/100;
+                $edoardo_hours=$durationhours*$edoardo_percent/100;
+                
+                //definisco l'importo orario dei tecnici
+                $hourlyamount_occasionale = User::where('CF', 'CPPGCM95A17C111Q')
+                    ->value('Costo_orario_netto');
+
+                $hourlyamount_forfettario=User::where('CF', 'CRGDRD94S03C111U')
+                    ->value('Costo_orario_netto');
 
                 //definisco la ritenuta d'acconto
                 $withholding_tax=0.2;
@@ -150,81 +266,164 @@ class MakePDF extends Controller
                 // Ottiengo i tecnici dal database (solo quelli con partita IVA 0000000000)
                 $technicians = User::where('current_team_id', '0000000000')->get();
 
-                // Prendo i primi due tecnici dall'elenco
-                $tech1 = $technicians[0];
-                $tech2 = $technicians[1];
-
                 // Trova il cliente nel database
                 $client = Client::findOrFail($idclient);
 
-                // Calcola le ore per tecnico (divise equamente)
-                $halfHours = $durationhours / 2;
-
-                // Itera per ogni tecnico e crea la ricevuta
+                //inizializzo array
                 $receipts = []; // Array per salvare le ricevute
                 $pdfPaths = []; // Array per salvare i percorsi dei PDF
+                $xmlPaths = []; // Array per salvare i percorsi degli XML
+                $invoices = []; // Array per salvare le fatture
 
-                foreach ([$tech1, $tech2] as $tech) {
+                foreach ($technicians as $tech) {
+                    if($tech->Tipo_collab == 'Occasionale')
+                    {
+                        // Recupera l'ultima ricevuta per l'anno corrente del tecnico
+                        $lastReceipt = Receipt::where('Anno', $anno)
+                                            ->where('CF_Sistemista', $tech->CF)
+                                            ->orderBy('Numero', 'desc')
+                                            ->first();
+
+                        // Calcola il prossimo numero di ricevuta
+                        $number = $lastReceipt ? $lastReceipt->Numero + 1 : 1;
+
+                        // Calcola l'importo netto e lordo (basato sulle ore divise)
+                        $importoNetto = $giacomo_hours * $hourlyamount_occasionale;
+                        $importoLordo = $importoNetto / (1 - $withholding_tax);
+                        $taxsum = $importoLordo - $importoNetto;
+
+
+                        // Crea la nuova ricevuta per il tecnico
+                        $receipt = new Receipt();
+                        $receipt->Numero = $number;
+                        $receipt->Anno = $anno;
+                        $receipt->Data = $currentdate;
+                        $receipt->P_IVA_CF_Cliente = $client->Partita_IVA_CF;
+                        $receipt->CF_Sistemista = $tech->CF;
+                        $receipt->Importo_Netto = $importoNetto;
+                        $receipt->Importo_Lordo = $importoLordo;
+                        $receipt->Percorso_File = "app/private/{$anno}_{$number}_{$tech->CF}_ricevuta.pdf";
+
+                        // Converti la data nel formato italiano
+                        $dateita = Carbon::createFromFormat('Y/m/d', $receipt->Data)->format('d/m/Y');
+
+                        // Genera il PDF per il tecnico
+                        $pdf = Pdf::loadView('ReceiptPDF', [
+                            'tickets' => $tickets,
+                            'client' => $client,
+                            'sys_admin' => $tech,
+                            'receipt' => $receipt,
+                            'taxsum' => $taxsum,
+                            'dateita' => $dateita
+                        ]);
+
+                        // Salva il PDF
+                        $filename = "{$anno}_{$number}_{$tech->CF}_ricevuta.pdf";
+
+                        Storage::put("private/{$filename}", $pdf->output());
+
+                        // Salva il percorso del PDF
+                        $pdfPaths[] = "app/private/{$filename}";
+
+                        // Aggiungi la ricevuta all'array
+                        $receipts[] = $receipt;
+                    }
                     
-                    // Recupera l'ultima ricevuta per l'anno corrente del tecnico
-                    $lastReceipt = Receipt::where('Anno', $anno)
-                                        ->where('CF_Sistemista', $tech->CF)
-                                        ->orderBy('Numero', 'desc')
-                                        ->first();
+                    elseif($tech->Tipo_collab == 'Forfettario')
+                    {
+                       
+                        $lastInvoice = Invoice::where('anno', $anno)
+                                            ->where('sistemista_id', $tech->id)
+                                            ->orderBy('numero', 'desc')
+                                            ->first();
 
-                    // Calcola il prossimo numero di ricevuta
-                    $number = $lastReceipt ? $lastReceipt->Numero + 1 : 1;
+                        
+                        // Calcola il prossimo numero di fattura
+                        $number = $lastInvoice ? $lastInvoice->numero + 1 : 1;
 
-                    // Calcola l'importo netto e lordo (basato sulle ore divise)
-                    $importoNetto = number_format($halfHours * $hourlyamount, 2);
-                    $importoLordo = number_format($importoNetto / (1 - $withholding_tax), 2);
-                    $taxsum = number_format($importoLordo - $importoNetto, 2);
+                        //progressivo invio
+                        $userletter=substr($tech->name, 0, 1);
+                        $progressivo=$anno
+                            . $userletter
+                            . str_pad($number, 5, '0', STR_PAD_LEFT);
 
+                        // Calcola l'importo 
+                        $importo = $edoardo_hours * $hourlyamount_forfettario;
 
-                    // Crea la nuova ricevuta per il tecnico
-                    $receipt = new Receipt();
-                    $receipt->Numero = $number;
-                    $receipt->Anno = $anno;
-                    $receipt->Data = $currentdate;
-                    $receipt->P_IVA_CF_Cliente = $client->Partita_IVA_CF;
-                    $receipt->CF_Sistemista = $tech->CF;
-                    $receipt->Importo_Netto = $importoNetto;
-                    $receipt->Importo_Lordo = $importoLordo;
-                    $receipt->Percorso_File = "app/private/ricevuta_{$tech->CF}_{$number}_{$anno}.pdf";
+                        // Splitto il nome per dopo
+                        $parts = explode(' ', $tech->name);
 
-                    // Converti la data nel formato italiano
-                    $dateita = Carbon::createFromFormat('Y/m/d', $receipt->Data)->format('d/m/Y');
+                        $nome = $parts[0] ?? '';
+                        $cognome = $parts[1] ?? '';
 
-                    // Genera il PDF per il tecnico
-                    $pdf = Pdf::loadView('ReceiptPDF', [
-                        'tickets' => $tickets,
-                        'client' => $client,
-                        'sys_admin' => $tech,
-                        'receipt' => $receipt,
-                        'taxsum' => $taxsum,
-                        'dateita' => $dateita
-                    ]);
+                        // Crea la nuova fattura
+                        $invoice = new Invoice();
+                        $invoice->numero = $number;
+                        $invoice->anno = $anno;
+                        $invoice->data_emissione = $currentdate;
+                        $invoice->tipo_documento = 'TD01';
+                        $invoice->progressivo_invio = $progressivo;
+                        $invoice->client_id = $client->Partita_IVA_CF;
+                        $invoice->sistemista_id = $tech->id;
+                        $invoice->prezzo_totale = $importo;
+                        $invoice->importo_totale = $importo *1.04;
+                        $invoice->aliquota_iva = '0.00';
+                        $invoice->natura = 'N2.2';
+                        $invoice->modalita_pagamento = 'MP05';
+                        $invoice->data_scadenza = Carbon::parse($currentdate)->addDays(10)->format('Y/m/d');
+                        $invoice->percorso_xml = "app/private/{$anno}_{$number}_{$tech->Partita_Iva}_fattura.xml";
+                        $invoice->percorso_pdf = "app/private/{$anno}_{$number}_{$tech->Partita_Iva}_fattura.pdf";
+                        $invoice->stato = "generata";
 
-                    // Salva il PDF
-                    $filename = "ricevuta_{$tech->CF}_{$number}_{$anno}.pdf";
-                    Storage::put("private/{$filename}", $pdf->output());
+                        // Converti la data nel formato italiano
+                        $dateita = Carbon::createFromFormat('Y/m/d', $invoice->data_emissione)->format('d/m/Y');
 
-                    // Salva il percorso del PDF
-                    $pdfPaths[] = "app/private/{$filename}";
+                        // Genera il PDF fattura di cortesia
+                        $pdf = Pdf::loadView('InvoicePDF', [
+                            'tickets' => $tickets,
+                            'client' => $client,
+                            'sys_admin' => $tech,
+                            'invoice' => $invoice,
+                            'dateita' => $dateita
+                        ]);
 
-                    // Aggiungi la ricevuta all'array
-                    $receipts[] = $receipt;
+                        // Salva il PDF
+                        $filename = "{$anno}_{$number}_{$tech->Partita_Iva}_fattura.pdf";
+
+                        Storage::put("private/{$filename}", $pdf->output());
+
+                        // Salva il percorso del PDF
+                        $pdfPaths[] = "app/private/{$filename}";
+
+                        //Genera XML
+                        $xml= view ('InvoiceXML', [
+                            'invoice' => $invoice,
+                            'client' => $client,
+                            'tech' => $tech,
+                            'nome' => $nome,
+                            'cognome' => $cognome,
+                        ])->render();
+
+                        $filenameXml = "{$anno}_{$number}_{$tech->Partita_Iva}_fattura.xml";
+
+                        Storage::put("private/{$filenameXml}", $xml);
+
+                        $xmlPaths[] = "app/private/{$filenameXml}";
+
+                        // Aggiungi la fattura all'array
+                        $invoices[] = $invoice;
+                    }
+                                     
                 }
-
                 // Passa i dati alla vista
                 return view('PreviewPDF2tech', [
                     'pdfPaths' => $pdfPaths,
+                    'xmlPaths' => $xmlPaths,
                     'receipts' => $receipts,
+                    'invoices' => $invoices,
                     'client' => $client,
-                    'sys_admins' => [$tech1, $tech2],
                     'tickets' => $tickets,
-                    'hourlyAmount' => $hourlyamount,
-                    'withholdingTax' => $withholding_tax,
+                    'sys_admin' => $technicians,
                 ]);
 
 

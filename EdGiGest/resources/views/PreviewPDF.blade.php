@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anteprima Ricevuta</title>
+    <title>Anteprima Fattura</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css"> 
 </head>
@@ -118,7 +118,7 @@
 </style>
 <script>
     function confermaInvio() {
-    let scelta = confirm("Vuoi inviare mail al cliente con la copia della ricevuta? Cliccando su annulla non verrà inviata la mail");
+    let scelta = confirm("Vuoi inviare mail al cliente con la copia della fattura? Cliccando su annulla non verrà inviata la mail");
 
     if (scelta) {
         document.getElementById('formSiclose').submit();
@@ -183,7 +183,7 @@
                     <span class="material-icons-sharp">
                         euro_symbol
                     </span>
-                    <h3>Crea Ricevuta</h3>
+                    <h3>Crea Fattura</h3>
                 </a>
                 <a href="/settings">
                     <span class="material-icons-sharp">
@@ -208,42 +208,32 @@
                     <h3>Logout</h3>
                 </a>
             </div>
-        </aside>
+        </aside> 
 
 <div class="form-container">
-    <h1>Anteprima Ricevuta</h1>
+    <h1>Anteprima Fattura</h1>
     <iframe src="{{ route('preview.pdf', ['filename' => basename($pathpdf)]) }}#zoom=65" width="100%" height="600px"></iframe>
     
     <div class="button-container">
-    <button onclick="confermaInvio()" class="submit-btn">Crea ricevuta</button>
+    <button onclick="confermaInvio()" class="submit-btn">Crea fattura</button>
             <form id="formNoclose" action="{{ route('store.receipt') }}" method="POST" style="display: none;">
                 @csrf
-                <input type="hidden" name="numero" value="{{ $receipt->Numero }}">
-                <input type="hidden" name="anno" value="{{ $receipt->Anno }}">
-                <input type="hidden" name="data" value="{{ $receipt->Data }}">
-                <input type="hidden" name="p_iva_cf_cliente" value="{{ $client->Partita_IVA_CF }}">
-                <input type="hidden" name="cf_sistemista" value="{{ $sys_admin->CF }}">
-                <input type="hidden" name="importo_netto" value="{{ number_format($receipt->Importo_Netto, 2) }}">
-                <input type="hidden" name="importo_lordo" value="{{ number_format($receipt->Importo_Lordo, 2) }}">
-                <input type="hidden" name="percorso_file" value="{{ $pathpdf }}">
-                <input type="hidden" name="taxsum" value="{{ $taxsum }}">
-                <input type="hidden" name="dateita" value="{{ $dateita }}">
+                <input type="hidden" name="receipt" value="{{ json_encode($receipt ?? null) }}">
+                <input type="hidden" name="invoice" value="{{ json_encode($invoice ?? null) }}">
+                <input type="hidden" name="client" value="{{ json_encode($client) }}">
                 <input type="hidden" name="tickets" value="{{ json_encode($tickets) }}">
             </form>
             <form id="formSiclose" action="{{ route('store.receipt.mail') }}" method="POST" style="display: none;">
                 @csrf
-                <input type="hidden" name="numero" value="{{ $receipt->Numero }}">
-                <input type="hidden" name="anno" value="{{ $receipt->Anno }}">
-                <input type="hidden" name="data" value="{{ $receipt->Data }}">
-                <input type="hidden" name="p_iva_cf_cliente" value="{{ $client->Partita_IVA_CF }}">
-                <input type="hidden" name="cf_sistemista" value="{{ $sys_admin->CF }}">
-                <input type="hidden" name="importo_netto" value="{{ number_format($receipt->Importo_Netto, 2) }}">
-                <input type="hidden" name="importo_lordo" value="{{ number_format($receipt->Importo_Lordo, 2) }}">
-                <input type="hidden" name="percorso_file" value="{{ $pathpdf }}">
-                <input type="hidden" name="taxsum" value="{{ $taxsum }}">
-                <input type="hidden" name="dateita" value="{{ $dateita }}">
+                <input type="hidden" name="receipt" value="{{ json_encode($receipt ?? null) }}">
+                <input type="hidden" name="invoice" value="{{ json_encode($invoice ?? null) }}">
+                <input type="hidden" name="client" value="{{ json_encode($client) }}">
                 <input type="hidden" name="tickets" value="{{ json_encode($tickets) }}">
             </form>
+            <a href="{{ route('download.xml', ['filename' => basename($xmlPath)]) }}"
+                class="submit-btn">
+                Scarica XML
+                </a>
             <button type="button" class="submit-btn" onclick="window.history.back();">Torna indietro</button>
 
     </div>

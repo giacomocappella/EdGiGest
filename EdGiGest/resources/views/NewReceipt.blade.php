@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crea Ricevuta</title>
+    <title>Crea Fattura</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css"> <!-- Assicurati che questo link punti al tuo file CSS -->
     <style>
@@ -172,7 +172,7 @@
                     <span class="material-icons-sharp">
                         euro_symbol
                     </span>
-                    <h3>Crea Ricevuta</h3>
+                    <h3>Crea Fattura</h3>
                 </a>
                 <a href="/settings">
                     <span class="material-icons-sharp">
@@ -200,7 +200,7 @@
         </aside>
 
 <div class="form-container">
-    <h1>Creazione Nuova Ricevuta</h1>
+    <h1>Creazione Fattura</h1>
     <div class="form-group">
         @if(isset($client) && !empty($client))
         <div class="riga"><strong>Seleziona un cliente</strong></div>
@@ -221,7 +221,7 @@
     @if(isset($tickets) && !empty($tickets))
     <div class="form-group">
         <div class="riga"><strong>Cliente: </strong>{{$clientname}}</div>
-        <div class="riga">Selezionare i ticket da includere nella ricevuta. Per i ticket non selezionabili la ricevuta è già stata emessa.</div>
+        <div class="riga">Selezionare i ticket da includere nella fattura. Per i ticket non selezionabili la fattura è già stata emessa.</div>
     
         <form action="{{ route('make.pdf') }}" method="GET">
             @csrf
@@ -234,7 +234,7 @@
                         <th>Nome ticket</th>
                         <th>Durata</th>
                         <th>Tecnici</th>
-                        <th>Ricevuta emessa</th>
+                        <th>Fattura emessa</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -242,7 +242,7 @@
                         @if($item->Stato == "Chiuso")
                             <tr>
                                 <td>
-                                    <input type="checkbox" name="selected_tickets[]" value="{{ $item->id }}" 
+                                    <input type="checkbox" name="selected_tickets[]" value="{{ $item->id }}" data-hours="{{ $item->Ore_totali }}"
                                         {{ $item->Rendicontato == 1 ? 'checked disabled' : '' }}>
                                 </td>
                                 <td>{{$item->id }}</td>
@@ -260,33 +260,145 @@
             <input type="hidden" name="clientname" value="{{$clientname}}">
     
             <!-- Selezione Tecnico -->
-            <div class="form-group" style="display: flex; align-items: center; gap: 20px;">
-                <label style="display: flex; align-items: center; gap: 10px;">
-                    <input type="checkbox" id="enable_technician" name="enable_technician"
-                        onchange="toggleTechnicianSelect()">
-                    Ricevuta singola
-                </label>
-                <select name="technician_id" id="technician_select" disabled style="width: 200px;">
-                    <option value="">-- Seleziona Tecnico --</option>
-                    @foreach($users as $technician)
-                        <option value="{{ $technician->id }}">{{ $technician->name }}</option>
-                    @endforeach
-                </select>
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 12px;">
+
+                <!-- Riga 1 -->
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <label style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="enable_technician" name="enable_technician"
+                            onchange="toggleTechnicianSelect()">
+                        Fattura singola
+                    </label>
+
+                    <select name="technician_id" id="technician_select" disabled style="width: 200px;">
+                        <option value="">-- Seleziona Tecnico --</option>
+                        @foreach($users as $technician)
+                            <option value="{{ $technician->id }}">{{ $technician->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                
+                <!-- Riga 2 -->
+                <div id="percentage_div"
+                    style="display: flex; align-items: center; gap: 40px; max-width: 900px;">
+
+                    <!-- Giacomo -->
+                    <div style="text-align: center;">
+                        <label>Giacomo: <span id="giacomo_percent">50</span>%</label>
+                        <input type="hidden" name="giacomo_percent" id="giacomo_percent_input">
+                        <input type="text" name="giacomo_amount" id="giacomo_amount"
+                            value="50" readonly style="width: 100px; text-align: center;">
+                    </div>
+
+                    <!-- Slider -->
+                    <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center;">
+                        <input type="range" id="percent_slider" min="0" max="100" value="50"
+                            style="width: 100%;">
+                    </div>
+
+                    <!-- Edoardo -->
+                    <div style="text-align: center;">
+                        <label>Edoardo: <span id="edoardo_percent">50</span>%</label>
+                        <input type="hidden" name="edoardo_percent" id="edoardo_percent_input">
+                        <input type="text" name="edoardo_amount" id="edoardo_amount"
+                            value="50" readonly style="width: 100px; text-align: center;">
+                    </div>
+
+                    <!-- Totale -->
+                    <div style="text-align: center;">
+                        <label>Importo netto:</label>
+                        <input type="text" name="net_total" id="net_total"
+                            value="0" readonly style="width: 100px; text-align: center;">
+                    </div>
+
+                </div>
             </div>
     
-            <script>
+           <script>
+                const slider = document.getElementById('percent_slider');
+
+                const giacomoPercent = document.getElementById('giacomo_percent');
+                const edoardoPercent = document.getElementById('edoardo_percent');
+
+                const giacomoAmount = document.getElementById('giacomo_amount');
+                const edoardoAmount = document.getElementById('edoardo_amount');
+
+                const netTotal = document.getElementById('net_total');
+
+                // Tutti i checkbox dei ticket
+                const ticketCheckboxes = document.querySelectorAll('input[name="selected_tickets[]"]');
+
+                // 🔹 Calcolo totale ore selezionate
+                function calculateTotalHours() {
+                    let totalHours = 0;
+
+                    ticketCheckboxes.forEach(cb => {
+                        // ESCLUDI quelli già rendicontati (disabled)
+                        if (cb.checked && !cb.disabled) {
+                            totalHours += parseFloat(cb.dataset.hours);
+                        }
+                    });
+
+                    return totalHours;
+                }
                 function toggleTechnicianSelect() {
-                    let checkbox = document.getElementById('enable_technician');
-                    let select = document.getElementById('technician_select');
-                    
+                    const checkbox = document.getElementById('enable_technician');
+                    const select = document.getElementById('technician_select');
+                    const percentageDiv = document.getElementById('percentage_div');
+
                     if (checkbox.checked) {
+                        // Fattura singola
                         select.disabled = false;
+                        percentageDiv.style.display = 'none';
                     } else {
+                        // Multipla
                         select.disabled = true;
-                        select.value = ""; // Reset valore quando deselezionato
+                        select.value = "";
+                        percentageDiv.style.display = 'flex';
                     }
                 }
-            </script>
+                // 🔹 Aggiorna TUTTO (totale + divisione tecnici)
+                function updateAll() {
+                    let totalHours = calculateTotalHours();
+                    let costoOrario = {{ $hourprice }};
+
+                    // Totale netto (ore * costo orario netto)
+                    let totalNet = totalHours * costoOrario;
+
+                    // Percentuali
+                    let percGiacomo = parseInt(slider.value);
+                    let percEdoardo = 100 - percGiacomo;
+
+                    // Importi per tecnico
+                    let giacomoNet = (totalNet * percGiacomo / 100);
+                    let edoardoNet = (totalNet * percEdoardo / 100);
+
+                    // Aggiornamento UI
+                    giacomoPercent.textContent = percGiacomo;
+                    edoardoPercent.textContent = percEdoardo;
+
+                    giacomoAmount.value = giacomoNet.toFixed(2);
+                    edoardoAmount.value = edoardoNet.toFixed(2);
+
+                    document.getElementById('giacomo_percent_input').value = percGiacomo;
+                    document.getElementById('edoardo_percent_input').value = percEdoardo;
+
+                    netTotal.value = totalNet.toFixed(2);
+                }
+
+                // 🔹 Eventi checkbox (quando spunti/despunti)
+                ticketCheckboxes.forEach(cb => {
+                    cb.addEventListener('change', updateAll);
+                });
+
+                // 🔹 Evento slider
+                slider.addEventListener('input', updateAll);
+
+                // 🔹 Init
+                document.addEventListener('DOMContentLoaded', function() {
+                    updateAll();
+                });
+                </script>
     
             <div class="button-container" style="display: flex; gap: 15px; align-items: center;">
                 <button type='submit' class="submit-btn">Visualizza anteprima</button>

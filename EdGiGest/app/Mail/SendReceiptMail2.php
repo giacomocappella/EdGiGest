@@ -27,7 +27,7 @@ class SendReceiptMail2 extends Mailable
 
     public function build()
     {
-        $mail = $this->subject('Ricevuta di prestazione occasionale - EdGiTech')
+        $mail = $this->subject('Invio documentazione fiscale relativa ai servizi erogati - EdGiTech')
                     ->view('MailSendReceipt2')
                     ->with([
                         'user' => $this->users,

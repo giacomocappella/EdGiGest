@@ -95,7 +95,7 @@
                 <a href="/newticket"><span class="material-icons-sharp">add</span><h3>Nuovo Ticket</h3></a>
                 <a href="/newservice"><span class="material-icons-sharp">add_to_queue</span><h3>Nuovo Servizio</h3></a>
                 <a href="/ticket"><span class="material-icons-sharp">format_list_numbered</span><h3>Lista Tickets</h3></a>
-                <a href="/newreceipt"><span class="material-icons-sharp">euro_symbol</span><h3>Crea Ricevuta</h3></a>
+                <a href="/newreceipt"><span class="material-icons-sharp">euro_symbol</span><h3>Crea Fattura</h3></a>
                 <a href="/settings"><span class="material-icons-sharp">settings</span><h3>Impostazioni</h3></a>
                 <a href="/profile" class="button-link sidebar-footer"><span class="material-icons-sharp">account_circle</span><h3>{{ Auth::user()->name }}</h3></a>
                 <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">@csrf</form>

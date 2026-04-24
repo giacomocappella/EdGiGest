@@ -154,7 +154,7 @@
                     <span class="material-icons-sharp">
                         euro_symbol
                     </span>
-                    <h3>Crea Ricevuta</h3>
+                    <h3>Crea Fattura</h3>
                 </a>
                 <a href="/settings">
                     <span class="material-icons-sharp">
@@ -195,9 +195,17 @@
         </div>
 
         <div class="form-group">
-            <label for="Partita_IVA_CF">Partita IVA / Codice Fiscale</label>
+            <label for="Partita_IVA_CF">Partita IVA</label>
             <input type="text" name="Partita_IVA_CF" value="{{($client['Partita_IVA_CF']) }}">
             @error('Partita_IVA_CF')
+                <div class="error">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="Codice_Fiscale">Codice Fiscale</label>
+            <input type="text" name="Codice_Fiscale" value="{{($client['Codice_Fiscale']) }}">
+            @error('Codice_Fiscale')
                 <div class="error">{{ $message }}</div>
             @enderror
         </div>
@@ -214,6 +222,22 @@
             <label for="Mail_ticket">Indirizzo Email per Invio Ticket</label>
             <input type="email" name="Mail_ticket" value="{{($client['Mail_ticket']) }}">
             @error('Mail_ticket')
+                <div class="error">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="PEC">Indirizzo PEC</label>
+            <input type="email" name="PEC" value="{{($client['PEC']) }}">
+            @error('PEC')
+                <div class="error">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="Cod_destinatario">Codice Destinatario</label>
+            <input type="text" name="Cod_destinatario" value="{{($client['Cod_destinatario']) }}">
+            @error('Cod_destinatario')
                 <div class="error">{{ $message }}</div>
             @enderror
         </div>

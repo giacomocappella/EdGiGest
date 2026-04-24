@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anteprima Ricevuta</title>
+    <title>Anteprima Fatture</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css"> 
 </head>
@@ -118,13 +118,16 @@
 
     .pdf-container {
         display: flex;
-        flex-wrap: wrap;
         gap: 20px;
         justify-content: center;
+        flex-wrap: wrap;
     }
+
     .pdf-box {
-        flex: 1;
-        min-width: 45%;
+        width: 48%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     @media (max-width: 768px) {
         .pdf-box {
@@ -135,7 +138,7 @@
 </style>
 <script>
     function confermaInvio() {
-    let scelta = confirm("Vuoi inviare mail al cliente con la copia della ricevuta? Cliccando su annulla non verrà inviata la mail");
+    let scelta = confirm("Vuoi inviare mail al cliente con la copia della fattura? Cliccando su annulla non verrà inviata la mail");
 
     if (scelta) {
         document.getElementById('formSiclose').submit();
@@ -200,7 +203,7 @@
                     <span class="material-icons-sharp">
                         euro_symbol
                     </span>
-                    <h3>Crea Ricevuta</h3>
+                    <h3>Crea Fattura</h3>
                 </a>
                 <a href="/settings">
                     <span class="material-icons-sharp">
@@ -224,16 +227,33 @@
                     </span>
                     <h3>Logout</h3>
                 </a>
-            </div>
+            </div> 
         </aside>
 
         <div class="form-container">
-        <h1>Anteprima Ricevute</h1>
+        <h1>Anteprima Fatture</h1>
     
-        <div class="pdf-container" style="display: flex; gap: 20px; justify-content: center;">
+        <div class="pdf-container">
             @foreach ($pdfPaths as $pdfPath)
-                <iframe src="{{ route('preview2tech.pdf', ['filename' => basename($pdfPath)]) }}#zoom=50" 
-                        width="48%" height="600px"></iframe>
+
+                <div class="pdf-box">
+                    <iframe src="{{ route('preview2tech.pdf', ['filename' => basename($pdfPath)]) }}#zoom=45"
+                            width="100%"
+                            height="600px">
+                    </iframe>
+
+                    @php
+                        $xmlFilename = str_replace('.pdf', '.xml', basename($pdfPath));
+                    @endphp
+                    <br><br>
+                    <a href="{{ route('download.xml', ['filename' => $xmlFilename]) }}"
+                    class="submit-btn"
+                    download
+                    style="margin-top:10px; display:inline-block;">
+                        Scarica XML
+                    </a>
+                    <br><br>
+                </div>
             @endforeach
         </div>
         
@@ -245,6 +265,7 @@
             <form id="formNoclose" action="{{ route('store.receipt2') }}" method="POST" style="display: none;">
                 @csrf
                 <input type="hidden" name="receipts" value="{{ json_encode($receipts) }}">
+                <input type="hidden" name="invoices" value="{{ json_encode($invoices) }}">
                 <input type="hidden" name="client" value="{{ json_encode($client) }}">
                 <input type="hidden" name="tickets" value="{{ json_encode($tickets) }}">
             </form>
@@ -253,6 +274,7 @@
             <form id="formSiclose" action="{{ route('store.receipt.mail2') }}" method="POST" style="display: none;">
                 @csrf
                 <input type="hidden" name="receipts" value="{{ json_encode($receipts) }}">
+                <input type="hidden" name="invoices" value="{{ json_encode($invoices) }}">
                 <input type="hidden" name="client" value="{{ json_encode($client) }}">
                 <input type="hidden" name="tickets" value="{{ json_encode($tickets) }}">
             </form>

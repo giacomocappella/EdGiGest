@@ -66,7 +66,7 @@
                     <span class="material-icons-sharp">
                         euro_symbol
                     </span>
-                    <h3>Crea Ricevuta</h3>
+                    <h3>Crea Fattura</h3>
                 </a>
                 <!--<a href="/calendars">
                     <span class="material-icons-sharp">

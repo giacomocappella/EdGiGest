@@ -25,6 +25,9 @@ class StoreEditProfile extends Controller
         $user->CAP = $request->CAP;
         $user->Provincia = $request->Provincia;
         $user->iban = $request->iban;
+        $user->Partita_Iva = $request->Partita_Iva;
+        $user->Tipo_collab = $request->Tipo_collab;
+        $user->Costo_orario_netto = $request->Costo_orario_netto;
 
         // Se è stata inserita una nuova password, la aggiorna hashandola
         if ($request->password) {

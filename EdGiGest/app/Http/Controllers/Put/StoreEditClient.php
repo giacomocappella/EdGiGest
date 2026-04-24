@@ -15,6 +15,8 @@ class StoreEditClient extends Controller
             'Partita_IVA_CF' => 'required|string|max:16', 
             'Mail_amministrazione' => 'required|email',
             'Mail_ticket' => 'required|email', 
+            'PEC' => 'email', 
+            'Cod_destinatario'=> 'max:7',
             'Contatto_telefonico' => 'required|string|max:20', 
             'Via' => 'required|string|max:255',
             'Civico' => 'required|string|max:10',
@@ -32,6 +34,8 @@ class StoreEditClient extends Controller
             'Citta.required' => 'La Città è obbligatoria.',
             'Cap.required' => 'Il CAP è obbligatorio.', 
             'Provincia.required' => 'La Provincia è obbligatoria.',
+            'PEC.email'=> 'Inserisci una PEC valida.',
+            'Cod_destinatario.max' => 'Il codice destinatario deve essere di 7 caratteri.',
         ]);
 
         
@@ -47,6 +51,9 @@ class StoreEditClient extends Controller
         $client->Citta=$request->Citta;
         $client->Cap=$request->Cap;
         $client->Provincia=$request->Provincia;
+        $client->Codice_Fiscale=$request->Codice_Fiscale;
+        $client->PEC=$request->PEC;
+        $client->Cod_destinatario=$request->Cod_destinatario;
 
 
         $client->save();
