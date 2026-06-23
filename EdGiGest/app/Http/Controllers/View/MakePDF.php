@@ -136,10 +136,12 @@ class MakePDF extends Controller
                         $number = $lastInvoice ? $lastInvoice->numero + 1 : 1;
 
                         //progressivo invio
-                        $userletter=substr($tech->name, 0, 1);
-                        $progressivo=$anno
+                        $yearShort = substr($anno, -2); 
+                        $userletter = strtoupper(substr($tech->name, 0, 1)); 
+
+                        $progressivo = $yearShort
                             . $userletter
-                            . str_pad($number, 5, '0', STR_PAD_LEFT);
+                            . str_pad($number, 2, '0', STR_PAD_LEFT);
 
                         // Calcola l'importo 
                         $importo = $durationhours * $hourlyamount_forfettario;

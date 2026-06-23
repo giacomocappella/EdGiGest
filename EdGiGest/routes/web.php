@@ -5,6 +5,7 @@ namespace App\Http\Controllers\View;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\View;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\TwoFactorController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -57,4 +58,10 @@ Route::put('/client/edit/store','App\Http\Controllers\Put\StoreEditClient')->nam
 Route::put('/profile/edit/store', 'App\Http\Controllers\Put\StoreEditProfile')->name('store.edit.profile')->middleware('auth');
 
 Route::get('/dashboard', function () { return redirect('/'); });
+Route::middleware('auth')->group(function () {
+    Route::get('profile/2fa/setup', 'App\Http\Controllers\Auth\TwoFactorController@showSetup')->name('2fa.setup');
+    Route::post('profile/2fa/enable', 'App\Http\Controllers\Auth\TwoFactorController@enable')->name('2fa.enable');
+    Route::post('profile/2fa/confirm', 'App\Http\Controllers\Auth\TwoFactorController@confirm')->name('2fa.confirm');
+    Route::post('profile/2fa/disable', [TwoFactorController::class, 'disable'])->name('2fa.disable');
+});
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

@@ -288,6 +288,7 @@
                         <input type="hidden" name="giacomo_percent" id="giacomo_percent_input">
                         <input type="text" name="giacomo_amount" id="giacomo_amount"
                             value="50" readonly style="width: 100px; text-align: center;">
+                            <span style="margin-left:5px;">€</span>
                     </div>
 
                     <!-- Slider -->
@@ -302,13 +303,15 @@
                         <input type="hidden" name="edoardo_percent" id="edoardo_percent_input">
                         <input type="text" name="edoardo_amount" id="edoardo_amount"
                             value="50" readonly style="width: 100px; text-align: center;">
+                            <span style="margin-left:5px;">€</span>
                     </div>
 
                     <!-- Totale -->
                     <div style="text-align: center;">
-                        <label>Importo netto:</label>
+                        <label>Netto da trasferire:</label>
                         <input type="text" name="net_total" id="net_total"
                             value="0" readonly style="width: 100px; text-align: center;">
+                            <span style="margin-left:5px;">€</span>
                     </div>
 
                 </div>
@@ -360,18 +363,16 @@
                 // 🔹 Aggiorna TUTTO (totale + divisione tecnici)
                 function updateAll() {
                     let totalHours = calculateTotalHours();
-                    let costoOrario = {{ $hourprice }};
-
-                    // Totale netto (ore * costo orario netto)
-                    let totalNet = totalHours * costoOrario;
+                    let costoOrarioG = {{ $hourpriceG }};
+                    let costoOrarioE = {{ $hourpriceE }};
 
                     // Percentuali
                     let percGiacomo = parseInt(slider.value);
                     let percEdoardo = 100 - percGiacomo;
 
                     // Importi per tecnico
-                    let giacomoNet = (totalNet * percGiacomo / 100);
-                    let edoardoNet = (totalNet * percEdoardo / 100);
+                    let giacomoNet = (totalHours * costoOrarioG * percGiacomo / 100);
+                    let edoardoNet = (totalHours * costoOrarioE * percEdoardo / 100);
 
                     // Aggiornamento UI
                     giacomoPercent.textContent = percGiacomo;
@@ -383,7 +384,7 @@
                     document.getElementById('giacomo_percent_input').value = percGiacomo;
                     document.getElementById('edoardo_percent_input').value = percEdoardo;
 
-                    netTotal.value = totalNet.toFixed(2);
+                    netTotal.value = (edoardoNet-(totalHours/2*costoOrarioE)).toFixed(2);
                 }
 
                 // 🔹 Eventi checkbox (quando spunti/despunti)

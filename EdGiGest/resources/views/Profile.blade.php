@@ -187,7 +187,7 @@
 
             <div class="form-group">
                 <label>Partita IVA</label>
-                <input type="text" name="Partita_Iva" value="{{ $user->Partita_Iva }}" required>
+                <input type="text" name="Partita_Iva" value="{{ $user->Partita_Iva }}">
             </div>
 
             <div class="form-group">
@@ -236,11 +236,41 @@
                 <label>IBAN</label>
                 <input type="text" name="iban" value="{{ $user->iban }}">
             </div>
-
+            <div class="form-group">
             <div class="button-container">
                 <button type="submit" class="submit-btn">Salva Modifiche</button>
             </div>
-        </form>
+
+            </form>
+            <label>Stato 2FA</label>
+
+                @if(auth()->user()->two_factor_confirmed_at)
+                    <span class="text">Attiva</span>
+                @else
+                    <span class="text">Non attiva</span>
+                @endif
+            </div>
+
+            {{-- AZIONI --}}
+            @if(!auth()->user()->two_factor_confirmed_at)
+
+                <a href="{{ route('2fa.setup') }}"
+                class="submit-btn">
+                    Attiva 2FA
+                </a>
+
+            @else
+
+                <form method="POST" action="{{ route('2fa.disable') }}">
+                    @csrf
+
+                    <button type="submit" class="submit-btn">
+                        Disattiva 2FA
+                    </button>
+                </form>
+
+            @endif
+
     </div>
     </div>
 </body>

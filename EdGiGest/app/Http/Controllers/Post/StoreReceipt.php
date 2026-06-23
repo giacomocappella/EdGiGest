@@ -54,22 +54,23 @@ class StoreReceipt extends Controller
         if (!empty($invoices)) {
             foreach ($invoices as $invoicesData) {
                 $invoice = new Invoice();
-                $invoice->numero = $invoicesData['numero'];
-                $invoice->anno = $invoicesData['anno'];
-                $invoice->data_emissione = $invoicesData['data_emissione'];
-                $invoice->tipo_documento = $invoicesData['tipo_documento'];
-                $invoice->progressivo_invio = $invoicesData['progressivo_invio'];
-                $invoice->client_id = $invoicesData['client_id'];
-                $invoice->sistemista_id = $invoicesData['sistemista_id'];
-                $invoice->prezzo_totale = $invoicesData['prezzo_totale'];
-                $invoice->importo_totale = $invoicesData['importo_totale'];
-                $invoice->aliquota_iva = $invoicesData['aliquota_iva'];
-                $invoice->natura = $invoicesData['natura'];
-                $invoice->modalita_pagamento = $invoicesData['modalita_pagamento'];
-                $invoice->data_scadenza = $invoicesData['data_scadenza'];
-                $invoice->percorso_xml = $invoicesData['percorso_xml'];
-                $invoice->percorso_pdf = $invoicesData['percorso_pdf'];
-                $invoice->stato = "creata";
+
+                $invoice->numero = $invoicesData->numero;
+                $invoice->anno = $invoicesData->anno;
+                $invoice->data_emissione = $invoicesData->data_emissione;
+                $invoice->tipo_documento = $invoicesData->tipo_documento;
+                $invoice->progressivo_invio = $invoicesData->progressivo_invio;
+                $invoice->client_id = $invoicesData->client_id;
+                $invoice->sistemista_id = $invoicesData->sistemista_id;
+                $invoice->prezzo_totale = $invoicesData->prezzo_totale;
+                $invoice->importo_totale = $invoicesData->importo_totale;
+                $invoice->aliquota_iva = $invoicesData->aliquota_iva;
+                $invoice->natura = $invoicesData->natura;
+                $invoice->modalita_pagamento = $invoicesData->modalita_pagamento;
+                $invoice->data_scadenza = $invoicesData->data_scadenza;
+                $invoice->percorso_xml = $invoicesData->percorso_xml;
+                $invoice->percorso_pdf = $invoicesData->percorso_pdf;
+                $invoice->stato = 'creata';
 
                 $invoice->save();
             }
@@ -82,8 +83,8 @@ class StoreReceipt extends Controller
     //gestisce lo store con invio mail
     public function StoreSendMail(Request $request)
     {
-        $receipts = $request->receipt ? json_decode($request->receipt, true) : null;
-        $invoices = $request->invoice ? json_decode($request->invoice, true) : null;
+        $receipts = $request->receipt ? json_decode($request->receipt) : null;
+        $invoices = $request->invoice ? json_decode($request->invoice) : null;
         $client = json_decode($request->input('client'), true);
         $tickets = json_decode($request->input('tickets'), true);
 
@@ -124,22 +125,23 @@ class StoreReceipt extends Controller
         if (!empty($invoices)) {
             foreach ($invoices as $invoicesData) {
                 $invoice = new Invoice();
-                $invoice->numero = $invoicesData['numero'];
-                $invoice->anno = $invoicesData['anno'];
-                $invoice->data_emissione = $invoicesData['data_emissione'];
-                $invoice->tipo_documento = $invoicesData['tipo_documento'];
-                $invoice->progressivo_invio = $invoicesData['progressivo_invio'];
-                $invoice->client_id = $invoicesData['client_id'];
-                $invoice->sistemista_id = $invoicesData['sistemista_id'];
-                $invoice->prezzo_totale = $invoicesData['prezzo_totale'];
-                $invoice->importo_totale = $invoicesData['importo_totale'];
-                $invoice->aliquota_iva = $invoicesData['aliquota_iva'];
-                $invoice->natura = $invoicesData['natura'];
-                $invoice->modalita_pagamento = $invoicesData['modalita_pagamento'];
-                $invoice->data_scadenza = $invoicesData['data_scadenza'];
-                $invoice->percorso_xml = $invoicesData['percorso_xml'];
-                $invoice->percorso_pdf = $invoicesData['percorso_pdf'];
-                $invoice->stato = "creata";
+
+                $invoice->numero = $invoicesData->numero;
+                $invoice->anno = $invoicesData->anno;
+                $invoice->data_emissione = $invoicesData->data_emissione;
+                $invoice->tipo_documento = $invoicesData->tipo_documento;
+                $invoice->progressivo_invio = $invoicesData->progressivo_invio;
+                $invoice->client_id = $invoicesData->client_id;
+                $invoice->sistemista_id = $invoicesData->sistemista_id;
+                $invoice->prezzo_totale = $invoicesData->prezzo_totale;
+                $invoice->importo_totale = $invoicesData->importo_totale;
+                $invoice->aliquota_iva = $invoicesData->aliquota_iva;
+                $invoice->natura = $invoicesData->natura;
+                $invoice->modalita_pagamento = $invoicesData->modalita_pagamento;
+                $invoice->data_scadenza = $invoicesData->data_scadenza;
+                $invoice->percorso_xml = $invoicesData->percorso_xml;
+                $invoice->percorso_pdf = $invoicesData->percorso_pdf;
+                $invoice->stato = 'creata';
 
                 $invoice->save();
 

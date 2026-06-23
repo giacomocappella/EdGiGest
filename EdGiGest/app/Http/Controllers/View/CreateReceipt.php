@@ -13,7 +13,9 @@ class CreateReceipt extends Controller
         $clients = Client::select([
             'Ragione_Sociale',
             'Partita_IVA_CF',
-        ])->get(); 
+        ])
+        ->orderBy('Ragione_Sociale', 'asc')
+        ->get();
 
         
 

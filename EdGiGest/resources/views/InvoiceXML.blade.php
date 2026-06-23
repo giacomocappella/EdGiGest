@@ -19,13 +19,12 @@
 		<Anagrafica>
 			<Nome>{{ $nome }}</Nome>
 			<Cognome>{{ $nome }}</Cognome>
-			<Titolo>Dott.</Titolo>
 		</Anagrafica>
 	<RegimeFiscale>RF19</RegimeFiscale>
 	</DatiAnagrafici>
 	<Sede>
 		<Indirizzo>{{ $tech->Via }}</Indirizzo>
-		<NumeroCivico>N {{ $tech->Civico }}</NumeroCivico>
+		<NumeroCivico>{{ $tech->Civico }}</NumeroCivico>
 		<CAP>{{ $tech->CAP }}</CAP>
 		<Comune>{{ $tech->Citta }}</Comune>
 		<Provincia>{{ $tech->Provincia }}</Provincia>
@@ -71,7 +70,7 @@
 <DatiBeniServizi>
 	<DettaglioLinee>
 		<NumeroLinea>1</NumeroLinea>
-		<Descrizione>Prestazione di Consulenza Informatica</Descrizione>
+		<Descrizione>Prestazioni di Consulenza Informatica</Descrizione>
         <PrezzoUnitario>{{ number_format($invoice->prezzo_totale, 2,'.', '') }}</PrezzoUnitario>
 		<PrezzoTotale>{{ number_format($invoice->prezzo_totale, 2, '.', '') }}</PrezzoTotale>
 		<AliquotaIVA>0.00</AliquotaIVA>

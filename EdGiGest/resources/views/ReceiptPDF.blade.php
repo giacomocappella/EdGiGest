@@ -90,25 +90,22 @@
     </div>
     <br>
     <h2 style="text-align: center;">RICEVUTA DI PRESTAZIONE OCCASIONALE </h2>
-    <h3 style="text-align: center;">Consulenza Tecnico Informatica</h3>
     <br>
-    <p> Ticket inclusi nella presente ricevuta:</p>
+    <p> Attività incluse nella presente ricevuta:</p>
     <div class="margin-top">
         <table class="products">
             <tr>
-                <th>#</th>
-                <th>Nome Ticket</th>
+                <th></th>
+                <th>Attività</th>
             </tr>
-            @foreach($tickets as $item)
             <tr class="items">
                     <td>
-                        {{ $item->id }}
+                        
                     </td>
                     <td>
-                        {{ $item->Nome }}
+                        Prestazione occasionale di consulenza tecnico informatica
                     </td>
             </tr>
-            @endforeach
         </table>
     </div>
     <br><br>

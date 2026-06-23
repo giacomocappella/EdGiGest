@@ -20,9 +20,11 @@ class GetTicketsSelectedClient extends Controller
 
         $users = User::where('current_team_id', '0000000000')->get();
 
-        $hourprice = User::where ('CF', 'CPPGCM95A17C111Q')->value('Costo_orario_netto');
+        $hourpriceG = User::where ('CF', 'CPPGCM95A17C111Q')->value('Costo_orario_netto');
+        $hourpriceE = 40.011062;
 
-        return view('NewReceipt', ['tickets'=>$tickets, 'idclient'=>$idclient, 'clientname'=>$client->Ragione_Sociale, 'users'=>$users, 'hourprice'=>$hourprice]);
+
+        return view('NewReceipt', ['tickets'=>$tickets, 'idclient'=>$idclient, 'clientname'=>$client->Ragione_Sociale, 'users'=>$users, 'hourpriceG'=>$hourpriceG, 'hourpriceE'=>$hourpriceE]);
          
     }
 }

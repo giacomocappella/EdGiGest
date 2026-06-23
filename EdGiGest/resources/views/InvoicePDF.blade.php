@@ -66,7 +66,6 @@
             </td>
             <td class="w-half">
                 <h3>Fattura n. {{$invoice->numero}} del {{$dateita}}</h3>
-                <p>Progressivo invio {{ $invoice->progressivo_invio }}</p>
             </td>
         </tr>
     </table>

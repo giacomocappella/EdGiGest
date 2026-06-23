@@ -14,7 +14,9 @@ class CreateTicket extends Controller
         $clients = Client::select([
             'Ragione_Sociale',
             'Partita_IVA_CF',
-        ])->get(); 
+        ])
+        ->orderBy('Ragione_Sociale', 'asc')
+        ->get(); 
         return view('NewTicket', ['items'=>$clients]);  
     }
 }
